@@ -5,7 +5,7 @@
     <div class="row justify-content-center" style="margin-top: 150px;">
         <div class="col-md-8 align-self-center">
             <div class="card" style="box-shadow: 5px 5px 5px rgba(0,0,139);">
-                <div class="card-header" style="background-color: #0046AD; color:white;">Registro Realizado</div>
+                <div class="card-header" style="background-color: #0046AD; color:white;">Registro Realizado com Sucesso!</div>
                 <div class="card-body">
                     <h4 style="font-weight: bolder; font-size: 18px; color: black; margin-bottom: 20px;">OLÁ, SEU REGISTRO FOI REALIZADO COM SUCESSO!</h4>
                     <h6 style="color: black; font-weight: bold;">Agradecemos sua solicitação, e segue abaixo algumas informações importantes:</h6>
