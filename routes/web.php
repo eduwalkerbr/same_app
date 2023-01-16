@@ -39,6 +39,7 @@ use App\Http\Controllers\cadastros\destaque\DestaqueController;
 use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\DiretorController;
 use App\Http\Controllers\SecretarioController;
+use App\Http\Controllers\comparativo\secretario\SecretarioComparativoController;
 use App\Http\Controllers\cadastros\legenda\LegendaController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\AlterarRegistroController;
@@ -304,6 +305,9 @@ Route::get('/municipio_principal', [SecretarioController::class, 'index'])->name
 Route::get('/municipio_principal/{id}/{id_disciplina}/{ano_same}', [SecretarioController::class, 'exibirMunicipio'])->name('secretario.exibirMunicipio');
 Route::get('/municipio_principal/{id}/{id_disciplina}/{ano}/{ano_same}', [SecretarioController::class, 'exibirMunicipioAno'])->name('secretario.exibirMunicipioAno');
 Route::get('/municipio_principal/{id}/{id_disciplina}/{ano}/{id_habilidade}/{ano_same}', [SecretarioController::class, 'exibirMunicipioHabilidade'])->name('secretario.exibirMunicipioHabilidade');
+
+//Secretario Comparativo
+Route::get('/municipio_principal/comparativo', [SecretarioComparativoController::class, 'index'])->name('secretario_comparativo.index');
 
 //CRUD Legenda
 Route::get('/legenda/create', [LegendaController::class, 'create'])->name('cadastro_legenda');
