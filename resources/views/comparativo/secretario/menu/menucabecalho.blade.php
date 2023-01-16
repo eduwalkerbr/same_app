@@ -190,16 +190,6 @@
                     <!------------------------------------ Sessão Disciplina ------------------->
                     <ul class="navbar-nav ml-4">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{strval($ano_same_selecionado) ?? 'Anos'}}</a>
-                            <ul class="dropdown-menu">
-                                @foreach($anos_same as $ano_same)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario.exibirMunicipio', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano_same' => $ano_same->SAME]) }}">{{ $ano_same->SAME ?? ''}}</a></li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ml-4">
-                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$disciplina_selecionada[0]->desc ?? 'Disciplina'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($disciplinas as $disciplina)
