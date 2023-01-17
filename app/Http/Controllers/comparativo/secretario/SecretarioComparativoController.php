@@ -77,26 +77,26 @@ class SecretarioComparativoController extends Controller
     /**
      * Método para buscar os munícipios utilizando Cache
      */
-    private function getMunicipios($ano_same){
+    private function getMunicipios(){
 
         if (auth()->user()->perfil == 'Administrador' 
             || (($this->getPrevilegio()[0]->funcaos_id == 13 || $this->getPrevilegio()[0]->funcaos_id == 14) && $this->getPrevilegio()[0]->municipios_id == 5)) {
-                if (Cache::has('total_municipios'.strval($ano_same))) {
-                    $municipiosListados = Cache::get('total_municipios'.strval($ano_same));
+                if (Cache::has('total_municipios_comparativo')) {
+                    $municipiosListados = Cache::get('total_municipios_comparativo');
                 } else {
-                    $municipiosListados = $this->objMunicipio->where(['status' => 'Ativo','SAME' => $ano_same])->get(); 
+                    $municipiosListados = $this->objMunicipio->where(['status' => 'Ativo'])->groupBy('nome')->get(); 
                     
                     //Adiciona ao Cache
-                    Cache::forever('total_municipios'.strval($ano_same), $municipiosListados);      
+                    Cache::forever('total_municipios_comparativo', $municipiosListados);      
                 }
         } else {
-            if (Cache::has('mun_list_'.strval(auth()->user()->id))) {
-                $municipiosListados = Cache::get('mun_list_'.strval(auth()->user()->id));
+            if (Cache::has('mun_list_comparativo'.strval(auth()->user()->id))) {
+                $municipiosListados = Cache::get('mun_list_comparativo'.strval(auth()->user()->id));
             } else {
-                $municipiosListados = $this->objMunicipio->where(['id' => $this->getPrevilegio()[0]->municipios_id, 'SAME' => $ano_same])->get();
+                $municipiosListados = $this->objMunicipio->where(['id' => $this->getPrevilegio()[0]->municipios_id])->get();
                 
                 //Adiciona ao Cache
-                Cache::put('mun_list_'.strval(auth()->user()->id),$municipiosListados, now()->addHours($this->horasCache));     
+                Cache::put('mun_list_comparativo'.strval(auth()->user()->id),$municipiosListados, now()->addHours($this->horasCache));     
             }
         }
         return $municipiosListados;
@@ -145,14 +145,14 @@ class SecretarioComparativoController extends Controller
     /**
      * Método que óbtem os dados do Municipio Selecionado utilizando Cache
      */
-    private function getMunicipioSelecionado($id, $ano_same){
-        if(Cache::has('mun_'.strval($id).strval($ano_same))){
-            $municipio_selecionado = Cache::get('mun_'.strval($id).strval($ano_same));
+    private function getMunicipioSelecionado($id){
+        if(Cache::has('mun_'.strval($id))){
+            $municipio_selecionado = Cache::get('mun_'.strval($id));
         } else {
-            $municipio_selecionado = $this->objMunicipio->where(['id' => $id])->where(['SAME' => $ano_same])->get();
+            $municipio_selecionado = $this->objMunicipio->where(['id' => $id])->get();
 
             //Adiciona ao Cache
-            Cache::forever('mun_'.strval($id).strval($ano_same), $municipio_selecionado);    
+            Cache::forever('mun_'.strval($id), $municipio_selecionado);    
         }
         
         return $municipio_selecionado;
@@ -219,14 +219,14 @@ class SecretarioComparativoController extends Controller
     /**
      * Método para buscar as escolas do Munícipio utilizando Cache
      */
-    private function getEscolasMunicipio($id_municipio, $ano_same){
+    private function getEscolasMunicipio($id_municipio){
 
-        if(Cache::has('escolas_'.strval($id_municipio).strval($ano_same))){
-            $escolasListadas = Cache::get('escolas_'.strval($id_municipio).strval($ano_same));
+        if(Cache::has('escolas_'.strval($id_municipio))){
+            $escolasListadas = Cache::get('escolas_'.strval($id_municipio));
         } else {
-            $escolasListadas = $this->objEscola->where(['status' => 'Ativo', 'municipios_id' => $id_municipio, 'SAME' => $ano_same])->get();
+            $escolasListadas = $this->objEscola->where(['status' => 'Ativo', 'municipios_id' => $id_municipio])->groupBy('nome')->get();
             //Adiciona ao Cache
-            Cache::put('escolas_'.strval($id_municipio).strval($ano_same), $escolasListadas, now()->addHours($this->horasCache));
+            Cache::put('escolas_'.strval($id_municipio), $escolasListadas, now()->addHours($this->horasCache));
         }
         
         return $escolasListadas;
@@ -235,14 +235,14 @@ class SecretarioComparativoController extends Controller
     /**
      * Método que óbtem os dados da Disciplina Selecionada utilizando Cache
      */
-    private function getEscolaSelecionada($id, $ano_same){
-        if(Cache::has('esc_'.strval($id).strval($ano_same))){
-            $escola_selecionada = Cache::get('esc_'.strval($id).strval($ano_same));
+    private function getEscolaSelecionada($id){
+        if(Cache::has('esc_'.strval($id))){
+            $escola_selecionada = Cache::get('esc_'.strval($id));
         } else {
-            $escola_selecionada = $this->objEscola->where(['id' => $id])->where(['SAME' => $ano_same])->get();
+            $escola_selecionada = $this->objEscola->where(['id' => $id])->get();
 
             //Adiciona ao Cache
-            Cache::forever('esc_'.strval($id).strval($ano_same), $escola_selecionada);    
+            Cache::forever('esc_'.strval($id), $escola_selecionada);    
         }
         
         return $escola_selecionada;
@@ -251,14 +251,14 @@ class SecretarioComparativoController extends Controller
     /**
      * Método para buscar as turmas do Munícipio utilizando Cache
      */
-    private function getTurmasMunicipio($id_municipio, $ano_same){
+    private function getTurmasMunicipio($id_municipio){
 
-        if(Cache::has('turmas_'.strval($id_municipio).strval($ano_same))){
-            $turmasListadas = Cache::get('turmas_'.strval($id_municipio).strval($ano_same));
+        if(Cache::has('turmas_'.strval($id_municipio))){
+            $turmasListadas = Cache::get('turmas_'.strval($id_municipio));
         } else {
-            $turmasListadas = $this->objTurma->where(['status' => 'Ativo', 'escolas_municipios_id' => $id_municipio, 'SAME' => $ano_same])->orderBy('TURMA','asc')->get();
+            $turmasListadas = $this->objTurma->where(['status' => 'Ativo', 'escolas_municipios_id' => $id_municipio])->groupBy('TURMA')->orderBy('TURMA','asc')->get();
             //Adiciona ao Cache
-            Cache::put('turmas_'.strval($id_municipio).strval($ano_same), $turmasListadas, now()->addHours($this->horasCache));
+            Cache::put('turmas_'.strval($id_municipio), $turmasListadas, now()->addHours($this->horasCache));
         }
         
         return $turmasListadas;
@@ -372,7 +372,7 @@ class SecretarioComparativoController extends Controller
         $previlegio = $this->getPrevilegio();
 
         //Lista os Munícipios
-        $municipios = $this->getMunicipios($ano_same_selecionado);
+        $municipios = $this->getMunicipios();
 
         //Lista as Disciplinas
         $disciplinas = $this->getDisciplinas();
@@ -400,10 +400,10 @@ class SecretarioComparativoController extends Controller
         $municipio = $municipios[0]->id;
 
         //Busca as escola ativas do município
-        $escolas = $this->getEscolasMunicipio($municipio, $ano_same_selecionado);
+        $escolas = $this->getEscolasMunicipio($municipio);
 
         //Busca as turmas ativas do municípios
-        $turmas = $this->getTurmasMunicipio($municipio, $ano_same_selecionado);
+        $turmas = $this->getTurmasMunicipio($municipio);
         
 
         //Seta os Anos a serem utilizados na listagem
@@ -418,13 +418,13 @@ class SecretarioComparativoController extends Controller
         $ano = substr(trim($turmas[0]->DESCR_TURMA), 0, 2);
 
         //Define o município selecionado
-        $municipio_selecionado = $this->getMunicipioSelecionado($municipio, $ano_same_selecionado);
+        $municipio_selecionado = $this->getMunicipioSelecionado($municipio);
 
         //Define a disciplina selecionada
         $disciplina_selecionada = $this->getDisciplinaSelecionada($disciplinas[0]->id);
 
         //Define a escola selecionada
-        $escola_selecionada = $this->getEscolaSelecionada($escolas[0]->id, $ano_same_selecionado);
+        $escola_selecionada = $this->getEscolaSelecionada($escolas[0]->id);
 
         //Reseta o nome da escola selecionada
         $escola_selecionada[0]->nome = null;
@@ -435,11 +435,93 @@ class SecretarioComparativoController extends Controller
         $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $municipio, $ano_same_selecionado);
         $label_disc = $dados_comp_grafico_disciplina[0];
         $dados_disc = $dados_comp_grafico_disciplina[1];
-
-        $turmas = null;
               
         return view('comparativo/secretario/content/secretario', compact(
-            'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','disciplinas',
+            'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas',
+            'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc'));
+    }
+
+    /**
+     * Show the application dashboard.
+     * Método para disponibilização de página Inicial
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function exibirMunicipioComparativo($id, $id_disciplina)
+    {
+        //Listagem de Anos do SAME
+        $anos_same = $this->getAnosSAME();
+        $ano_same_selecionado = $anos_same[0]->SAME;
+
+        //Busca os previlégios do Usuário Logado
+        $previlegio = $this->getPrevilegio();
+
+        //Lista os Munícipios
+        $municipios = $this->getMunicipios();
+
+        //Lista as Disciplinas
+        $disciplinas = $this->getDisciplinas();
+
+        //Busca as Sugestões
+        $sugestoes = $this->objSugestao->orderBy('updated_at', 'desc')->paginate(2);
+
+        //Caso seja Gestor busca as solicitações de seu munícpio
+        if ($previlegio[0]->funcaos_id == 6) {
+            $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+            $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+            $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+        } else {
+            //Caso contrário busca todas as solicições
+            $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
+            $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
+            $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
+        }
+
+    
+        //Busca os destaques
+        $destaques = $this->objDestaque->orderBy('updated_at', 'desc')->get();
+
+        //Busca o munícipio selecionado
+        $municipio = $id;
+
+        //Busca as escola ativas do município
+        $escolas = $this->getEscolasMunicipio($municipio);
+
+        //Busca as turmas ativas do municípios
+        $turmas = $this->getTurmasMunicipio($municipio);
+        
+
+        //Seta os Anos a serem utilizados na listagem
+        $anos = [];
+        for ($i = 0; $i < sizeof($turmas); $i++) {
+            if (!in_array(substr(trim($turmas[$i]->DESCR_TURMA), 0, 2), $anos)) {
+                $anos[$i] = substr(trim($turmas[$i]->DESCR_TURMA), 0, 2);
+            }
+        }
+
+        //Define o primeiro ano da listagem como padrão
+        $ano = substr(trim($turmas[0]->DESCR_TURMA), 0, 2);
+
+        //Define o município selecionado
+        $municipio_selecionado = $this->getMunicipioSelecionado($municipio);
+
+        //Define a disciplina selecionada
+        $disciplina_selecionada = $this->getDisciplinaSelecionada($id_disciplina);
+
+        //Define a escola selecionada
+        $escola_selecionada = $this->getEscolaSelecionada($escolas[0]->id);
+
+        //Reseta o nome da escola selecionada
+        $escola_selecionada[0]->nome = null;
+
+        //Busca as Habilidades pela Disciplina e Munícipio
+        $habilidades = $this->getHabilidades($disciplina_selecionada, $municipio);
+
+        $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $municipio, $ano_same_selecionado);
+        $label_disc = $dados_comp_grafico_disciplina[0];
+        $dados_disc = $dados_comp_grafico_disciplina[1];
+              
+        return view('comparativo/secretario/content/secretario', compact(
+            'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas',
             'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc'));
     }
    

@@ -7,14 +7,14 @@
 </script>
 
 @endif
-<div class="container" style="padding-top: 20px;margin-bottom: 5px;box-shadow: 5px 5px 5px rgba(0,0,139);background-color: white;margin-top: 110px;" id="municipio">
+<div class="container" style="padding-top: 20px;margin-bottom: 5px;box-shadow: 5px 5px 5px rgba(0,0,139);background-color: white;margin-top: 110px;">
     <!------------------------------------ Sessão inicial da plataforma de Carrousel ------------------->
     @include('layouts/_gerais.bemVindo')  
 
     <!------------------------------------ Sessão de Seleção de Município, Escola, Turma e Disciplina ------------------->
 
-    <div class="row justify-content-center">
-        <div class="col-md-12" style="background-color: white;margin-top:30px;border: 1px solid white;">
+    <div class="row justify-content-center" id="municipio_comparativo">
+        <div class="col-md-12" style="background-color: white;margin-top:30px;border: 1px solid white;" >
             <nav>
                 <div class="nav nav-tabs" id="nav-tab-novo" role="tablist" style="border-bottom: 1px solid #f9821e;">
                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" style="color:#f9821E;">Comparativo</a>
@@ -42,13 +42,13 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <button onclick="removerAno()" style="background-color: #f9821E;border-color:#f9821E;margin-left:20px;margin-right:20px;margin-top:10px;" class="btn btn-primary btn-sm">Remover Ano</button>
-                                    <button onclick="adicionarAno()" style="background-color: #f9821E;border-color:#f9821E;margin-left:20px;margin-right:20px;margin-top:10px;" class="btn btn-primary btn-sm">Adicionar Ano</button>
-                                    <button onclick="resetar()" style="margin-left:20px;margin-right:20px;margin-top:10px;" class="btn btn-secondary btn-sm">Resetar</button>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:20px;">
+                                    @foreach($label_disc as $label_disc_item)
+                                    <button id="button_disc_{{$label_disc_item}}" onclick="manipularAno('{{$label_disc_item}}')" style="margin-left:20px;margin-right:20px;margin-top:5px;" class="btn btn-dark btn-sm">{{$label_disc_item}}</button>
+                                    @endforeach
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                         * O presente gráfico representa o Percentual de Proficiência do Município entre as disciplinas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
-                                    <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                                    <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
                                 </div>
                                 <!------------------------------------ Navegação ------------------->
                                 <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="fim">

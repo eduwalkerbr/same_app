@@ -230,55 +230,96 @@
     }
     ctxDisciplina.onclick = clickHandler;
 
+    //Copia os Labels Originais do Gráfico
+    var labelsOriginais = [];
+    graficoDisciplina.data.labels.forEach(element => labelsOriginais.push(element));
+
+    //Copia os Dados Originais
+    var dataOriginais = [];
+    graficoDisciplina.data.datasets[0].data.forEach(element => dataOriginais.push(element));
+
     var anoRemDisciplina = [];
+    var anoMantDisciplina = [];
+
     var labelRemDisciplina = [];
+    var labelMantDisciplina = [];
+
     var nrLabelDisciplina = graficoDisciplina.data.labels.length;
 
-    function removerAno(){
-        console.log("Removendo ...");
-        if(graficoDisciplina.data.labels.length > 1){
-            var setDataSet = false;
-            for ($i = 0; $i < graficoDisciplina.data.labels.length; $i++) {
-                if(!setDataSet){
-                    anoRemDisciplina.push(graficoDisciplina.data.datasets[$i].data[graficoDisciplina.data.datasets[$i].data.length-1]);
-                    setDataSet = true;
+    function manipularAno(ano){
+        console.log("Alterando ...");
+        //Reseta Array Mantidos
+        labelMantDisciplina = [];
+        anoMantDisciplina = [];
+        
+        anoFormatado = new String(ano);
+
+        var component_button = document.getElementById("button_disc_" + anoFormatado);
+
+        //Se tiver ao menos um Item no array
+        if(graficoDisciplina.data.labels.length > 0){
+
+            //Dentre os Dados Originais
+            for($i = 0; $i < dataOriginais.length; $i++){
+                if(dataOriginais[$i].x == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoDisciplina.data.datasets[0].data.includes(dataOriginais[$i])){
+                        //Se não estiver adiciona
+                        anoMantDisciplina.push(dataOriginais[$i]);
+                        anoRemDisciplina = anoRemDisciplina.filter(dataItem => dataItem != dataOriginais[$i]);
+                    } else {
+                        if(graficoDisciplina.data.labels.length > 1){
+                            anoRemDisciplina.push(dataOriginais[$i]);
+                        } else {
+                            anoMantDisciplina.push(dataOriginais[$i]);
+                        }
+                    }
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!anoRemDisciplina.includes(dataOriginais[$i])){
+                        anoMantDisciplina.push(dataOriginais[$i]);
+                    }
                 }
-                graficoDisciplina.data.datasets[$i].data.pop();
+            }
+            //Dentro da Lista de Labels Originais
+            for ($i = 0; $i < labelsOriginais.length; $i++) {
+                //Realiza a adequação dos Labels -------------------------------------------------------------------
+                if(labelsOriginais[$i] == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoDisciplina.data.labels.includes(labelsOriginais[$i])){
+                        //Se não estiver adiciona
+                        labelMantDisciplina.push(labelsOriginais[$i]);
+                        labelRemDisciplina = labelRemDisciplina.filter(label => label != labelsOriginais[$i]);
+                    } else {
+                        if(graficoDisciplina.data.labels.length > 1){
+                            labelRemDisciplina.push(labelsOriginais[$i]);
+                        } else {
+                            labelMantDisciplina.push(labelsOriginais[$i]);
+                        }
+                    }
+                    
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!labelRemDisciplina.includes(labelsOriginais[$i])){
+                        labelMantDisciplina.push(labelsOriginais[$i]);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------
             } 
-            labelRemDisciplina.push(graficoDisciplina.data.labels[graficoDisciplina.data.labels.length-1]);
-            graficoDisciplina.data.labels.pop();
+            graficoDisciplina.data.labels = [];
+            labelMantDisciplina.forEach(element => graficoDisciplina.data.labels.push(element));
+
+            for($i = 0; $i < labelsOriginais.length; $i++){
+                graficoDisciplina.data.datasets[$i].data = anoMantDisciplina;
+            }
+
+            if(labelRemDisciplina.includes(ano)){
+                component_button.className = "btn btn-light btn-sm";
+            } else{
+                component_button.className = "btn btn-dark btn-sm";
+            }
             graficoDisciplina.update();    
         }
-    }
-
-    function adicionarAno(){
-        console.log("Adicionando ...");
-        if(labelRemDisciplina.length > 0){
-            for ($i = 0; $i < nrLabelDisciplina; $i++) {
-                graficoDisciplina.data.datasets[$i].data.push(anoRemDisciplina[anoRemDisciplina.length-1]);
-            }
-            anoRemDisciplina.pop();
-
-            graficoDisciplina.data.labels.push(labelRemDisciplina[labelRemDisciplina.length-1]);
-            labelRemDisciplina.pop();
-
-            graficoDisciplina.update(); 
-        }
-    }
-
-    function resetar(){
-        console.log("Resetando...");
-        anoRemDisciplina.forEach(element => {
-            for ($i = 0; $i < nrLabelDisciplina; $i++) {
-                graficoDisciplina.data.datasets[$i].data.push(element);
-            }
-        });
-        labelRemDisciplina.forEach(element => {
-            graficoDisciplina.data.labels.push(element);
-        });
-        anoRemDisciplina = [];
-        labelRemDisciplina = [];
-        graficoDisciplina.update(); 
     }
 
 </script>
@@ -286,5 +327,5 @@
 
 <!------------------------------------ Posição ao Abrir o Site ------------------->
 <script>
-    window.location.href = '#fullpage';
+    window.location.href = '#municipio_comparativo';
 </script>
