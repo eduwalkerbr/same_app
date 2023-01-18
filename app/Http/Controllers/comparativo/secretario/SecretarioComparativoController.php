@@ -267,19 +267,55 @@ class SecretarioComparativoController extends Controller
     /**
      * Método que busca os dados para montar a sessão Disciplinas Munícipio
      */
-    private function estatisticaDisciplinas($confPresenca, $municipio, $ano_same){
+    private function estatisticaDisciplinas($confPresenca, $municipio){
         //Busca os dados do gráfico de disciplina
-        if (Cache::has('compar_disciplina_mun_'.strval($municipio).strval($ano_same))) {
-            $dados_base_grafico_disciplina = Cache::get('compar_disciplina_mun_'.strval($municipio).strval($ano_same));
+        if (Cache::has('compar_disciplina_mun_'.strval($municipio))) {
+            $dados_base_grafico_disciplina = Cache::get('compar_disciplina_mun_'.strval($municipio));
         } else {
             $dados_base_grafico_disciplina  = DB::select('SELECT nome_disciplina as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
                  FROM dado_unificados WHERE id_municipio = :id_municipio AND presenca > :presenca GROUP BY SAME, nome_disciplina', 
                  ['presenca' => $confPresenca, 'id_municipio' => $municipio]);   
             
-            $dados_base_grafico_disciplina = $this->getDataSet($dados_base_grafico_disciplina, 'compar_disciplina_mun_'.strval($municipio).strval($ano_same));     
+            $dados_base_grafico_disciplina = $this->getDataSet($dados_base_grafico_disciplina, 'compar_disciplina_mun_'.strval($municipio));     
         }
 
         return $dados_base_grafico_disciplina;
+    }
+
+    /**
+     * Método que busca os dados para montar a sessão Temas Munícipio
+     */
+    private function estatisticaTemas($confPresenca, $municipio){
+        //Busca os dados do gráfico de disciplina
+        if (Cache::has('compar_tema_mun_'.strval($municipio))) {
+            $dados_base_grafico_tema = Cache::get('compar_tema_mun_'.strval($municipio));
+        } else {
+            $dados_base_grafico_tema = DB::select('SELECT nome_tema as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+                 FROM dado_unificados WHERE id_municipio = :id_municipio AND presenca > :presenca GROUP BY SAME, nome_tema', 
+                 ['presenca' => $confPresenca, 'id_municipio' => $municipio]);   
+            
+            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_mun_'.strval($municipio));     
+        }
+
+        return $dados_base_grafico_tema;
+    }
+
+    /**
+     * Método que busca os dados para montar a sessão Temas Munícipio
+     */
+    private function estatisticaEscolas($confPresenca, $municipio){
+        //Busca os dados do gráfico de disciplina
+        if (Cache::has('compar_escola_mun_'.strval($municipio))) {
+            $dados_base_grafico_escola = Cache::get('compar_escola_mun_'.strval($municipio));
+        } else {
+            $dados_base_grafico_escola = DB::select('SELECT REPLACE(nome_escola, \'.\', \'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+                 FROM dado_unificados WHERE id_municipio = :id_municipio AND presenca > :presenca GROUP BY SAME, nome_escola', 
+                 ['presenca' => $confPresenca, 'id_municipio' => $municipio]);   
+            
+            $dados_base_grafico_escola = $this->getDataSet($dados_base_grafico_escola, 'compar_escola_mun_'.strval($municipio));     
+        }
+
+        return $dados_base_grafico_escola;
     }
 
     private function getDataSet($resultSet, $cacheName){
@@ -329,12 +365,13 @@ class SecretarioComparativoController extends Controller
             }
 
             //Monta o DataSet do Gráfico
+            $contColors = 0;
             for ($i = 0; $i < sizeof($itens_disc); $i++) {
                 $item_data_set = [
                     'label' => $itens_disc[$i],
                     'data' => array_values($map_itens_label),
-                    'backgroundColor' => $this->backgroundColors[$i],
-                    'borderColor' => $this->borderColors[$i],
+                    'backgroundColor' => $this->backgroundColors[$contColors],
+                    'borderColor' => $this->borderColors[$contColors],
                     'borderWidth' => 1,
                     'hoverBorderWidth' => 2,
                     'hoverBorderColor' => 'green',
@@ -344,6 +381,12 @@ class SecretarioComparativoController extends Controller
                 ];   
     
                 $dataSet[$i] = $item_data_set;
+                if($contColors == 6){   
+                    $contColors = 0;
+                } else {
+                    $contColors++;
+                }
+                
             }
 
             $dados[0] = $labels_disc;
@@ -432,13 +475,26 @@ class SecretarioComparativoController extends Controller
         //Busca as Habilidades pela Disciplina e Munícipio
         $habilidades = $this->getHabilidades($disciplina_selecionada, $municipio);
 
-        $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $municipio, $ano_same_selecionado);
+        //Busca dados da Sessão de Disciplina
+        $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $municipio);
         $label_disc = $dados_comp_grafico_disciplina[0];
         $dados_disc = $dados_comp_grafico_disciplina[1];
+
+        //Busca dados da Sessão de Temas
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
+        $label_tema = $dados_comp_grafico_tema[0];
+        $dados_tema = $dados_comp_grafico_tema[1];
+
+        //Busca dados da Sessão de Escolas
+        $dados_comp_grafico_escola=$this->estatisticaEscolas($this->confPresenca, $municipio);
+        $label_escola = $dados_comp_grafico_escola[0];
+        $dados_escola = $dados_comp_grafico_escola[1];
               
         return view('comparativo/secretario/content/secretario', compact(
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas',
-            'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc'));
+            'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc',
+            'label_tema','dados_tema','label_escola','dados_escola'
+        ));
     }
 
     /**
@@ -516,13 +572,26 @@ class SecretarioComparativoController extends Controller
         //Busca as Habilidades pela Disciplina e Munícipio
         $habilidades = $this->getHabilidades($disciplina_selecionada, $municipio);
 
-        $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $municipio, $ano_same_selecionado);
+        //Busca dados Sessão de Disciplinas
+        $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $municipio);
         $label_disc = $dados_comp_grafico_disciplina[0];
         $dados_disc = $dados_comp_grafico_disciplina[1];
+
+        //Busca dados da Sessão de Temas
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
+        $label_tema = $dados_comp_grafico_tema[0];
+        $dados_tema = $dados_comp_grafico_tema[1];
+
+        //Busca dados da Sessão de Escolas
+        $dados_comp_grafico_escola=$this->estatisticaEscolas($this->confPresenca, $municipio);
+        $label_escola = $dados_comp_grafico_escola[0];
+        $dados_escola = $dados_comp_grafico_escola[1];;
               
         return view('comparativo/secretario/content/secretario', compact(
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas',
-            'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc'));
+            'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc',
+            'label_tema','dados_tema','label_escola','dados_escola'
+        ));
     }
    
 }
