@@ -324,6 +324,409 @@
 
 </script>
 
+<script>
+
+    // setup 
+    const dataTema = {
+        labels: <?php echo json_encode($label_tema) ?>,
+        datasets: <?php echo json_encode($dados_tema) ?>,
+    };
+
+    // config 
+    const configTema = {
+        type: 'bar',
+        data: dataTema,
+        options: {
+            layout: {
+                padding: {
+                    left: -12
+                },
+            },
+            responsive: true,
+            animation: {
+                onComplete: () => {
+                    delayed = true;
+                },
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            },
+
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparativo de Proficiência do Município entre os Temas nos Anos SAME',
+                    font: {
+                        size: 14,
+                        family: 'arial',
+                        weight: 'bold',
+                        style: 'normal'
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        padding: 14,
+                        boxHeight: 8,
+                        font: {
+                            size: 12,
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        boxWidth: 5,
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            let valor = context.dataset.data[context.dataIndex];
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += valor[context.dataset.label] || '';
+                                label += '% ';
+                            }
+                            return label;
+                        }
+                    }
+                },
+            },
+            elements: {
+                bar: {
+                    backgroundColor: colorize(false),
+                    borderColor: colorize(true),
+                    borderWidth: 2
+                }
+            }
+        }
+    };
+
+    // render init block
+    const ctxTema = document.getElementById('graficoTema');
+    Chart.defaults.font.size = 13;
+    var graficoTema = new Chart(
+        ctxTema,
+        configTema
+    );
+
+    function clickHandler(click) {
+        const points = graficoLink.getElementsAtEventForMode(click, 'nearest', {
+            intersect: true
+        }, true);
+        if (points.length) {
+            const firstPoint = points[0];
+            const value = graficoLink.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+            location.href = value.colunas.link;
+            window.open(location.href);
+        }
+    }
+    ctxTema.onclick = clickHandler;
+
+    //Copia os Labels Originais do Gráfico
+    var labelsOriginaisTema = [];
+    graficoTema.data.labels.forEach(element => labelsOriginaisTema.push(element));
+
+    //Copia os Dados Originais
+    var dataOriginaisTema = [];
+    graficoTema.data.datasets[0].data.forEach(element => dataOriginaisTema.push(element));
+
+    var anoRemTema = [];
+    var anoMantTema = [];
+
+    var labelRemTema = [];
+    var labelMantTema = [];
+
+    var nrDataTema = graficoTema.data.datasets.length;
+
+    function manipularAnoTema(ano){
+        console.log("Alterando ...");
+        //Reseta Array Mantidos
+        labelMantTema = [];
+        anoMantTema = [];
+        
+        anoFormatado = new String(ano);
+
+        var component_button = document.getElementById("button_tema_" + anoFormatado);
+
+        //Se tiver ao menos um Item no array
+        if(graficoTema.data.labels.length > 0){
+
+            //Dentre os Dados Originais
+            for($i = 0; $i < dataOriginaisTema.length; $i++){
+                if(dataOriginaisTema[$i].x == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoTema.data.datasets[0].data.includes(dataOriginaisTema[$i])){
+                        //Se não estiver adiciona
+                        anoMantTema.push(dataOriginaisTema[$i]);
+                        anoRemTema = anoRemTema.filter(dataItem => dataItem != dataOriginaisTema[$i]);
+                    } else {
+                        if(graficoTema.data.labels.length > 1){
+                            anoRemTema.push(dataOriginaisTema[$i]);
+                        } else {
+                            anoMantTema.push(dataOriginaisTema[$i]);
+                        }
+                    }
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!anoRemTema.includes(dataOriginaisTema[$i])){
+                        anoMantTema.push(dataOriginaisTema[$i]);
+                    }
+                }
+            }
+            //Dentro da Lista de Labels Originais
+            for ($i = 0; $i < labelsOriginaisTema.length; $i++) {
+                //Realiza a adequação dos Labels -------------------------------------------------------------------
+                if(labelsOriginaisTema[$i] == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoTema.data.labels.includes(labelsOriginaisTema[$i])){
+                        //Se não estiver adiciona
+                        labelMantTema.push(labelsOriginaisTema[$i]);
+                        labelRemTema = labelRemTema.filter(label => label != labelsOriginaisTema[$i]);
+                    } else {
+                        if(graficoTema.data.labels.length > 1){
+                            labelRemTema.push(labelsOriginaisTema[$i]);
+                        } else {
+                            labelMantTema.push(labelsOriginaisTema[$i]);
+                        }
+                    }
+                    
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!labelRemTema.includes(labelsOriginaisTema[$i])){
+                        labelMantTema.push(labelsOriginaisTema[$i]);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------
+            } 
+            graficoTema.data.labels = [];
+            labelMantTema.forEach(element => graficoTema.data.labels.push(element));
+
+            for($i = 0; $i < nrDataTema; $i++){
+                graficoTema.data.datasets[$i].data = anoMantTema;
+            }
+
+            if(labelRemTema.includes(ano)){
+                component_button.className = "btn btn-light btn-sm";
+            } else{
+                component_button.className = "btn btn-dark btn-sm";
+            }
+            graficoTema.update();    
+        }
+    }
+
+</script>
+
+<script>
+
+    // setup 
+    const dataEscola = {
+        labels: <?php echo json_encode($label_escola) ?>,
+        datasets: <?php echo json_encode($dados_escola) ?>,
+    };
+
+    // config 
+    const configEscola = {
+        type: 'bar',
+        data: dataEscola,
+        options: {
+            responsive: true,
+            animation: {
+                onComplete: () => {
+                    delayed = true;
+                },
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            },
+
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparativo de Proficiência do Município entre as Escolas nos Anos SAME',
+                    font: {
+                        size: 14,
+                        family: 'arial',
+                        weight: 'bold',
+                        style: 'normal'
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        boxHeight: 10,
+                        font: {
+                            size: 13,
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        boxWidth: 5,
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            let valor = context.dataset.data[context.dataIndex];
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += valor[context.dataset.label] || '';
+                                label += '% ';
+                            }
+                            return label;
+                        }
+                    }
+                },
+            },
+            elements: {
+                bar: {
+                    backgroundColor: colorize(false),
+                    borderColor: colorize(true),
+                    borderWidth: 2
+                }
+            }
+        }
+    };
+
+    // render init block
+    const ctxEscola = document.getElementById('graficoEscola');
+    Chart.defaults.font.size = 13;
+    var graficoEscola = new Chart(
+        ctxEscola,
+        configEscola
+    );
+
+    function clickHandler(click) {
+        const points = graficoLink.getElementsAtEventForMode(click, 'nearest', {
+            intersect: true
+        }, true);
+        if (points.length) {
+            const firstPoint = points[0];
+            const value = graficoLink.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+            location.href = value.colunas.link;
+            window.open(location.href);
+        }
+    }
+    ctxEscola.onclick = clickHandler;
+
+    //Copia os Labels Originais do Gráfico
+    var labelsOriginaisEscola = [];
+    graficoEscola.data.labels.forEach(element => labelsOriginaisEscola.push(element));
+
+    //Copia os Dados Originais
+    var dataOriginaisEscola = [];
+    graficoEscola.data.datasets[0].data.forEach(element => dataOriginaisEscola.push(element));
+
+    var anoRemEscola = [];
+    var anoMantEscola = [];
+
+    var labelRemEscola = [];
+    var labelMantEscola = [];
+
+    var nrDataEscola = graficoEscola.data.datasets.length;
+
+    function manipularAnoEscola(ano){
+        console.log("Alterando ...");
+        console.log(graficoEscola.data);
+        //Reseta Array Mantidos
+        labelMantEscola = [];
+        anoMantEscola = [];
+        
+        anoFormatado = new String(ano);
+
+        var component_button = document.getElementById("button_escola_" + anoFormatado);
+
+        //Se tiver ao menos um Item no array
+        if(graficoEscola.data.labels.length > 0){
+
+            //Dentre os Dados Originais
+            for($i = 0; $i < dataOriginaisEscola.length; $i++){
+                if(dataOriginaisEscola[$i].x == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoEscola.data.datasets[0].data.includes(dataOriginaisEscola[$i])){
+                        //Se não estiver adiciona
+                        anoMantEscola.push(dataOriginaisEscola[$i]);
+                        anoRemEscola = anoRemEscola.filter(dataItem => dataItem != dataOriginaisEscola[$i]);
+                    } else {
+                        if(graficoEscola.data.labels.length > 1){
+                            anoRemEscola.push(dataOriginaisEscola[$i]);
+                        } else {
+                            anoMantEscola.push(dataOriginaisEscola[$i]);
+                        }
+                    }
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!anoRemEscola.includes(dataOriginaisEscola[$i])){
+                        anoMantEscola.push(dataOriginaisEscola[$i]);
+                    }
+                }
+            }
+            //Dentro da Lista de Labels Originais
+            for ($i = 0; $i < labelsOriginaisEscola.length; $i++) {
+                //Realiza a adequação dos Labels -------------------------------------------------------------------
+                if(labelsOriginaisEscola[$i] == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoEscola.data.labels.includes(labelsOriginaisEscola[$i])){
+                        //Se não estiver adiciona
+                        labelMantEscola.push(labelsOriginaisEscola[$i]);
+                        labelRemEscola = labelRemEscola.filter(label => label != labelsOriginaisEscola[$i]);
+                    } else {
+                        if(graficoEscola.data.labels.length > 1){
+                            labelRemEscola.push(labelsOriginaisEscola[$i]);
+                        } else {
+                            labelMantEscola.push(labelsOriginaisEscola[$i]);
+                        }
+                    }
+                    
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!labelRemEscola.includes(labelsOriginaisEscola[$i])){
+                        labelMantEscola.push(labelsOriginaisEscola[$i]);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------
+            } 
+            graficoEscola.data.labels = [];
+            labelMantEscola.forEach(element => graficoEscola.data.labels.push(element));
+
+            for($i = 0; $i < nrDataEscola; $i++){
+                graficoEscola.data.datasets[$i].data = anoMantEscola;
+            }
+
+            if(labelRemEscola.includes(ano)){
+                component_button.className = "btn btn-light btn-sm";
+            } else{
+                component_button.className = "btn btn-dark btn-sm";
+            }
+            graficoEscola.update();    
+        }
+    }
+
+</script>
+
 
 <!------------------------------------ Posição ao Abrir o Site ------------------->
 <script>
