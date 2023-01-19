@@ -308,7 +308,7 @@ Route::get('/municipio_principal/{id}/{id_disciplina}/{ano}/{id_habilidade}/{ano
 
 //Secretario Comparativo
 Route::get('/municipio_principal/comparativo', [SecretarioComparativoController::class, 'index'])->name('secretario_comparativo.index');
-Route::get('/municipio_comparativo/comparativo/{id}/{id_disciplina}', [SecretarioComparativoController::class, 'exibirMunicipioComparativo'])->name('secretario_comparativo.exibirMunicipioComparativo');
+Route::get('/municipio_comparativo/comparativo/{id}/{id_disciplina}/{sessao}', [SecretarioComparativoController::class, 'exibirMunicipioComparativo'])->name('secretario_comparativo.exibirMunicipioComparativo');
 
 //CRUD Legenda
 Route::get('/legenda/create', [LegendaController::class, 'create'])->name('cadastro_legenda');

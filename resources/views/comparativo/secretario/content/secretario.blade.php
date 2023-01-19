@@ -54,9 +54,9 @@
                                 <!------------------------------------ Navegação ------------------->
                                 <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficotema">
                                     <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
+                                        <div class="col-md-12" style="background-color: white;border: 1px solid white;text-align:center;">
                                             <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficotema">
-                                                Temas do Município de {{$municipio_selecionado[0]->nome}} no transcorrer dos Anos SAME &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
+                                                Temas do Município de {{$municipio_selecionado[0]->nome}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
                                             </a>
                                         </div>
                                     </div>
@@ -100,12 +100,12 @@
                                 <div class="row justify-content-center">
                                     <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
                                         <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#municipio_comparativo">
-                                            Voltar para Disciplinas no Município de {{$municipio_selecionado[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
+                                            Voltar para Disciplinas em {{$municipio_selecionado[0]->nome}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
                                         </a>
                                     </div>
                                     <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
                                         <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescola">
-                                            Escolas do Município de {{$municipio_selecionado[0]->desc}} no transcorrer dos Anos SAME &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
+                                            Escolas de {{$municipio_selecionado[0]->nome}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -144,18 +144,17 @@
                                 <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
                             </div>
                             <!------------------------------------ Navegação ------------------->
-                            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="fim">
+                            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficoescoladisciplina">
                                 <div class="row justify-content-center">
                                     <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
                                         <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficotema">
-                                            Voltar para Temas do Município de {{$municipio_selecionado[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
+                                            Voltar para Temas em {{$municipio_selecionado[0]->nome}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
 
                                         </a>
                                     </div>
                                     <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficohabilidadeanodisciplina">
-                                            Habilidade Selecionada em {{$disciplina_selecionada[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
+                                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescoladisciplina">
+                                            Escolas em {{$municipio_selecionado[0]->nome}} na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -165,7 +164,140 @@
                     </div>
                     <!---------------------------- Card Escolas Comparativo Gráfico ------------------->
                 </div>
-                <!------------------------------------ Sessão Escolas Comparativo Gráfico ------------------->
+                <!------------------------------------ Sessão Escolas Disciplina Comparativo Gráfico ------------------->
+
+                <!------------------------------------ Sessão Escolas Disciplina Comparativo ------------------->
+                <div class="row justify-content-center section" style="margin-bottom: 15px;">
+                    <!---------------------------- Card Escolas Disciplina Comparativo Gráfico ------------------->
+                    <div class="card-deck" style="background-color: white;padding-top:16px;border: 1px solid white;">
+                        <div class="card text-center" style="box-shadow: 5px 5px 5px rgba(156,163,175);">
+                            <!---------------------------- Título Escolas Disciplina Comparativo Gráfico------------------->
+                            <div class=" card-header" style="text-align: justify;background-color: white; border-bottom:none;font-size:15px;color:black#f9821E;font-weight:bold;">
+                                <i class="fa-solid fa-square-poll-vertical"></i> &emsp; Indicadores Escolas na Disciplina de {{$disciplina_selecionada[0]->desc}}
+                            </div>
+                            <!---------------------------- Título Escolas Disciplina Comparativo ------------------->
+                            <div class="card-body" style="padding-top:1rem;padding-bottom:0.5rem;background-color:white;">
+                                <div class="chartCard col-md-12">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-12" style="background-color: white;border: 1px solid white;margin-bottom:-10px;margin-top: -10px;">
+                                            <nav aria-label="breadcrumb">
+                                                <ol class="breadcrumb" style="background-color: white;border:none;color:#0046AD;padding: 0em 0em;">
+                                                    <li class="breadcrumb-item">
+                                                    <li class="nav-item dropdown">
+                                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color:black;font-size: 13px;border: 1px solid black;border-radius: 10px;"><i class="fa-brands fa-wpforms"></i>&emsp;{{$disciplina_selecionada[0]->desc}}</a>
+                                                        <ul class="dropdown-menu">
+                                                            @foreach($disciplinas as $disciplina)
+                                                            <li><a class="dropdown-item" style="color:black;font-size: 13px;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina->id, 'sessao' => 'graficoescoladisciplina']) }}">{{ $disciplina->desc}}</a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+
+                                                </ol>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                    <!------------------------------------ Gráfico ------------------->
+                                    <div class="chartBox">
+                                        <canvas id="graficoEscolaDisciplina"></canvas>
+                                    </div>
+                                    <!------------------------------------ Gráfico ------------------->
+                                </div>
+                                @foreach($label_escola_disc as $label_escola_disc_item)
+                                <button id="button_escola_disc_{{$label_escola_disc_item}}" onclick="manipularAnoEscolaDisciplina('{{$label_escola_disc_item}}')" style="margin-left:20px;margin-right:20px;margin-top:0px;" class="btn btn-dark btn-sm">{{$label_escola_disc_item}}</button>
+                                @endforeach
+                                <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    * O presente gráfico representa o Percentual de Proficiência do Município entre as Escolas na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
+                                </p>
+                                <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                            </div>
+                            <!------------------------------------ Navegação ------------------->
+                            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="graficocurriculardisciplina">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
+                                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescola">
+                                            Voltar para Temas do Município de {{$municipio_selecionado[0]->nome}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
+                                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficocurriculardisciplina">
+                                            Anos Curriculares em {{$municipio_selecionado[0]->nome}} na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------------------------ Navegação ------------------->
+                        </div>
+                    </div>
+                    <!---------------------------- Card Curricular Disciplina Comparativo Gráfico ------------------->
+                </div>
+                <!------------------------------------ Sessão Curricular Disciplina Comparativo Gráfico ------------------->
+
+                <!------------------------------------ Sessão Curricular Disciplina Comparativo ------------------->
+                <div class="row justify-content-center section" style="margin-bottom: 15px;">
+                    <!---------------------------- Card Curricular Disciplina Comparativo Gráfico ------------------->
+                    <div class="card-deck" style="background-color: white;padding-top:16px;border: 1px solid white;">
+                        <div class="card text-center" style="box-shadow: 5px 5px 5px rgba(156,163,175);">
+                            <!---------------------------- Título Curricular Disciplina Comparativo Gráfico------------------->
+                            <div class=" card-header" style="text-align: justify;background-color: white; border-bottom:none;font-size:15px;color:black#f9821E;font-weight:bold;">
+                                <i class="fa-solid fa-square-poll-vertical"></i> &emsp; Indicadores Anos Curriculares na Disciplina de {{$disciplina_selecionada[0]->desc}}
+                            </div>
+                            <!---------------------------- Título Curricular Disciplina Comparativo ------------------->
+                            <div class="card-body" style="padding-top:1rem;padding-bottom:0.5rem;background-color:white;">
+                                <div class="chartCard col-md-12">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-12" style="background-color: white;border: 1px solid white;margin-bottom:-10px;margin-top: -10px;">
+                                            <nav aria-label="breadcrumb">
+                                                <ol class="breadcrumb" style="background-color: white;border:none;color:#0046AD;padding: 0em 0em;">
+                                                    <li class="breadcrumb-item">
+                                                    <li class="nav-item dropdown">
+                                                        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color:black;font-size: 13px;border: 1px solid black;border-radius: 10px;"><i class="fa-brands fa-wpforms"></i>&emsp;{{$disciplina_selecionada[0]->desc}}</a>
+                                                        <ul class="dropdown-menu">
+                                                            @foreach($disciplinas as $disciplina)
+                                                            <li><a class="dropdown-item" style="color:black;font-size: 13px;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina->id, 'sessao' => 'graficocurriculardisciplina']) }}">{{ $disciplina->desc}}</a></li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+
+                                                </ol>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                    <!------------------------------------ Gráfico ------------------->
+                                    <div class="chartBox">
+                                        <canvas id="graficoCurricularDisciplina"></canvas>
+                                    </div>
+                                    <!------------------------------------ Gráfico ------------------->
+                                </div>
+                                @foreach($label_curricular_disc as $label_curricular_disc_item)
+                                <button id="button_curricular_disc_{{$label_curricular_disc_item}}" onclick="manipularAnoCurricularDisciplina('{{$label_curricular_disc_item}}')" style="margin-left:20px;margin-right:20px;margin-top:0px;" class="btn btn-dark btn-sm">{{$label_curricular_disc_item}}</button>
+                                @endforeach
+                                <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    * O presente gráfico representa o Percentual de Proficiência do Município entre os Anos Curriculares na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
+                                </p>
+                                <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                            </div>
+                            <!------------------------------------ Navegação ------------------->
+                            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="fim">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
+                                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescoladisciplina">
+                                        Voltar para Escolas em {{$municipio_selecionado[0]->nome}} na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
+                                        </a>
+                                    </div>
+                                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
+                                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficohabilidadeanodisciplina">
+                                            Habilidade Selecionada em {{$disciplina_selecionada[0]->nome}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!------------------------------------ Navegação ------------------->
+                        </div>
+                    </div>
+                    <!---------------------------- Card Curricular Disciplina Comparativo Gráfico ------------------->
+                </div>
+                <!------------------------------------ Sessão Curricular Disciplina Comparativo Gráfico ------------------->
+
 
             </div>
         </div>
