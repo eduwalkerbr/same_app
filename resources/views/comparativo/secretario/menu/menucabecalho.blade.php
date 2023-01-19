@@ -146,7 +146,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$municipio_selecionado[0]->nome ?? 'Município'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($municipios as $municipio)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio->id, 'id_disciplina' => $disciplina_selecionada[0]->id]) }}">{{ $municipio->nome ?? ''}}</a></li>
+                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'municipio_comparativo']) }}">{{ $municipio->nome ?? ''}}</a></li>
                                 @endforeach
                             </ul>
                         </li>
@@ -177,7 +177,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$disciplina_selecionada[0]->desc ?? 'Disciplina'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($disciplinas as $disciplina)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina->id]) }}">{{ $disciplina->desc ?? ''}}</a></li>
+                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina->id, 'sessao' => 'municipio_comparativo']) }}">{{ $disciplina->desc ?? ''}}</a></li>
                                 @endforeach
                             </ul>
                         </li>
