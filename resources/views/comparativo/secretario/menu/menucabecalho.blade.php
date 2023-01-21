@@ -162,7 +162,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($escolas as $escola)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor.exibirEscola', ['id' => $escola->id, 'id_municipio' => $municipio_selecionado[0]->id , 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $escola->nome ?? ''}}</a></li>
+                                <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor_comparativo.exibirEscolaComparativo', ['id' => $escola->id, 'id_municipio' => $municipio_selecionado[0]->id , 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'escola_comparativo']) }}">{{ $escola->nome ?? ''}}</a></li>
                                 @endforeach
                             </ul>
                         </li>

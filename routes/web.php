@@ -40,6 +40,7 @@ use App\Http\Controllers\ProfessorController;
 use App\Http\Controllers\DiretorController;
 use App\Http\Controllers\SecretarioController;
 use App\Http\Controllers\comparativo\secretario\SecretarioComparativoController;
+use App\Http\Controllers\comparativo\diretor\DiretorComparativoController;
 use App\Http\Controllers\cadastros\legenda\LegendaController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\AlterarRegistroController;
@@ -299,6 +300,10 @@ Route::get('/escola_principal', [DiretorController::class, 'index'])->name('dire
 Route::get('/escola_principal/{id}/{id_municipio}/{id_disciplina}/{ano_same}', [DiretorController::class, 'exibirEscola'])->name('diretor.exibirEscola');
 Route::get('/escola_principal/{id}/{id_municipio}/{id_disciplina}/{ano}/{ano_same}', [DiretorController::class, 'exibirEscolaAno'])->name('diretor.exibirEscolaAno');
 Route::get('/escola_principal/{id}/{id_municipio}/{id_disciplina}/{ano}/{id_habilidade}/{ano_same}', [DiretorController::class, 'exibirEscolaHabilidade'])->name('diretor.exibirEscolaHabilidade');
+
+//Diretor Comparativo
+Route::get('/escola_principal/comparativo', [DiretorComparativoController::class, 'index'])->name('diretor_comparativo.index');
+Route::get('/escola_comparativo/comparativo/{id}/{id_municipio}/{id_disciplina}/{sessao}', [DiretorComparativoController::class, 'exibirEscolaComparativo'])->name('diretor_comparativo.exibirEscolaComparativo');
 
 //Secretario
 Route::get('/municipio_principal', [SecretarioController::class, 'index'])->name('secretario.index');

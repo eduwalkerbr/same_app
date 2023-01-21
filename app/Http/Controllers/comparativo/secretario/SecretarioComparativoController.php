@@ -146,13 +146,13 @@ class SecretarioComparativoController extends Controller
      * Método que óbtem os dados do Municipio Selecionado utilizando Cache
      */
     private function getMunicipioSelecionado($id){
-        if(Cache::has('mun_'.strval($id))){
-            $municipio_selecionado = Cache::get('mun_'.strval($id));
+        if(Cache::has('mun_comp'.strval($id))){
+            $municipio_selecionado = Cache::get('mun_comp'.strval($id));
         } else {
-            $municipio_selecionado = $this->objMunicipio->where(['id' => $id])->get();
+            $municipio_selecionado = $this->objMunicipio->where(['id' => $id])->groupBy('nome')->get();
 
             //Adiciona ao Cache
-            Cache::forever('mun_'.strval($id), $municipio_selecionado);    
+            Cache::forever('mun_comp'.strval($id), $municipio_selecionado);    
         }
         
         return $municipio_selecionado;
@@ -221,12 +221,12 @@ class SecretarioComparativoController extends Controller
      */
     private function getEscolasMunicipio($id_municipio){
 
-        if(Cache::has('escolas_'.strval($id_municipio))){
-            $escolasListadas = Cache::get('escolas_'.strval($id_municipio));
+        if(Cache::has('escolas_comp'.strval($id_municipio))){
+            $escolasListadas = Cache::get('escolas_comp'.strval($id_municipio));
         } else {
             $escolasListadas = $this->objEscola->where(['status' => 'Ativo', 'municipios_id' => $id_municipio])->groupBy('nome')->get();
             //Adiciona ao Cache
-            Cache::put('escolas_'.strval($id_municipio), $escolasListadas, now()->addHours($this->horasCache));
+            Cache::put('escolas_comp'.strval($id_municipio), $escolasListadas, now()->addHours($this->horasCache));
         }
         
         return $escolasListadas;
@@ -236,13 +236,13 @@ class SecretarioComparativoController extends Controller
      * Método que óbtem os dados da Disciplina Selecionada utilizando Cache
      */
     private function getEscolaSelecionada($id){
-        if(Cache::has('esc_'.strval($id))){
-            $escola_selecionada = Cache::get('esc_'.strval($id));
+        if(Cache::has('esc_comp'.strval($id))){
+            $escola_selecionada = Cache::get('esc_comp'.strval($id));
         } else {
-            $escola_selecionada = $this->objEscola->where(['id' => $id])->get();
+            $escola_selecionada = $this->objEscola->where(['id' => $id])->groupBy('nome')->get();
 
             //Adiciona ao Cache
-            Cache::forever('esc_'.strval($id), $escola_selecionada);    
+            Cache::forever('esc_comp'.strval($id), $escola_selecionada);    
         }
         
         return $escola_selecionada;
@@ -253,12 +253,12 @@ class SecretarioComparativoController extends Controller
      */
     private function getTurmasMunicipio($id_municipio){
 
-        if(Cache::has('turmas_'.strval($id_municipio))){
-            $turmasListadas = Cache::get('turmas_'.strval($id_municipio));
+        if(Cache::has('turmas_comp'.strval($id_municipio))){
+            $turmasListadas = Cache::get('turmas_comp'.strval($id_municipio));
         } else {
             $turmasListadas = $this->objTurma->where(['status' => 'Ativo', 'escolas_municipios_id' => $id_municipio])->groupBy('TURMA')->orderBy('TURMA','asc')->get();
             //Adiciona ao Cache
-            Cache::put('turmas_'.strval($id_municipio), $turmasListadas, now()->addHours($this->horasCache));
+            Cache::put('turmas_comp'.strval($id_municipio), $turmasListadas, now()->addHours($this->horasCache));
         }
         
         return $turmasListadas;

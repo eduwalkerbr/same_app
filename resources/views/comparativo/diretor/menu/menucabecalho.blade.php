@@ -5,7 +5,7 @@
                 <img src="{{ asset('img/logo.png') }}" width="90" height="90" class="d-inline-block align-center" alt="" loading="lazy"></a>
             </a>
         </div>
-        <div class="col-md-10" style="background-color: white;border: 1px solid white;">
+        <div class="col-md-10" style="background-color: white;border: 1px solid white;;">
             <div class="row justify-content-center" style="font-weight:bold;">
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
@@ -28,12 +28,12 @@
                     </ul>
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ route('secretario.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                            Proficiências
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ route('secretario_comparativo.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                            Comparativos
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size: 15px;color: black;">
-                                <a class="dropdown-item" href="{{ route('secretario_comparativo.index') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                    Comparativos
+                                <a class="dropdown-item" href="{{ route('secretario.index') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                    Proficiências
                                 </a>
                             </div>
                         </li>
@@ -146,7 +146,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$municipio_selecionado[0]->nome ?? 'Município'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($municipios as $municipio)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario.exibirMunicipio', ['id' => $municipio->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $municipio->nome ?? ''}}</a></li>
+                                <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'municipio_comparativo']) }}">{{ $municipio->nome ?? ''}}</a></li>
                                 @endforeach
                             </ul>
                         </li>
@@ -162,32 +162,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($escolas as $escola)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor.exibirEscola', ['id' => $escola->id, 'id_municipio' => $municipio_selecionado[0]->id , 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $escola->nome ?? ''}}</a></li>
-                                @endforeach
-                            </ul>
-                        </li>
-                        @endif
-                    </ul>
-                    <ul class="navbar-nav mr-4">
-                        <!------------------------------------ Turma ------------------->
-                        @if(isset($turmas))
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$turma_selecionada[0]->DESCR_TURMA ?? 'Turma'}}</a>
-                            <ul class="dropdown-menu">
-                                @foreach($turmas as $turma)
-                                @php
-                                $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                                @endphp
-                                @if($previlegio->funcaos_id == 7)
-                                @php
-                                $escola = $turma->find($turma->id)->relEscolas;
-                                $descricao_professor = $turma->DESCR_TURMA.' (Escola '.$escola->nome.')';
-                                @endphp
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('professor.exibirTurma', ['id' => $turma->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'id_escola' => $escola_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $descricao_professor ?? ''}}</a></li>
-
-                                @else
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('professor.exibirTurma', ['id' => $turma->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'id_escola' => $escola_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $turma->DESCR_TURMA ?? ''}}</a></li>
-                                @endif
+                                <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor_comparativo.exibirEscolaComparativo', ['id' => $escola->id, 'id_municipio' => $municipio_selecionado[0]->id , 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'escola_comparativo']) }}">{{ $escola->nome ?? ''}}</a></li>
                                 @endforeach
                             </ul>
                         </li>
@@ -199,20 +174,10 @@
                     <!------------------------------------ Sessão Disciplina ------------------->
                     <ul class="navbar-nav ml-4">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{strval($ano_same_selecionado) ?? 'Anos'}}</a>
-                            <ul class="dropdown-menu">
-                                @foreach($anos_same as $ano_same)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('professor.exibirTurmaAnoSame', ['id_disciplina' => $disciplina_selecionada[0]->id, 'id_escola' => $escola_selecionada[0]->id, 'ano_same' => $ano_same->SAME]) }}">{{ $ano_same->SAME ?? ''}}</a></li>
-                                @endforeach
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ml-4">
-                        <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$disciplina_selecionada[0]->desc ?? 'Disciplina'}}</a>
                             <ul class="dropdown-menu">
                                 @foreach($disciplinas as $disciplina)
-                                <li><a class="dropdown-item" style="color:black;" href="{{ route('professor.exibirTurma', ['id' => $turma_selecionada[0]->id, 'id_disciplina' => $disciplina->id, 'id_escola' => $escola_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $disciplina->desc ?? ''}}</a></li>
+                                <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor_comparativo.exibirEscolaComparativo', ['id' => $escola->id,'id_municipio' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina->id, 'sessao' => 'escola_comparativo']) }}">{{ $disciplina->desc ?? ''}}</a></li>
                                 @endforeach
                             </ul>
                         </li>

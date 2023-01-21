@@ -49,7 +49,7 @@
                                     <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                         * O presente gráfico representa o Percentual de Proficiência do Município entre as disciplinas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
-                                    <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                                    <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                                 </div>
                                 <!------------------------------------ Navegação ------------------->
                                 <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficotema">
@@ -93,7 +93,7 @@
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre os Temas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
-                                <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                                <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficoescola">
@@ -141,7 +141,7 @@
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre as Escolas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
-                                <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                                <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficoescoladisciplina">
@@ -208,7 +208,7 @@
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre as Escolas na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
-                                <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                                <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="graficocurriculardisciplina">
@@ -274,7 +274,7 @@
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre os Anos Curriculares na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
-                                <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas dos Municípios.</p>
+                                <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="fim">
