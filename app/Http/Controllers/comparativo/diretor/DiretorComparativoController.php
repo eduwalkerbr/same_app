@@ -367,7 +367,7 @@ class DiretorComparativoController extends Controller
         if (Cache::has('compar_tema_esc_'.strval($escola))) {
             $dados_base_grafico_tema = Cache::get('compar_tema_esc_'.strval($escola));
         } else {
-            $dados_base_grafico_tema = DB::select('SELECT nome_tema as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+            $dados_base_grafico_tema = DB::select('SELECT REPLACE(nome_tema,\'.\', \'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
                  FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca GROUP BY SAME, nome_tema', 
                  ['presenca' => $confPresenca, 'id_escola' => $escola]);   
             
@@ -403,7 +403,7 @@ class DiretorComparativoController extends Controller
         if (Cache::has('compar_turma_esc_'.strval($escola).strval($id_disciplina))) {
             $dados_base_grafico_turma_disc = Cache::get('compar_turma_esc_'.strval($escola).strval($id_disciplina));
         } else {
-            $dados_base_grafico_turma_disc = DB::select('SELECT nome_turma as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+            $dados_base_grafico_turma_disc = DB::select('SELECT REPLACE(nome_turma,\'\t\',\'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
                  FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca AND id_disciplina = :id_disciplina GROUP BY SAME, nome_turma', 
                  ['presenca' => $confPresenca, 'id_escola' => $escola, 'id_disciplina' => $id_disciplina]);   
             
@@ -440,25 +440,53 @@ class DiretorComparativoController extends Controller
                     $itens_disc[$cont_item] = $resultSet[$i]->item;
                     $cont_item++;
                 }
-                //Monta o Array de Itens por Label
-                if(array_key_exists($resultSet[$i]->label,$map_itens_label)){
-                    //Pega Itens Existente no Array
-                    $item_array = $map_itens_label[$resultSet[$i]->label];
-                    //Cria o Novo Item
-                    $novo_item_array = array(
-                        'x' => $resultSet[$i]->label,
-                        $resultSet[$i]->item => $resultSet[$i]->percentual,);
-                    //Combina os Itens para criar o Array completo    
-                    $map_itens_label[$resultSet[$i]->label] = array_merge($item_array, $novo_item_array);
-                } else {
-                    //Caso seja o primeiro item do array
-                    $map_itens_label[$resultSet[$i]->label] = array(
-                        'x' => $resultSet[$i]->label,
-                        $resultSet[$i]->item => $resultSet[$i]->percentual,
-                    );
-                } 
             }
-
+            for ($i = 0; $i < sizeof($itens_disc); $i++) {
+                for ($j = 0; $j < sizeof($labels_disc); $j++) {
+                    $cont_item = 0;
+                    for ($k = 0; $k < sizeof($resultSet); $k++) {
+                        if($resultSet[$k]->item == $itens_disc[$i] && $resultSet[$k]->label == $labels_disc[$j]){
+                            $cont_item = 1;
+                            //Caso Exista o Mapeamento para o Ano
+                            if(array_key_exists($labels_disc[$j],$map_itens_label)){
+                                //Pega Itens Existente no Array
+                                $item_array = $map_itens_label[$labels_disc[$j]];
+                                //Cria o Novo Item
+                                $novo_item_array = array(
+                                    'x' => $resultSet[$k]->label,
+                                    $resultSet[$k]->item => $resultSet[$k]->percentual,);
+                                //Combina os Itens para criar o Array completo    
+                                $map_itens_label[$labels_disc[$j]] = array_merge($item_array, $novo_item_array);
+                            } else {
+                                //Caso seja o primeiro item do array
+                                $map_itens_label[$resultSet[$k]->label] = array(
+                                    'x' => $resultSet[$k]->label,
+                                    $resultSet[$k]->item => $resultSet[$k]->percentual,
+                                );   
+                            }    
+                        }
+                    }
+                    if($cont_item == 0){
+                        if(array_key_exists($labels_disc[$j],$map_itens_label)){
+                            //Pega Itens Existente no Array
+                            $item_array = $map_itens_label[$labels_disc[$j]];
+                            //Cria o Novo Item
+                            $novo_item_array = array(
+                                'x' => $labels_disc[$j],
+                                $itens_disc[$i] => "00.0000",);
+                            //Combina os Itens para criar o Array completo    
+                            $map_itens_label[$labels_disc[$j]] = array_merge($item_array, $novo_item_array);
+                        } else {
+                            //Caso seja o primeiro item do array
+                            $map_itens_label[$labels_disc[$j]] = array(
+                                'x' => $labels_disc[$j],
+                                $itens_disc[$i] => "00.0000",
+                            );     
+                        }
+                    }
+                }
+            }
+            
             //Monta o DataSet do Gráfico
             $contColors = 0;
             for ($i = 0; $i < sizeof($itens_disc); $i++) {
@@ -486,6 +514,8 @@ class DiretorComparativoController extends Controller
 
             $dados[0] = $labels_disc;
             $dados[1] = $dataSet;
+            $dados[2] = $itens_disc;
+            $dados[3] = $map_itens_label;
 
             //Adiciona ao Cache
             Cache::forever($cacheName,$dados);
@@ -578,28 +608,37 @@ class DiretorComparativoController extends Controller
         $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $escola);
         $label_disc = $dados_comp_grafico_disciplina[0];
         $dados_disc = $dados_comp_grafico_disciplina[1];
+        $itens_disc = $dados_comp_grafico_disciplina[2];
+        $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
         $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
+        $itens_tema = $dados_comp_grafico_tema[2];
+        $map_itens_tema = $dados_comp_grafico_tema[3];
 
         //Busca dados da Sessão de Ano Curricular Disciplina
         $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
         $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
         $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+        $itens_curricular_disc = $dados_comp_grafico_curricular_disc[2];
+        $map_itens_curricular_disc = $dados_comp_grafico_curricular_disc[3];
 
         //Busca dados da Sessão de Turma Disciplina
         $dados_comp_grafico_turma_disc=$this->estatisticaTurmaDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
         $label_turma_disc = $dados_comp_grafico_turma_disc[0];
         $dados_turma_disc = $dados_comp_grafico_turma_disc[1];
+        $itens_turma_disc = $dados_comp_grafico_turma_disc[2];
+        $map_itens_turma_disc = $dados_comp_grafico_turma_disc[3];
 
         $sessao_inicio = "municipio_comparativo";
   
         return view('comparativo/diretor/content/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','sessao_inicio',
             'disciplinas','disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same',
-            'ano_same_selecionado','label_disc','dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc'));
+            'ano_same_selecionado','label_disc','dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc',
+            'itens_disc','map_itens_disc','itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc'));
     }
 
     /**
@@ -691,21 +730,29 @@ class DiretorComparativoController extends Controller
         $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $escola);
         $label_disc = $dados_comp_grafico_disciplina[0];
         $dados_disc = $dados_comp_grafico_disciplina[1];
+        $itens_disc = $dados_comp_grafico_disciplina[2];
+        $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
         $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
+        $itens_tema = $dados_comp_grafico_tema[2];
+        $map_itens_tema = $dados_comp_grafico_tema[3];
 
         //Busca dados da Sessão de Ano Curricular Disciplina
         $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
         $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
         $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+        $itens_curricular_disc = $dados_comp_grafico_curricular_disc[2];
+        $map_itens_curricular_disc = $dados_comp_grafico_curricular_disc[3];
 
         //Busca dados da Sessão de Turma Disciplina
         $dados_comp_grafico_turma_disc=$this->estatisticaTurmaDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
         $label_turma_disc = $dados_comp_grafico_turma_disc[0];
         $dados_turma_disc = $dados_comp_grafico_turma_disc[1];
+        $itens_turma_disc = $dados_comp_grafico_turma_disc[2];
+        $map_itens_turma_disc = $dados_comp_grafico_turma_disc[3];
 
         //Busca todos os Critérios
         $criterios_questaoAll = $this->getCriterios();
@@ -716,7 +763,9 @@ class DiretorComparativoController extends Controller
         return view('comparativo/diretor/content/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','disciplinas','sessao_inicio',
             'disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same','ano_same_selecionado','label_disc',
-            'dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc'));
+            'dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc','itens_disc','map_itens_disc',
+            'itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc'
+        ));
     }
 
 }

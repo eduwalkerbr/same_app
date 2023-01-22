@@ -382,7 +382,6 @@ class SecretarioComparativoController extends Controller
                     $cont_item++;
                 }
             }
-
             for ($i = 0; $i < sizeof($itens_disc); $i++) {
                 for ($j = 0; $j < sizeof($labels_disc); $j++) {
                     $cont_item = 0;
@@ -409,14 +408,22 @@ class SecretarioComparativoController extends Controller
                         }
                     }
                     if($cont_item == 0){
-                        //Pega Itens Existente no Array
-                        $item_array = $map_itens_label[$labels_disc[$j]];
-                        //Cria o Novo Item
-                        $novo_item_array = array(
-                            'x' => $labels_disc[$j],
-                            $itens_disc[$i] => "00.0000",);
-                        //Combina os Itens para criar o Array completo    
-                        $map_itens_label[$labels_disc[$j]] = array_merge($item_array, $novo_item_array);
+                        if(array_key_exists($labels_disc[$j],$map_itens_label)){
+                            //Pega Itens Existente no Array
+                            $item_array = $map_itens_label[$labels_disc[$j]];
+                            //Cria o Novo Item
+                            $novo_item_array = array(
+                                'x' => $labels_disc[$j],
+                                $itens_disc[$i] => "00.0000",);
+                            //Combina os Itens para criar o Array completo    
+                            $map_itens_label[$labels_disc[$j]] = array_merge($item_array, $novo_item_array);
+                        } else {
+                            //Caso seja o primeiro item do array
+                            $map_itens_label[$labels_disc[$j]] = array(
+                                'x' => $labels_disc[$j],
+                                $itens_disc[$i] => "00.0000",
+                            );     
+                        }
                     }
                 }
             }
@@ -545,29 +552,37 @@ class SecretarioComparativoController extends Controller
         $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
+        $itens_tema = $dados_comp_grafico_tema[2];
+        $map_itens_tema = $dados_comp_grafico_tema[3];
 
         //Busca dados da Sessão de Escolas
         $dados_comp_grafico_escola=$this->estatisticaEscolas($this->confPresenca, $municipio);
         $label_escola = $dados_comp_grafico_escola[0];
         $dados_escola = $dados_comp_grafico_escola[1];
+        $itens_escola = $dados_comp_grafico_escola[2];
+        $map_itens_escola = $dados_comp_grafico_escola[3];
 
         //Busca dados da Sessão de Escolas Disciplina
         $dados_comp_grafico_escola_disc=$this->estatisticaEscolasDisciplina($this->confPresenca, $municipio, $disciplina_selecionada[0]->id);
         $label_escola_disc = $dados_comp_grafico_escola_disc[0];
         $dados_escola_disc = $dados_comp_grafico_escola_disc[1];
+        $itens_escola_disc = $dados_comp_grafico_escola_disc[2];
+        $map_itens_escola_disc = $dados_comp_grafico_escola_disc[3];
 
         //Busca dados da Sessão de Ano Curricular Disciplina
         $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $municipio, $disciplina_selecionada[0]->id);
         $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
         $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+        $itens_curricular_disc = $dados_comp_grafico_curricular_disc[2];
+        $map_itens_curricular_disc = $dados_comp_grafico_curricular_disc[3];
 
         $sessao_inicio = "municipio_comparativo";
               
         return view('comparativo/secretario/content/secretario', compact(
-            'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas',
+            'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas','itens_tema','map_itens_tema',
             'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc','itens_disc','map_itens_disc',
             'label_tema','dados_tema','label_escola','dados_escola','label_escola_disc','dados_escola_disc','sessao_inicio','label_curricular_disc',
-            'dados_curricular_disc'
+            'dados_curricular_disc','itens_curricular_disc','map_itens_curricular_disc','itens_escola_disc','map_itens_escola_disc','itens_escola','map_itens_escola'
         ));
     }
 
@@ -657,30 +672,38 @@ class SecretarioComparativoController extends Controller
         $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
+        $itens_tema = $dados_comp_grafico_tema[2];
+        $map_itens_tema = $dados_comp_grafico_tema[3];
 
         //Busca dados da Sessão de Escolas
         $dados_comp_grafico_escola=$this->estatisticaEscolas($this->confPresenca, $municipio);
         $label_escola = $dados_comp_grafico_escola[0];
         $dados_escola = $dados_comp_grafico_escola[1];
+        $itens_escola = $dados_comp_grafico_escola[2];
+        $map_itens_escola = $dados_comp_grafico_escola[3];
 
         //Busca dados da Sessão de Escolas Disciplina
         $dados_comp_grafico_escola_disc=$this->estatisticaEscolasDisciplina($this->confPresenca, $municipio, $disciplina_selecionada[0]->id);
         $label_escola_disc = $dados_comp_grafico_escola_disc[0];
         $dados_escola_disc = $dados_comp_grafico_escola_disc[1];
+        $itens_escola_disc = $dados_comp_grafico_escola_disc[2];
+        $map_itens_escola_disc = $dados_comp_grafico_escola_disc[3];
 
         //Busca dados da Sessão de Ano Curricular Disciplina
         $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $municipio, $disciplina_selecionada[0]->id);
         $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
         $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+        $itens_curricular_disc = $dados_comp_grafico_curricular_disc[2];
+        $map_itens_curricular_disc = $dados_comp_grafico_curricular_disc[3];
 
         $sessao_inicio = "";
         $sessao_inicio = $sessao;
               
         return view('comparativo/secretario/content/secretario', compact(
-            'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas',
+            'solRegistro','solAltCadastral','solAddTurma','sugestoes','escolas','municipios','destaques','municipio_selecionado','disciplinas','itens_tema','map_itens_tema',
             'disciplina_selecionada','escola_selecionada','anos','ano','habilidades','anos_same','ano_same_selecionado','label_disc','dados_disc','itens_disc','map_itens_disc',
-            'label_tema','dados_tema','label_escola','dados_escola','label_escola_disc','dados_escola_disc','sessao_inicio','label_curricular_disc',
-            'dados_curricular_disc'
+            'label_tema','dados_tema','label_escola','dados_escola','label_escola_disc','dados_escola_disc','sessao_inicio','label_curricular_disc','itens_escola','map_itens_escola',
+            'dados_curricular_disc','itens_escola_disc','map_itens_escola_disc','itens_curricular_disc','map_itens_curricular_disc'
         ));
     }
 
