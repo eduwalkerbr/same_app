@@ -1,11 +1,11 @@
-<!-- The Modal de Dados Tabelas Ano Curricular Disciplina -->
-<div class="modal" id="mod_com_disc">
+<!-- The Modal de Dados Tabelas Escola Disciplina -->
+<div class="modal" id="mod_disciplina">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content">
 
             <!-- Modal Header -->
             <div class="modal-header" style="background-color:#0046AD;">
-                <h4 class="modal-title" style="background-color:#0046AD; color:white;font-size:15px;font-weight:bold;">Comparativo de {{$municipio_selecionado[0]->nome}} entre as Disciplinas</h4>
+                <h4 class="modal-title" style="background-color:#0046AD; color:white;font-size:15px;font-weight:bold;">Comparativo da Escola {{$escola_selecionada[0]->nome}} entre as Disciplinas</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal Header -->
@@ -72,4 +72,4 @@
         </div>
     </div>
 </div>
-<!-- The Modal de Dados Tabelas Ano Curricular Disciplina -->
+<!-- The Modal de Dados Tabelas Escola Disciplina -->

@@ -46,11 +46,15 @@
                                     @foreach($label_disc as $label_disc_item)
                                     <button id="button_disc_{{$label_disc_item}}" onclick="manipularAno('{{$label_disc_item}}')" style="margin-right:5px;margin-top:5px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_disc_item}}</button>
                                     @endforeach
+                                    <button id="" data-bs-toggle="modal" data-bs-target="#mod_disciplina" onclick="" style="margin-left:100px;margin-top:5px;font-size:14px;font-weight:bold;" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-table-list"></i> &ensp; Dados Tabelados</button>
                                     <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                         * O presente gráfico representa o Percentual de Proficiência da Escola entre as disciplinas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                                 </div>
+
+                                @include('comparativo/diretor/content/modals.disciplina')
+
                                 <!------------------------------------ Navegação ------------------->
                                 <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficotema">
                                     <div class="row justify-content-center">
@@ -88,11 +92,15 @@
                                     @foreach($label_tema as $label_tema_item)
                                     <button id="button_tema_{{$label_tema_item}}" onclick="manipularAnoTema('{{$label_tema_item}}')" style="margin-right:5px;margin-top:5px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_tema_item}}</button>
                                     @endforeach
+                                    <button id="" data-bs-toggle="modal" data-bs-target="#mod_tema" onclick="" style="margin-left:100px;margin-top:5px;font-size:14px;font-weight:bold;" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-table-list"></i> &ensp; Dados Tabelados</button>
                                     <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                         * O presente gráfico representa o Percentual de Proficiência da Escola entre os Temas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                                 </div>
+
+                                @include('comparativo/diretor/content/modals.tema')
+
                                 <!------------------------------------ Navegação ------------------->
                                 <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficocurricular">
                                     <div class="row justify-content-center">
@@ -154,11 +162,15 @@
                                 @foreach($label_curricular_disc as $label_curricular_disc_item)
                                 <button id="button_curricular_disc_{{$label_curricular_disc_item}}" onclick="manipularAnoCurricularDisciplina('{{$label_curricular_disc_item}}')" style="margin-right:5px;margin-top:0px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_curricular_disc_item}}</button>
                                 @endforeach
+                                <button id="" data-bs-toggle="modal" data-bs-target="#mod_curricular_disc" onclick="" style="margin-left:100px;margin-top:5px;font-size:14px;font-weight:bold;" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-table-list"></i> &ensp; Dados Tabelados</button>
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência da Escola entre os Anos Curriculares na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
                                 <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
+
+                            @include('comparativo/diretor/content/modals.curricular_disciplina')
+
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="graficoturma">
                                 <div class="row justify-content-center">
@@ -220,11 +232,15 @@
                                 @foreach($label_turma_disc as $label_turma_disc_item)
                                 <button id="button_turma_disc_{{$label_turma_disc_item}}" onclick="manipularTurmaDisciplina('{{$label_turma_disc_item}}')" style="margin-right:5px;margin-top:0px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_turma_disc_item}}</button>
                                 @endforeach
+                                <button id="" data-bs-toggle="modal" data-bs-target="#mod_turma_disc" onclick="" style="margin-left:100px;margin-top:5px;font-size:14px;font-weight:bold;" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-table-list"></i> &ensp; Dados Tabelados</button>
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência da Escola entre as Turmas na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
                                 <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
+
+                            @include('comparativo/diretor/content/modals.turma_disciplina')
+
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="graficohabilidade">
                                 <div class="row justify-content-center">
