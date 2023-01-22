@@ -315,8 +315,10 @@
 
             if(labelRemDisciplina.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoDisciplina.update();    
         }
@@ -519,8 +521,10 @@
 
             if(labelRemTema.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoTema.update();    
         }
@@ -718,8 +722,10 @@
 
             if(labelRemEscola.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoEscola.update();    
         }
@@ -917,8 +923,10 @@
 
             if(labelRemEscolaDisciplina.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoEscolaDisciplina.update();    
         }
@@ -1115,8 +1123,10 @@
 
             if(labelRemCurricularDisciplina.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoCurricularDisciplina.update();    
         }

@@ -44,13 +44,17 @@
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
                                     @foreach($label_disc as $label_disc_item)
-                                    <button id="button_disc_{{$label_disc_item}}" onclick="manipularAno('{{$label_disc_item}}')" style="margin-left:20px;margin-right:20px;margin-top:5px;" class="btn btn-dark btn-sm">{{$label_disc_item}}</button>
+                                    <button id="button_disc_{{$label_disc_item}}" onclick="manipularAno('{{$label_disc_item}}')" style="margin-top:5px;margin-right:5px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp; {{$label_disc_item}}</button>
                                     @endforeach
+                                    <button id="" data-bs-toggle="modal" data-bs-target="#mod_com_disc" onclick="" style="margin-left:100px;margin-top:5px;font-size:14px;font-weight:bold;" class="btn btn-outline-dark btn-sm"><i class="fa-solid fa-table-list"></i> &ensp; Dados Tabelados</button>
                                     <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                         * O presente gráfico representa o Percentual de Proficiência do Município entre as disciplinas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                                 </div>
+
+                                @include('comparativo/secretario/content/modals.disciplina')    
+                                
                                 <!------------------------------------ Navegação ------------------->
                                 <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-5px;" id="graficotema">
                                     <div class="row justify-content-center">
@@ -88,7 +92,7 @@
                                     <!------------------------------------ Gráfico ------------------->
                                 </div>
                                 @foreach($label_tema as $label_tema_item)
-                                <button id="button_tema_{{$label_tema_item}}" onclick="manipularAnoTema('{{$label_tema_item}}')" style="margin-left:20px;margin-right:20px;margin-top:5px;" class="btn btn-dark btn-sm">{{$label_tema_item}}</button>
+                                <button id="button_tema_{{$label_tema_item}}" onclick="manipularAnoTema('{{$label_tema_item}}')" style="margin-right:5px;margin-top:5px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_tema_item}}</button>
                                 @endforeach
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre os Temas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
@@ -136,7 +140,7 @@
                                     <!------------------------------------ Gráfico ------------------->
                                 </div>
                                 @foreach($label_escola as $label_escola_item)
-                                <button id="button_escola_{{$label_escola_item}}" onclick="manipularAnoEscola('{{$label_escola_item}}')" style="margin-left:20px;margin-right:20px;margin-top:5px;" class="btn btn-dark btn-sm">{{$label_escola_item}}</button>
+                                <button id="button_escola_{{$label_escola_item}}" onclick="manipularAnoEscola('{{$label_escola_item}}')" style="margin-right:5px;margin-top:5px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_escola_item}}</button>
                                 @endforeach
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre as Escolas no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
@@ -203,7 +207,7 @@
                                     <!------------------------------------ Gráfico ------------------->
                                 </div>
                                 @foreach($label_escola_disc as $label_escola_disc_item)
-                                <button id="button_escola_disc_{{$label_escola_disc_item}}" onclick="manipularAnoEscolaDisciplina('{{$label_escola_disc_item}}')" style="margin-left:20px;margin-right:20px;margin-top:0px;" class="btn btn-dark btn-sm">{{$label_escola_disc_item}}</button>
+                                <button id="button_escola_disc_{{$label_escola_disc_item}}" onclick="manipularAnoEscolaDisciplina('{{$label_escola_disc_item}}')" style="margin-right:5px;margin-top:0px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_escola_disc_item}}</button>
                                 @endforeach
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre as Escolas na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
@@ -269,19 +273,20 @@
                                     <!------------------------------------ Gráfico ------------------->
                                 </div>
                                 @foreach($label_curricular_disc as $label_curricular_disc_item)
-                                <button id="button_curricular_disc_{{$label_curricular_disc_item}}" onclick="manipularAnoCurricularDisciplina('{{$label_curricular_disc_item}}')" style="margin-left:20px;margin-right:20px;margin-top:0px;" class="btn btn-dark btn-sm">{{$label_curricular_disc_item}}</button>
+                                <button id="button_curricular_disc_{{$label_curricular_disc_item}}" onclick="manipularAnoCurricularDisciplina('{{$label_curricular_disc_item}}')" style="margin-right:5px;margin-top:0px;" class="btn btn-primary btn-sm"><i class="fa-solid fa-minus"></i> &ensp;{{$label_curricular_disc_item}}</button>
                                 @endforeach
                                 <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
                                     * O presente gráfico representa o Percentual de Proficiência do Município entre os Anos Curriculares na Disciplina de {{$disciplina_selecionada[0]->desc}} no trancorrer dos Anos SAME.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                 </p>
                                 <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME.</p>
                             </div>
+
                             <!------------------------------------ Navegação ------------------->
                             <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;margin-top:-10px;" id="fim">
                                 <div class="row justify-content-center">
                                     <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
                                         <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescoladisciplina">
-                                        Voltar para Escolas em {{$municipio_selecionado[0]->nome}} na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
+                                            Voltar para Escolas em {{$municipio_selecionado[0]->nome}} na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
                                         </a>
                                     </div>
                                     <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">

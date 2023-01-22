@@ -377,6 +377,42 @@ class DiretorComparativoController extends Controller
         return $dados_base_grafico_tema;
     }
 
+    /**
+     * Método que busca os dados para montar a sessão Ano Curricular Escola
+     */
+    private function estatisticaCurricularDisciplina($confPresenca, $escola, $id_disciplina){
+        //Busca os dados do gráfico de disciplina
+        if (Cache::has('compar_curricular_esc_'.strval($escola).strval($id_disciplina))) {
+            $dados_base_grafico_curricular_disc = Cache::get('compar_curricular_esc_'.strval($escola).strval($id_disciplina));
+        } else {
+            $dados_base_grafico_curricular_disc = DB::select('SELECT CONCAT(\'Ano \',ano) as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca AND id_disciplina = :id_disciplina GROUP BY SAME, ano', 
+                 ['presenca' => $confPresenca, 'id_escola' => $escola, 'id_disciplina' => $id_disciplina]);   
+            
+            $dados_base_grafico_curricular_disc = $this->getDataSet($dados_base_grafico_curricular_disc, 'compar_curricular_esc_'.strval($escola).strval($id_disciplina));     
+        }
+
+        return $dados_base_grafico_curricular_disc;
+    }
+
+    /**
+     * Método que busca os dados para montar a sessão Turma Escola
+     */
+    private function estatisticaTurmaDisciplina($confPresenca, $escola, $id_disciplina){
+        //Busca os dados do gráfico de disciplina
+        if (Cache::has('compar_turma_esc_'.strval($escola).strval($id_disciplina))) {
+            $dados_base_grafico_turma_disc = Cache::get('compar_turma_esc_'.strval($escola).strval($id_disciplina));
+        } else {
+            $dados_base_grafico_turma_disc = DB::select('SELECT nome_turma as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca AND id_disciplina = :id_disciplina GROUP BY SAME, nome_turma', 
+                 ['presenca' => $confPresenca, 'id_escola' => $escola, 'id_disciplina' => $id_disciplina]);   
+            
+            $dados_base_grafico_turma_disc = $this->getDataSet($dados_base_grafico_turma_disc, 'compar_turma_esc_'.strval($escola).strval($id_disciplina));     
+        }
+
+        return $dados_base_grafico_turma_disc;
+    }
+
     private function getDataSet($resultSet, $cacheName){
 
         $dados = [];
@@ -548,12 +584,22 @@ class DiretorComparativoController extends Controller
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
 
+        //Busca dados da Sessão de Ano Curricular Disciplina
+        $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
+        $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
+        $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+
+        //Busca dados da Sessão de Turma Disciplina
+        $dados_comp_grafico_turma_disc=$this->estatisticaTurmaDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
+        $label_turma_disc = $dados_comp_grafico_turma_disc[0];
+        $dados_turma_disc = $dados_comp_grafico_turma_disc[1];
+
         $sessao_inicio = "municipio_comparativo";
   
         return view('comparativo/diretor/content/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','sessao_inicio',
             'disciplinas','disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same',
-            'ano_same_selecionado','label_disc','dados_disc','label_tema','dados_tema'));
+            'ano_same_selecionado','label_disc','dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc'));
     }
 
     /**
@@ -651,6 +697,16 @@ class DiretorComparativoController extends Controller
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
 
+        //Busca dados da Sessão de Ano Curricular Disciplina
+        $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
+        $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
+        $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+
+        //Busca dados da Sessão de Turma Disciplina
+        $dados_comp_grafico_turma_disc=$this->estatisticaTurmaDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
+        $label_turma_disc = $dados_comp_grafico_turma_disc[0];
+        $dados_turma_disc = $dados_comp_grafico_turma_disc[1];
+
         //Busca todos os Critérios
         $criterios_questaoAll = $this->getCriterios();
 
@@ -660,7 +716,7 @@ class DiretorComparativoController extends Controller
         return view('comparativo/diretor/content/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','disciplinas','sessao_inicio',
             'disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same','ano_same_selecionado','label_disc',
-            'dados_disc','label_tema','dados_tema'));
+            'dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc'));
     }
 
 }

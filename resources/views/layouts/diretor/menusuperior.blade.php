@@ -32,7 +32,7 @@
                             Proficiências
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size: 15px;color: black;">
-                                <a class="dropdown-item" href="{{ route('secretario_comparativo.index') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                <a class="dropdown-item" href="{{ route('diretor_comparativo.exibirEscolaComparativo',['id' => $escola_selecionada[0]->id, 'id_municipio' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'escola_comparativo']) }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                     Comparativos
                                 </a>
                             </div>

@@ -315,8 +315,10 @@
 
             if(labelRemDisciplina.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoDisciplina.update();    
         }
@@ -519,10 +521,413 @@
 
             if(labelRemTema.includes(ano)){
                 component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
             } else{
-                component_button.className = "btn btn-dark btn-sm";
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoTema.update();    
+        }
+    }
+
+</script>
+
+<script>
+
+    // setup 
+    const dataCurricularDisciplina = {
+        labels: <?php echo json_encode($label_curricular_disc) ?>,
+        datasets: <?php echo json_encode($dados_curricular_disc) ?>,
+    };
+
+    // config 
+    const configCurricularDisciplina = {
+        type: 'bar',
+        data: dataCurricularDisciplina,
+        options: {
+            responsive: true,
+            animation: {
+                onComplete: () => {
+                    delayed = true;
+                },
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            },
+
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparativo de Proficiência da Escola na Disciplina de ' + <?php echo json_encode($disciplina_selecionada[0]->desc) ?> + ' entre os Anos Curriculares nos Anos SAME',
+                    font: {
+                        size: 14,
+                        family: 'arial',
+                        weight: 'bold',
+                        style: 'normal'
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        boxHeight: 10,
+                        font: {
+                            size: 13,
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        boxWidth: 5,
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            let valor = context.dataset.data[context.dataIndex];
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += valor[context.dataset.label] || '';
+                                label += '% ';
+                            }
+                            return label;
+                        }
+                    }
+                },
+            },
+            elements: {
+                bar: {
+                    backgroundColor: colorize(false),
+                    borderColor: colorize(true),
+                    borderWidth: 2
+                }
+            }
+        }
+    };
+
+    // render init block
+    const ctxCurricularDisciplina = document.getElementById('graficoCurricularDisciplina');
+    Chart.defaults.font.size = 13;
+    var graficoCurricularDisciplina = new Chart(
+        ctxCurricularDisciplina,
+        configCurricularDisciplina
+    );
+
+    function clickHandler(click) {
+        const points = graficoLink.getElementsAtEventForMode(click, 'nearest', {
+            intersect: true
+        }, true);
+        if (points.length) {
+            const firstPoint = points[0];
+            const value = graficoLink.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+            location.href = value.colunas.link;
+            window.open(location.href);
+        }
+    }
+    ctxCurricularDisciplina.onclick = clickHandler;
+
+    //Copia os Labels Originais do Gráfico
+    var labelsOriginaisCurricularDisciplina = [];
+    graficoCurricularDisciplina.data.labels.forEach(element => labelsOriginaisCurricularDisciplina.push(element));
+
+    //Copia os Dados Originais
+    var dataOriginaisCurricularDisciplina = [];
+    graficoCurricularDisciplina.data.datasets[0].data.forEach(element => dataOriginaisCurricularDisciplina.push(element));
+
+    var anoRemCurricularDisciplina = [];
+    var anoMantCurricularDisciplina = [];
+
+    var labelRemCurricularDisciplina = [];
+    var labelMantCurricularDisciplina = [];
+
+    var nrDataCurricularDisciplina = graficoCurricularDisciplina.data.datasets.length;
+
+    function manipularAnoCurricularDisciplina(ano){
+        console.log("Alterando ...");
+        //Reseta Array Mantidos
+        labelMantCurricularDisciplina = [];
+        anoMantCurricularDisciplina = [];
+        
+        anoFormatado = new String(ano);
+
+        var component_button = document.getElementById("button_curricular_disc_" + anoFormatado);
+
+        //Se tiver ao menos um Item no array
+        if(graficoCurricularDisciplina.data.labels.length > 0){
+
+            //Dentre os Dados Originais
+            for($i = 0; $i < dataOriginaisCurricularDisciplina.length; $i++){
+                if(dataOriginaisCurricularDisciplina[$i].x == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoCurricularDisciplina.data.datasets[0].data.includes(dataOriginaisCurricularDisciplina[$i])){
+                        //Se não estiver adiciona
+                        anoMantCurricularDisciplina.push(dataOriginaisCurricularDisciplina[$i]);
+                        anoRemCurricularDisciplina = anoRemCurricularDisciplina.filter(dataItem => dataItem != dataOriginaisCurricularDisciplina[$i]);
+                    } else {
+                        if(graficoCurricularDisciplina.data.labels.length > 1){
+                            anoRemCurricularDisciplina.push(dataOriginaisCurricularDisciplina[$i]);
+                        } else {
+                            anoMantCurricularDisciplina.push(dataOriginaisCurricularDisciplina[$i]);
+                        }
+                    }
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!anoRemCurricularDisciplina.includes(dataOriginaisCurricularDisciplina[$i])){
+                        anoMantCurricularDisciplina.push(dataOriginaisCurricularDisciplina[$i]);
+                    }
+                }
+            }
+            //Dentro da Lista de Labels Originais
+            for ($i = 0; $i < labelsOriginaisCurricularDisciplina.length; $i++) {
+                //Realiza a adequação dos Labels -------------------------------------------------------------------
+                if(labelsOriginaisCurricularDisciplina[$i] == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoCurricularDisciplina.data.labels.includes(labelsOriginaisCurricularDisciplina[$i])){
+                        //Se não estiver adiciona
+                        labelMantCurricularDisciplina.push(labelsOriginaisCurricularDisciplina[$i]);
+                        labelRemCurricularDisciplina = labelRemCurricularDisciplina.filter(label => label != labelsOriginaisCurricularDisciplina[$i]);
+                    } else {
+                        if(graficoCurricularDisciplina.data.labels.length > 1){
+                            labelRemCurricularDisciplina.push(labelsOriginaisCurricularDisciplina[$i]);
+                        } else {
+                            labelMantCurricularDisciplina.push(labelsOriginaisCurricularDisciplina[$i]);
+                        }
+                    }
+                    
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!labelRemCurricularDisciplina.includes(labelsOriginaisCurricularDisciplina[$i])){
+                        labelMantCurricularDisciplina.push(labelsOriginaisCurricularDisciplina[$i]);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------
+            } 
+            graficoCurricularDisciplina.data.labels = [];
+            labelMantCurricularDisciplina.forEach(element => graficoCurricularDisciplina.data.labels.push(element));
+
+            for($i = 0; $i < nrDataCurricularDisciplina; $i++){
+                graficoCurricularDisciplina.data.datasets[$i].data = anoMantCurricularDisciplina;
+            }
+
+            if(labelRemCurricularDisciplina.includes(ano)){
+                component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
+            } else{
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
+            }
+            graficoCurricularDisciplina.update();    
+        }
+    }
+
+</script>
+
+<script>
+
+    // setup 
+    const dataTurmaDisciplina = {
+        labels: <?php echo json_encode($label_turma_disc) ?>,
+        datasets: <?php echo json_encode($dados_turma_disc) ?>,
+    };
+
+    // config 
+    const configTurmaDisciplina = {
+        type: 'bar',
+        data: dataTurmaDisciplina,
+        options: {
+            responsive: true,
+            animation: {
+                onComplete: () => {
+                    delayed = true;
+                },
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            },
+
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparativo de Proficiência da Escola na Disciplina de ' + <?php echo json_encode($disciplina_selecionada[0]->desc) ?> + ' entre as Turmas nos Anos SAME',
+                    font: {
+                        size: 14,
+                        family: 'arial',
+                        weight: 'bold',
+                        style: 'normal'
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        padding: 14,
+                        boxHeight: 10,
+                        font: {
+                            size: 13,
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        boxWidth: 5,
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            let valor = context.dataset.data[context.dataIndex];
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += valor[context.dataset.label] || '';
+                                label += '% ';
+                            }
+                            return label;
+                        }
+                    }
+                },
+            },
+            elements: {
+                bar: {
+                    backgroundColor: colorize(false),
+                    borderColor: colorize(true),
+                    borderWidth: 2
+                }
+            }
+        }
+    };
+
+    // render init block
+    const ctxTurmaDisciplina = document.getElementById('graficoTurmaDisciplina');
+    Chart.defaults.font.size = 13;
+    var graficoTurmaDisciplina = new Chart(
+        ctxTurmaDisciplina,
+        configTurmaDisciplina
+    );
+
+    function clickHandler(click) {
+        const points = graficoLink.getElementsAtEventForMode(click, 'nearest', {
+            intersect: true
+        }, true);
+        if (points.length) {
+            const firstPoint = points[0];
+            const value = graficoLink.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+            location.href = value.colunas.link;
+            window.open(location.href);
+        }
+    }
+    ctxTurmaDisciplina.onclick = clickHandler;
+
+    //Copia os Labels Originais do Gráfico
+    var labelsOriginaisTurmaDisciplina = [];
+    graficoTurmaDisciplina.data.labels.forEach(element => labelsOriginaisTurmaDisciplina.push(element));
+
+    //Copia os Dados Originais
+    var dataOriginaisTurmaDisciplina = [];
+    graficoTurmaDisciplina.data.datasets[0].data.forEach(element => dataOriginaisTurmaDisciplina.push(element));
+
+    var anoRemTurmaDisciplina = [];
+    var anoMantTurmaDisciplina = [];
+
+    var labelRemTurmaDisciplina = [];
+    var labelMantTurmaDisciplina = [];
+
+    var nrDataTurmaDisciplina = graficoTurmaDisciplina.data.datasets.length;
+
+    function manipularTurmaDisciplina(ano){
+        console.log("Alterando ...");
+        //Reseta Array Mantidos
+        labelMantTurmaDisciplina = [];
+        anoMantTurmaDisciplina = [];
+        
+        anoFormatado = new String(ano);
+
+        var component_button = document.getElementById("button_turma_disc_" + anoFormatado);
+
+        //Se tiver ao menos um Item no array
+        if(graficoTurmaDisciplina.data.labels.length > 0){
+
+            //Dentre os Dados Originais
+            for($i = 0; $i < dataOriginaisTurmaDisciplina.length; $i++){
+                if(dataOriginaisTurmaDisciplina[$i].x == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoTurmaDisciplina.data.datasets[0].data.includes(dataOriginaisTurmaDisciplina[$i])){
+                        //Se não estiver adiciona
+                        anoMantTurmaDisciplina.push(dataOriginaisTurmaDisciplina[$i]);
+                        anoRemTurmaDisciplina = anoRemTurmaDisciplina.filter(dataItem => dataItem != dataOriginaisTurmaDisciplina[$i]);
+                    } else {
+                        if(graficoTurmaDisciplina.data.labels.length > 1){
+                            anoRemTurmaDisciplina.push(dataOriginaisTurmaDisciplina[$i]);
+                        } else {
+                            anoMantTurmaDisciplina.push(dataOriginaisTurmaDisciplina[$i]);
+                        }
+                    }
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!anoRemTurmaDisciplina.includes(dataOriginaisTurmaDisciplina[$i])){
+                        anoMantTurmaDisciplina.push(dataOriginaisTurmaDisciplina[$i]);
+                    }
+                }
+            }
+            //Dentro da Lista de Labels Originais
+            for ($i = 0; $i < labelsOriginaisTurmaDisciplina.length; $i++) {
+                //Realiza a adequação dos Labels -------------------------------------------------------------------
+                if(labelsOriginaisTurmaDisciplina[$i] == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoTurmaDisciplina.data.labels.includes(labelsOriginaisTurmaDisciplina[$i])){
+                        //Se não estiver adiciona
+                        labelMantTurmaDisciplina.push(labelsOriginaisTurmaDisciplina[$i]);
+                        labelRemTurmaDisciplina = labelRemTurmaDisciplina.filter(label => label != labelsOriginaisTurmaDisciplina[$i]);
+                    } else {
+                        if(graficoTurmaDisciplina.data.labels.length > 1){
+                            labelRemTurmaDisciplina.push(labelsOriginaisTurmaDisciplina[$i]);
+                        } else {
+                            labelMantTurmaDisciplina.push(labelsOriginaisTurmaDisciplina[$i]);
+                        }
+                    }
+                    
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!labelRemTurmaDisciplina.includes(labelsOriginaisTurmaDisciplina[$i])){
+                        labelMantTurmaDisciplina.push(labelsOriginaisTurmaDisciplina[$i]);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------
+            } 
+            graficoTurmaDisciplina.data.labels = [];
+            labelMantTurmaDisciplina.forEach(element => graficoTurmaDisciplina.data.labels.push(element));
+
+            for($i = 0; $i < nrDataTurmaDisciplina; $i++){
+                graficoTurmaDisciplina.data.datasets[$i].data = anoMantTurmaDisciplina;
+            }
+
+            if(labelRemTurmaDisciplina.includes(ano)){
+                component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
+            } else{
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
+            }
+            graficoTurmaDisciplina.update();    
         }
     }
 
