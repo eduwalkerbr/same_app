@@ -37,14 +37,14 @@
                                         </td>
                                         @foreach($map_itens_tema as $map_item)
                                         @php
-                                        $valor = "Sem Valor";
+                                        $valor = "Ausente";
                                         if(array_key_exists(trim($item_tema),$map_item)){
                                             if($map_item[trim($item_tema)] != '00.0000'){
                                                 $valor = $map_item[trim($item_tema)];
                                             }
                                         }
                                         @endphp
-                                        @if($valor == 'Sem Valor')
+                                        @if($valor == 'Ausente')
                                         <td style="text-align:center;font-weight: normal;font-size:12px;padding: 0.1em;vertical-align:middle;color:red;font-weight:bold;" scope="row">
                                             {{$valor}}
                                         </td>
