@@ -37,14 +37,14 @@
                                         </td>
                                         @foreach($map_itens_curricular_disc as $map_item)
                                         @php
-                                        $valor = "Sem Valor";
+                                        $valor = "Ausente";
                                         if(array_key_exists(trim($item_curricular_disc),$map_item)){
                                             if($map_item[trim($item_curricular_disc)] != '00.0000'){
                                                 $valor = $map_item[trim($item_curricular_disc)];
                                             }
                                         }
                                         @endphp
-                                        @if($valor == 'Sem Valor')
+                                        @if($valor == 'Ausente')
                                         <td style="text-align:center;font-weight: normal;font-size:12px;padding: 0.1em;vertical-align:middle;color:red;font-weight:bold;" scope="row">
                                             {{$valor}}
                                         </td>

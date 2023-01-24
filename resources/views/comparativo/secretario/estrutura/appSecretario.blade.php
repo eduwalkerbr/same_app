@@ -1134,6 +1134,207 @@
 
 </script>
 
+<script>
+
+    // setup 
+    const dataHabilidadeAnoDisciplina = {
+        labels: <?php echo json_encode($label_hab_ano_disc) ?>,
+        datasets: <?php echo json_encode($dados_hab_ano_disc) ?>,
+    };
+
+    // config 
+    const configHabilidadeAnoDisciplina = {
+        type: 'bar',
+        data: dataHabilidadeAnoDisciplina,
+        options: {
+            responsive: true,
+            animation: {
+                onComplete: () => {
+                    delayed = true;
+                },
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                    }
+                    return delay;
+                },
+            },
+
+            interaction: {
+                mode: 'nearest',
+                axis: 'x',
+                intersect: false
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Comparativo de Proficiência do Município nas Habilidades em ' + <?php echo json_encode($disciplina_selecionada[0]->desc) ?> + ' no ' + <?php echo json_encode($ano[0]) ?> + 'º Ano entre os Anos SAME',
+                    font: {
+                        size: 14,
+                        family: 'arial',
+                        weight: 'bold',
+                        style: 'normal'
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        boxHeight: 10,
+                        font: {
+                            size: 13,
+                        },
+                        usePointStyle: true,
+                        pointStyle: 'rect',
+                        boxWidth: 5,
+                    },
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.dataset.label || '';
+                            let valor = context.dataset.data[context.dataIndex];
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += valor[context.dataset.label] || '';
+                                label += '% (';
+                                label += valor.nome_habilidade;
+                                label += ')';
+                            }
+                            return label;
+                        }
+                    }
+                },
+            },
+            elements: {
+                bar: {
+                    backgroundColor: colorize(false),
+                    borderColor: colorize(true),
+                    borderWidth: 2
+                }
+            }
+        }
+    };
+
+    // render init block
+    const ctxHabilidadeAnoDisciplina = document.getElementById('graficoHabilidadeAnoDisciplina');
+    Chart.defaults.font.size = 13;
+    var graficoHabilidadeAnoDisciplina = new Chart(
+        ctxHabilidadeAnoDisciplina,
+        configHabilidadeAnoDisciplina
+    );
+
+    function clickHandler(click) {
+        const points = graficoLink.getElementsAtEventForMode(click, 'nearest', {
+            intersect: true
+        }, true);
+        if (points.length) {
+            const firstPoint = points[0];
+            const value = graficoLink.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+            location.href = value.colunas.link;
+            window.open(location.href);
+        }
+    }
+    ctxHabilidadeAnoDisciplina.onclick = clickHandler;
+
+    //Copia os Labels Originais do Gráfico
+    var labelsOriginaisHabilidadeAnoDisciplina = [];
+    graficoHabilidadeAnoDisciplina.data.labels.forEach(element => labelsOriginaisHabilidadeAnoDisciplina.push(element));
+
+    //Copia os Dados Originais
+    var dataOriginaisHabilidadeAnoDisciplina = [];
+    graficoHabilidadeAnoDisciplina.data.datasets[0].data.forEach(element => dataOriginaisHabilidadeAnoDisciplina.push(element));
+
+    var anoRemHabilidadeAnoDisciplina = [];
+    var anoMantHabilidadeAnoDisciplina = [];
+
+    var labelRemHabilidadeAnoDisciplina = [];
+    var labelMantHabilidadeAnoDisciplina = [];
+
+    var nrDataHabilidadeAnoDisciplina = graficoHabilidadeAnoDisciplina.data.datasets.length;
+
+    function manipularHabilidadeAnoDisciplina(ano){
+        console.log("Alterando ...");
+        //Reseta Array Mantidos
+        labelMantHabilidadeAnoDisciplina = [];
+        anoMantHabilidadeAnoDisciplina = [];
+        
+        anoFormatado = new String(ano);
+
+        var component_button = document.getElementById("button_hab_ano_disc_" + anoFormatado);
+
+        //Se tiver ao menos um Item no array
+        if(graficoHabilidadeAnoDisciplina.data.labels.length > 0){
+
+            //Dentre os Dados Originais
+            for($i = 0; $i < dataOriginaisHabilidadeAnoDisciplina.length; $i++){
+                if(dataOriginaisHabilidadeAnoDisciplina[$i].x == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoHabilidadeAnoDisciplina.data.datasets[0].data.includes(dataOriginaisHabilidadeAnoDisciplina[$i])){
+                        //Se não estiver adiciona
+                        anoMantHabilidadeAnoDisciplina.push(dataOriginaisHabilidadeAnoDisciplina[$i]);
+                        anoRemHabilidadeAnoDisciplina = anoRemHabilidadeAnoDisciplina.filter(dataItem => dataItem != dataOriginaisHabilidadeAnoDisciplina[$i]);
+                    } else {
+                        if(graficoHabilidadeAnoDisciplina.data.labels.length > 1){
+                            anoRemHabilidadeAnoDisciplina.push(dataOriginaisHabilidadeAnoDisciplina[$i]);
+                        } else {
+                            anoMantHabilidadeAnoDisciplina.push(dataOriginaisHabilidadeAnoDisciplina[$i]);
+                        }
+                    }
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!anoRemHabilidadeAnoDisciplina.includes(dataOriginaisHabilidadeAnoDisciplina[$i])){
+                        anoMantHabilidadeAnoDisciplina.push(dataOriginaisHabilidadeAnoDisciplina[$i]);
+                    }
+                }
+            }
+            //Dentro da Lista de Labels Originais
+            for ($i = 0; $i < labelsOriginaisHabilidadeAnoDisciplina.length; $i++) {
+                //Realiza a adequação dos Labels -------------------------------------------------------------------
+                if(labelsOriginaisHabilidadeAnoDisciplina[$i] == ano){
+                    //Caso seja, verifica se está na Listagem atual de Labels
+                    if(!graficoHabilidadeAnoDisciplina.data.labels.includes(labelsOriginaisHabilidadeAnoDisciplina[$i])){
+                        //Se não estiver adiciona
+                        labelMantHabilidadeAnoDisciplina.push(labelsOriginaisHabilidadeAnoDisciplina[$i]);
+                        labelRemHabilidadeAnoDisciplina = labelRemHabilidadeAnoDisciplina.filter(label => label != labelsOriginaisHabilidadeAnoDisciplina[$i]);
+                    } else {
+                        if(graficoHabilidadeAnoDisciplina.data.labels.length > 1){
+                            labelRemHabilidadeAnoDisciplina.push(labelsOriginaisHabilidadeAnoDisciplina[$i]);
+                        } else {
+                            labelMantHabilidadeAnoDisciplina.push(labelsOriginaisHabilidadeAnoDisciplina[$i]);
+                        }
+                    }
+                    
+                } else {
+                    //Se diferente do Label Selecionado
+                    if(!labelRemHabilidadeAnoDisciplina.includes(labelsOriginaisHabilidadeAnoDisciplina[$i])){
+                        labelMantHabilidadeAnoDisciplina.push(labelsOriginaisHabilidadeAnoDisciplina[$i]);
+                    }
+                }
+                //---------------------------------------------------------------------------------------------------
+            } 
+            graficoHabilidadeAnoDisciplina.data.labels = [];
+            labelMantHabilidadeAnoDisciplina.forEach(element => graficoHabilidadeAnoDisciplina.data.labels.push(element));
+
+            for($i = 0; $i < nrDataHabilidadeAnoDisciplina; $i++){
+                graficoHabilidadeAnoDisciplina.data.datasets[$i].data = anoMantHabilidadeAnoDisciplina;
+            }
+
+            if(labelRemHabilidadeAnoDisciplina.includes(ano)){
+                component_button.className = "btn btn-light btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
+            } else{
+                component_button.className = "btn btn-primary btn-sm";
+                component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
+            }
+            graficoHabilidadeAnoDisciplina.update();    
+        }
+    }
+
+</script>
 
 <!------------------------------------ Posição ao Abrir o Site ------------------->
 <script>
