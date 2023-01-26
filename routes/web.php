@@ -304,6 +304,7 @@ Route::get('/escola_principal/{id}/{id_municipio}/{id_disciplina}/{ano}/{id_habi
 //Diretor Comparativo
 Route::get('/escola_principal/comparativo', [DiretorComparativoController::class, 'index'])->name('diretor_comparativo.index');
 Route::get('/escola_comparativo/comparativo/{id}/{id_municipio}/{id_disciplina}/{sessao}', [DiretorComparativoController::class, 'exibirEscolaComparativo'])->name('diretor_comparativo.exibirEscolaComparativo');
+Route::get('/escola_comparativo/comparativo/{id}/{id_municipio}/{id_disciplina}/{ano}/{sessao}', [DiretorComparativoController::class, 'exibirEscolaComparativoAno'])->name('diretor_comparativo.exibirEscolaComparativoAno');
 
 //Secretario
 Route::get('/municipio_principal', [SecretarioController::class, 'index'])->name('secretario.index');

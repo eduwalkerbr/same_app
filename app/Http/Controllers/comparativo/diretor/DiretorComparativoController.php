@@ -413,6 +413,142 @@ class DiretorComparativoController extends Controller
         return $dados_base_grafico_turma_disc;
     }
 
+    /**
+     * Método que busca os dados para montar a sessão Temas Munícipio
+     */
+    private function estatisticaHabilidadeAnoDisciplina($confPresenca, $escola, $id_disciplina, $ano){
+        //Busca os dados do gráfico de disciplina
+        if (Cache::has('compar_hab_ano_esc_'.strval($escola).strval($id_disciplina).strval($ano))) {
+            $dados_base_grafico_hab_ano_disc = Cache::get('compar_hab_ano_esc_'.strval($escola).strval($id_disciplina).strval($ano));
+        } else {
+            $dados_base_grafico_hab_ano_disc = DB::select('SELECT sigla_habilidade as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual, nome_habilidade AS nome
+                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca AND id_disciplina = :id_disciplina AND ano = :ano GROUP BY SAME, sigla_habilidade, nome_habilidade', 
+                 ['presenca' => $confPresenca, 'id_escola' => $escola, 'id_disciplina' => $id_disciplina, 'ano' => $ano]);   
+            
+            $dados_base_grafico_hab_ano_disc = $this->getDataSetHabilidade($dados_base_grafico_hab_ano_disc, 'compar_hab_ano_esc_'.strval($escola).strval($id_disciplina).strval($ano));     
+        }
+
+        return $dados_base_grafico_hab_ano_disc;
+    }
+
+    private function getDataSetHabilidade($resultSet, $cacheName){
+
+        $dados = [];
+
+        //Verifica se já tem o valor em Cache
+        if (Cache::has($cacheName)) {
+            $dados = Cache::get($cacheName);
+        } else {
+            //Inicializa Labels do Gráfico
+            $labels_hab = [];
+            $itens_hab = [];
+            $nome_hab = [];
+            $map_itens_label = [];
+            $cont_label = 0;
+            $cont_item = 0;
+
+            //Executa para listar os Labels e Itens Diferentes
+            for ($i = 0; $i < sizeof($resultSet); $i++) {
+                //Monta a Lista de Labels
+                if (!in_array(trim($resultSet[$i]->label), $labels_hab)) {
+                    $labels_hab[$cont_label] = $resultSet[$i]->label;
+                    $cont_label++;
+                }
+                //Monta a Lista de Itens
+                if (!in_array(trim($resultSet[$i]->item), $itens_hab)) {
+                    $itens_hab[$cont_item] = $resultSet[$i]->item;
+                    $nome_hab[$cont_item] = $resultSet[$i]->nome;
+                    $cont_item++;
+                }
+            }
+            for ($i = 0; $i < sizeof($itens_hab); $i++) {
+                for ($j = 0; $j < sizeof($labels_hab); $j++) {
+                    $cont_item = 0;
+                    for ($k = 0; $k < sizeof($resultSet); $k++) {
+                        if($resultSet[$k]->item == $itens_hab[$i] && $resultSet[$k]->label == $labels_hab[$j]){
+                            $cont_item = 1;
+                            //Caso Exista o Mapeamento para o Ano
+                            if(array_key_exists($labels_hab[$j],$map_itens_label)){
+                                //Pega Itens Existente no Array
+                                $item_array = $map_itens_label[$labels_hab[$j]];
+                                //Cria o Novo Item
+                                $novo_item_array = array(
+                                    'x' => $resultSet[$k]->label,
+                                    $resultSet[$k]->item => $resultSet[$k]->percentual,
+                                    'nome_habilidade' => $resultSet[$k]->nome,);
+                                //Combina os Itens para criar o Array completo    
+                                $map_itens_label[$labels_hab[$j]] = array_merge($item_array, $novo_item_array);
+                            } else {
+                                //Caso seja o primeiro item do array
+                                $map_itens_label[$resultSet[$k]->label] = array(
+                                    'x' => $resultSet[$k]->label,
+                                    $resultSet[$k]->item => $resultSet[$k]->percentual,
+                                    'nome_habilidade' => $resultSet[$k]->nome
+                                );   
+                            }    
+                        }
+                    }
+                    if($cont_item == 0){
+                        if(array_key_exists($labels_hab[$j],$map_itens_label)){
+                            //Pega Itens Existente no Array
+                            $item_array = $map_itens_label[$labels_hab[$j]];
+                            //Cria o Novo Item
+                            $novo_item_array = array(
+                                'x' => $labels_hab[$j],
+                                $itens_hab[$i] => "Ausente",
+                                'nome_habilidade' => $nome_hab[$i],);
+                            //Combina os Itens para criar o Array completo    
+                            $map_itens_label[$labels_hab[$j]] = array_merge($item_array, $novo_item_array);
+                        } else {
+                            //Caso seja o primeiro item do array
+                            $map_itens_label[$labels_hab[$j]] = array(
+                                'x' => $labels_hab[$j],
+                                $itens_hab[$i] => "Ausente",
+                                'nome_habilidade' => $nome_hab[$i]
+                            );     
+                        }
+                    }
+                }
+            }
+            
+            //Monta o DataSet do Gráfico
+            $contColors = 0;
+            for ($i = 0; $i < sizeof($itens_hab); $i++) {
+                $item_data_set = [
+                    'label' => $itens_hab[$i],
+                    'data' => array_values($map_itens_label),
+                    'backgroundColor' => $this->backgroundColors[$contColors],
+                    'borderColor' => $this->borderColors[$contColors],
+                    'borderWidth' => 1,
+                    'hoverBorderWidth' => 2,
+                    'hoverBorderColor' => 'green',
+                    'parsing' => [
+                        'yAxisKey' => $itens_hab[$i]
+                    ]
+                ];   
+    
+                $dataSet[$i] = $item_data_set;
+                if($contColors == 6){   
+                    $contColors = 0;
+                } else {
+                    $contColors++;
+                }
+                
+            }
+
+            $dados[0] = $labels_hab;
+            $dados[1] = $dataSet;
+            $dados[2] = $itens_hab;
+            $dados[3] = $map_itens_label;
+            $dados[4] = $nome_hab;
+
+            //Adiciona ao Cache
+            Cache::forever($cacheName,$dados);
+        }
+
+        return $dados;
+    }
+
     private function getDataSet($resultSet, $cacheName){
 
         $dados = [];
@@ -473,14 +609,14 @@ class DiretorComparativoController extends Controller
                             //Cria o Novo Item
                             $novo_item_array = array(
                                 'x' => $labels_disc[$j],
-                                $itens_disc[$i] => "00.0000",);
+                                $itens_disc[$i] => "Ausente",);
                             //Combina os Itens para criar o Array completo    
                             $map_itens_label[$labels_disc[$j]] = array_merge($item_array, $novo_item_array);
                         } else {
                             //Caso seja o primeiro item do array
                             $map_itens_label[$labels_disc[$j]] = array(
                                 'x' => $labels_disc[$j],
-                                $itens_disc[$i] => "00.0000",
+                                $itens_disc[$i] => "Ausente",
                             );     
                         }
                     }
@@ -632,13 +768,23 @@ class DiretorComparativoController extends Controller
         $itens_turma_disc = $dados_comp_grafico_turma_disc[2];
         $map_itens_turma_disc = $dados_comp_grafico_turma_disc[3];
 
+        //Busca dados da Sessão de Habilidade Ano Disciplina
+        $dados_comp_grafico_han_ano_disc=$this->estatisticaHabilidadeAnoDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id, $ano);
+        $label_hab_ano_disc = $dados_comp_grafico_han_ano_disc[0];
+        $dados_hab_ano_disc = $dados_comp_grafico_han_ano_disc[1];
+        $itens_hab_ano_disc = $dados_comp_grafico_han_ano_disc[2];
+        $map_itens_hab_ano_disc = $dados_comp_grafico_han_ano_disc[3];
+        $nome_hab = $dados_comp_grafico_han_ano_disc[4];
+
         $sessao_inicio = "municipio_comparativo";
   
         return view('comparativo/diretor/content/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','sessao_inicio',
             'disciplinas','disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same',
             'ano_same_selecionado','label_disc','dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc',
-            'itens_disc','map_itens_disc','itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc'));
+            'itens_disc','map_itens_disc','itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc',
+            'label_hab_ano_disc','dados_hab_ano_disc','itens_hab_ano_disc','map_itens_hab_ano_disc','nome_hab'    
+        ));
     }
 
     /**
@@ -754,6 +900,14 @@ class DiretorComparativoController extends Controller
         $itens_turma_disc = $dados_comp_grafico_turma_disc[2];
         $map_itens_turma_disc = $dados_comp_grafico_turma_disc[3];
 
+        //Busca dados da Sessão de Habilidade Ano Disciplina
+        $dados_comp_grafico_han_ano_disc=$this->estatisticaHabilidadeAnoDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id, $ano);
+        $label_hab_ano_disc = $dados_comp_grafico_han_ano_disc[0];
+        $dados_hab_ano_disc = $dados_comp_grafico_han_ano_disc[1];
+        $itens_hab_ano_disc = $dados_comp_grafico_han_ano_disc[2];
+        $map_itens_hab_ano_disc = $dados_comp_grafico_han_ano_disc[3];
+        $nome_hab = $dados_comp_grafico_han_ano_disc[4];
+
         //Busca todos os Critérios
         $criterios_questaoAll = $this->getCriterios();
 
@@ -764,8 +918,144 @@ class DiretorComparativoController extends Controller
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','disciplinas','sessao_inicio',
             'disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same','ano_same_selecionado','label_disc',
             'dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc','itens_disc','map_itens_disc',
-            'itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc'
+            'itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc','label_hab_ano_disc','dados_hab_ano_disc',
+            'itens_hab_ano_disc','map_itens_hab_ano_disc','nome_hab'
         ));
     }
 
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function exibirEscolaComparativoAno($id, $id_municipio, $id_disciplina, $ano, $sessao)
+    {
+        //Busca os previlégios do Usuário Logado
+        $previlegio = $this->getPrevilegio();
+
+        //Listagem de Anos do SAME
+        $anos_same = $this->getAnosSAME();
+        $ano_same_selecionado = $anos_same[0]->SAME;
+
+        //Listage, de Direção Professor utilizando Cache
+        $direcaoProfessor = $this->getDirecaoProfessor();
+
+        //------------------------------------------- Municípios -----------------------------------------------------------------
+        $municipios = $this->getMunicipios();
+
+        //----------------------------------------- Escolas -------------------------------------------------------------------
+        $escolas = $this->getEscolasDiretor($id_municipio);
+        if(!isset($escolas) || sizeof($escolas) == 0){
+            $escolas = $this->getEscolasDiretor($municipios[0]->id);
+        }
+
+        //----------------------------------------- Disciplinas ----------------------------------------------------------------
+        $disciplinas = $this->getDisciplinas();
+
+        //------------------------------------------ Solicitações -----------------------------------------------------------------
+        //Caso seja Gestor busca todas solicitações em aberto do munícipio
+        if ($previlegio[0]->funcaos_id == 6) {
+            $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+            $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+            $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+        } else {
+            //Nos demais casos busca todas as solicitações independente do município (demais validações para quem exibir estão na blade)
+            $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
+            $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
+            $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
+        }
+        //----------------------------------------------------------------------------------------------------------------------
+
+        //Busca as Legendas
+        $legendas = $this->getLegendas();
+
+        //Realiza a busca dos Destaques
+        $destaques = $this->objDestaque->orderBy('updated_at', 'desc')->get();
+
+        //Identifica a escola selecionada
+        $escola = $escolas[0]->id;
+        for ($i = 0; $i < sizeof($escolas); $i++) {
+            if($escolas[$i]->id == $id){
+                $escola = $id;    
+            }    
+        }
+
+        //Busca as turmas da escola selecionda
+        $turmas = $this->getTurmasEscola($escola);
+
+        //Seta os Anos a serem utilizados no Select
+        $anos = [];
+        for ($i = 0; $i < sizeof($turmas); $i++) {
+            if (!in_array(substr(trim($turmas[$i]->DESCR_TURMA), 0, 2), $anos)) {
+                $anos[$i] = substr(trim($turmas[$i]->DESCR_TURMA), 0, 2);
+            }
+        }
+        //Define o ano padrão do Select
+        $ano = $ano;
+
+        //Busca os dados da Escola Selecionda
+        $escola_selecionada = $this->getEscolaSelecionada($escola);
+
+        //Busca os dados do Município selecionado partindo da escola
+        $municipio_selecionado = $this->getMunicipioSelecionado($escola_selecionada[0]->municipios_id);
+
+        //Busca os dados da Disciplina Selecionada
+        $disciplina_selecionada = $this->getDisciplinaSelecionada($id_disciplina);
+
+        //Buscas as Habilidades
+        $habilidades = $this->getHabilidadesEscola($disciplina_selecionada[0]->id, $escola_selecionada[0]->id);    
+
+        //Busca os dados da Habilidade Selecionda    
+        $habilidade_selecionada = $this->getHabilidadeSelecionada($habilidades[0]->id_habilidade);  
+        
+        //Busca dados Sessão de Disciplinas
+        $dados_comp_grafico_disciplina=$this->estatisticaDisciplinas($this->confPresenca, $escola);
+        $label_disc = $dados_comp_grafico_disciplina[0];
+        $dados_disc = $dados_comp_grafico_disciplina[1];
+        $itens_disc = $dados_comp_grafico_disciplina[2];
+        $map_itens_disc = $dados_comp_grafico_disciplina[3];
+
+        //Busca dados da Sessão de Temas
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola);
+        $label_tema = $dados_comp_grafico_tema[0];
+        $dados_tema = $dados_comp_grafico_tema[1];
+        $itens_tema = $dados_comp_grafico_tema[2];
+        $map_itens_tema = $dados_comp_grafico_tema[3];
+
+        //Busca dados da Sessão de Ano Curricular Disciplina
+        $dados_comp_grafico_curricular_disc=$this->estatisticaCurricularDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
+        $label_curricular_disc = $dados_comp_grafico_curricular_disc[0];
+        $dados_curricular_disc = $dados_comp_grafico_curricular_disc[1];
+        $itens_curricular_disc = $dados_comp_grafico_curricular_disc[2];
+        $map_itens_curricular_disc = $dados_comp_grafico_curricular_disc[3];
+
+        //Busca dados da Sessão de Turma Disciplina
+        $dados_comp_grafico_turma_disc=$this->estatisticaTurmaDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id);
+        $label_turma_disc = $dados_comp_grafico_turma_disc[0];
+        $dados_turma_disc = $dados_comp_grafico_turma_disc[1];
+        $itens_turma_disc = $dados_comp_grafico_turma_disc[2];
+        $map_itens_turma_disc = $dados_comp_grafico_turma_disc[3];
+
+        //Busca dados da Sessão de Habilidade Ano Disciplina
+        $dados_comp_grafico_han_ano_disc=$this->estatisticaHabilidadeAnoDisciplina($this->confPresenca, $escola, $disciplina_selecionada[0]->id, $ano);
+        $label_hab_ano_disc = $dados_comp_grafico_han_ano_disc[0];
+        $dados_hab_ano_disc = $dados_comp_grafico_han_ano_disc[1];
+        $itens_hab_ano_disc = $dados_comp_grafico_han_ano_disc[2];
+        $map_itens_hab_ano_disc = $dados_comp_grafico_han_ano_disc[3];
+        $nome_hab = $dados_comp_grafico_han_ano_disc[4];
+
+        //Busca todos os Critérios
+        $criterios_questaoAll = $this->getCriterios();
+
+        $sessao_inicio = "";
+        $sessao_inicio = $sessao;
+
+        return view('comparativo/diretor/content/diretor', compact(
+            'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','escola_selecionada','disciplinas','sessao_inicio',
+            'disciplina_selecionada','municipio_selecionado','legendas','anos','ano','habilidades','habilidade_selecionada','anos_same','ano_same_selecionado','label_disc',
+            'dados_disc','label_tema','dados_tema','label_curricular_disc','dados_curricular_disc','label_turma_disc','dados_turma_disc','itens_disc','map_itens_disc',
+            'itens_tema','map_itens_tema','itens_curricular_disc','map_itens_curricular_disc','itens_turma_disc','map_itens_turma_disc','label_hab_ano_disc','dados_hab_ano_disc',
+            'itens_hab_ano_disc','map_itens_hab_ano_disc','nome_hab'
+        ));
+    }
 }
