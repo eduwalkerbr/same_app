@@ -58,12 +58,27 @@
         </header>
 
         <main class="py-4">
-            @yield('content')
-            @if (session('status'))
-            <script>
-                alert("{{ session('status') }}");
-            </script>
-            @endif
+            <div class="row">
+                <div class="col-2 fixed-top">
+                    <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4" style="margin-top:160px;margin-right:5px;">
+                        <nav class="nav nav-pills flex-column" style="background-color:rgba(54, 162, 235, 0.2);">
+                            <a id="link_municipio_comparativo" onclick="manipularLink('municipio_comparativo')" class="nav-link" href="#municipio_comparativo" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Disciplinas</a>
+                            <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas</a>
+                            <a id="link_graficoescola" class="nav-link" onclick="manipularLink('graficoescola')" href="#graficoescola" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas</a>
+                            <a id="link_graficoescoladisciplina" class="nav-link" onclick="manipularLink('graficoescoladisciplina')" href="#graficoescoladisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas por Disciplina</a>
+                            <a id="link_graficocurriculardisciplina" class="nav-link" onclick="manipularLink('graficocurriculardisciplina')" href="#graficocurriculardisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Anos Curriculares por Disciplina</a>
+                            <a id="link_graficohabilidadeanodisciplina" class="nav-link" onclick="manipularLink('graficohabilidadeanodisciplina')" href="#graficohabilidadeanodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habiliade por Disciplina e Ano</a>
+                        </nav>
+                    </nav>
+                </div>
+                <div  class="scrollspy-example-2 col-12">
+                    @yield('content')
+                    @if (session('status'))
+                    <script>
+                        alert("{{ session('status') }}");
+                    </script>
+                    @endif
+                </div>
         </main>
         <!------------------------------------ Rodapé ------------------->
         @include('layouts/_parciais.footer')
@@ -313,11 +328,14 @@
                 graficoDisciplina.data.datasets[$i].data = anoMantDisciplina;
             }
 
-            if(labelRemDisciplina.includes(ano)){
-                component_button.className = "btn btn-light btn-sm";
+            if (labelRemDisciplina.includes(ano)) {
+                component_button.style.backgroundColor = 'white';
+                component_button.style.color='black';
                 component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
-            } else{
-                component_button.className = "btn btn-primary btn-sm";
+            } else {
+                component_button.style.backgroundColor = '#f9821E';
+                component_button.style.borderColor = '#f9821E';
+                component_button.style.color='white';
                 component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoDisciplina.update();    
@@ -519,11 +537,14 @@
                 graficoTema.data.datasets[$i].data = anoMantTema;
             }
 
-            if(labelRemTema.includes(ano)){
-                component_button.className = "btn btn-light btn-sm";
+            if (labelRemTema.includes(ano)) {
+                component_button.style.backgroundColor = 'white';
+                component_button.style.color='black';
                 component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
-            } else{
-                component_button.className = "btn btn-primary btn-sm";
+            } else {
+                component_button.style.backgroundColor = '#f9821E';
+                component_button.style.borderColor = '#f9821E';
+                component_button.style.color='white';
                 component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoTema.update();    
@@ -720,11 +741,14 @@
                 graficoEscola.data.datasets[$i].data = anoMantEscola;
             }
 
-            if(labelRemEscola.includes(ano)){
-                component_button.className = "btn btn-light btn-sm";
+            if (labelRemEscola.includes(ano)) {
+                component_button.style.backgroundColor = 'white';
+                component_button.style.color='black';
                 component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
-            } else{
-                component_button.className = "btn btn-primary btn-sm";
+            } else {
+                component_button.style.backgroundColor = '#f9821E';
+                component_button.style.borderColor = '#f9821E';
+                component_button.style.color='white';
                 component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoEscola.update();    
@@ -921,11 +945,14 @@
                 graficoEscolaDisciplina.data.datasets[$i].data = anoMantEscolaDisciplina;
             }
 
-            if(labelRemEscolaDisciplina.includes(ano)){
-                component_button.className = "btn btn-light btn-sm";
+            if (labelRemEscolaDisciplina.includes(ano)) {
+                component_button.style.backgroundColor = 'white';
+                component_button.style.color='black';
                 component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
-            } else{
-                component_button.className = "btn btn-primary btn-sm";
+            } else {
+                component_button.style.backgroundColor = '#f9821E';
+                component_button.style.borderColor = '#f9821E';
+                component_button.style.color='white';
                 component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoEscolaDisciplina.update();    
@@ -1121,11 +1148,14 @@
                 graficoCurricularDisciplina.data.datasets[$i].data = anoMantCurricularDisciplina;
             }
 
-            if(labelRemCurricularDisciplina.includes(ano)){
-                component_button.className = "btn btn-light btn-sm";
+            if (labelRemCurricularDisciplina.includes(ano)) {
+                component_button.style.backgroundColor = 'white';
+                component_button.style.color='black';
                 component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
-            } else{
-                component_button.className = "btn btn-primary btn-sm";
+            } else {
+                component_button.style.backgroundColor = '#f9821E';
+                component_button.style.borderColor = '#f9821E';
+                component_button.style.color='white';
                 component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoCurricularDisciplina.update();    
@@ -1323,17 +1353,44 @@
                 graficoHabilidadeAnoDisciplina.data.datasets[$i].data = anoMantHabilidadeAnoDisciplina;
             }
 
-            if(labelRemHabilidadeAnoDisciplina.includes(ano)){
-                component_button.className = "btn btn-light btn-sm";
+            if (labelRemHabilidadeAnoDisciplina.includes(ano)) {
+                component_button.style.backgroundColor = 'white';
+                component_button.style.color='black';
                 component_button.innerHTML = "<i class=\"fa-solid fa-plus\"></i> " + component_button.textContent;
-            } else{
-                component_button.className = "btn btn-primary btn-sm";
+            } else {
+                component_button.style.backgroundColor = '#f9821E';
+                component_button.style.borderColor = '#f9821E';
+                component_button.style.color='white';
                 component_button.innerHTML = "<i class=\"fa-solid fa-minus\"></i> " + component_button.textContent;
             }
             graficoHabilidadeAnoDisciplina.update();    
         }
     }
 
+</script>
+
+<script>
+    var sessao_historico = '';
+
+    function manipularLink(sessao) {
+        if(sessao_historico != ''){
+            var component_link = document.getElementById('link_' + sessao_historico);
+            component_link.style.color='#0046AD';
+            component_link.style.backgroundColor='transparent';
+        }
+
+        sessao_historico = sessao;
+
+        var component_link = document.getElementById('link_' + sessao);
+        component_link.style.color='white';
+        component_link.style.backgroundColor='#0046AD';
+    }    
+</script>
+
+<script>
+    window.onload = function () {
+        manipularLink(<?php echo json_encode($sessao_inicio) ?>);
+    }
 </script>
 
 <!------------------------------------ Posição ao Abrir o Site ------------------->

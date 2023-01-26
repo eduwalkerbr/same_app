@@ -436,7 +436,7 @@ class SecretarioComparativoController extends Controller
                             //Cria o Novo Item
                             $novo_item_array = array(
                                 'x' => $labels_hab[$j],
-                                $itens_hab[$i] => "00.0000",
+                                $itens_hab[$i] => "Ausente",
                                 'nome_habilidade' => $nome_hab[$i],);
                             //Combina os Itens para criar o Array completo    
                             $map_itens_label[$labels_hab[$j]] = array_merge($item_array, $novo_item_array);
@@ -444,7 +444,7 @@ class SecretarioComparativoController extends Controller
                             //Caso seja o primeiro item do array
                             $map_itens_label[$labels_hab[$j]] = array(
                                 'x' => $labels_hab[$j],
-                                $itens_hab[$i] => "00.0000",
+                                $itens_hab[$i] => "Ausente",
                                 'nome_habilidade' => $nome_hab[$i]
                             );     
                         }
@@ -550,14 +550,14 @@ class SecretarioComparativoController extends Controller
                             //Cria o Novo Item
                             $novo_item_array = array(
                                 'x' => $labels_disc[$j],
-                                $itens_disc[$i] => "00.0000",);
+                                $itens_disc[$i] => "Ausente",);
                             //Combina os Itens para criar o Array completo    
                             $map_itens_label[$labels_disc[$j]] = array_merge($item_array, $novo_item_array);
                         } else {
                             //Caso seja o primeiro item do array
                             $map_itens_label[$labels_disc[$j]] = array(
                                 'x' => $labels_disc[$j],
-                                $itens_disc[$i] => "00.0000",
+                                $itens_disc[$i] => "Ausente",
                             );     
                         }
                     }

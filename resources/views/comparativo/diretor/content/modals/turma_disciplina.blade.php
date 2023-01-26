@@ -39,7 +39,7 @@
                                         @php
                                         $valor = "Ausente";
                                         if(array_key_exists(trim($item_turma_disc),$map_item)){
-                                            if($map_item[trim($item_turma_disc)] != '00.0000'){
+                                            if($map_item[trim($item_turma_disc)] != 'Ausente'){
                                                 $valor = $map_item[trim($item_turma_disc)];
                                             }
                                         }
