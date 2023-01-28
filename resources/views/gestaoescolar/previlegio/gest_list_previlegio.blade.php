@@ -4,8 +4,8 @@
 <div class="container" style="padding-top: 20px;margin-top: 100px; margin-bottom: 140px;box-shadow: 5px 5px 5px rgba(0,0, 139);background-color:white;">
   <div class="row justify-content-center" style="margin-bottom: 20px;">
         <div class="col-md-10">
-            <h4 style="font-weight: bolder; font-size: 18px; color: #f9821E; margin-bottom: 20px;text-align:center;">Lista de Previlégios</h4>
-            <p style="color: black;text-align:center;font-weight:bold;">Segue abaixo a lista de Previlégios para Visualização e ou Edição.</p>
+            <h4 style="font-weight: bolder; font-size: 18px; color: #f9821E; margin-bottom: 20px;text-align:center;">Lista de Privilégios</h4>
+            <p style="color: black;text-align:center;font-weight:bold;">Segue abaixo a lista de Privilégios para Visualização e ou Edição.</p>
         </div>
     </div>
   @csrf
@@ -88,7 +88,7 @@
         <th scope="col" style="color: black;">Usuário</th>
         <th scope="col" style="color: black;">E-Mail</th>
         <th scope="col" style="color: black;">Função</th>
-        <th scope="col" style="color: black;">Ano SAME</th>
+        <th scope="col" style="color: black;text-align:center">Ano SAME</th>
         <th style="text-align:center; color: black;" scope="col">Ações</th>
       </tr>
     </thead>
@@ -103,8 +103,8 @@
         <td style="font-weight: normal;font-size:14px;">{{$usuario->name}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$usuario->email}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$funcao->desc}}</td>
-        <td style="font-weight: normal;font-size:14px;">{{$previlegio->SAME}}</td>
-        <td style="text-align:center;">
+        <td style="font-weight: normal;font-size:14px;text-align:center">{{$previlegio->SAME}}</td>
+        <td style="text-align:center;width:150px;">
           <a href="{{ route('gest_previlegio.edit', $previlegio->id) }}">
             <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Editar</button>
           </a>

@@ -53,6 +53,8 @@ use App\Http\Controllers\cadastros\turmaprevia\TurmaPreviaFilterController;
 use App\Http\Controllers\cadastros\anosame\AnoSAMEController;
 use App\Http\Controllers\cadastros\manutencao\ManutencaoController;
 use App\Http\Controllers\cadastros\manutencao\CacheMunicipioController;
+use App\Http\Controllers\cadastros\manutencao\CacheCompMunicipioController;
+use App\Http\Controllers\cadastros\manutencao\CacheCompEscolaController;
 use App\Http\Controllers\cadastros\manutencao\CacheEscolaController;
 use App\Http\Controllers\cadastros\manutencao\CacheTurmaController;
 use App\Http\Controllers\gestaoescolar\GestaoEscPrevilegioController;
@@ -411,3 +413,12 @@ Route::put('/gestao_direcao_professor/{id}', [GestaoEscDirProfessorController::c
 Route::any('/gestao_direcao_professor/filtrar', [GestaoEscDirProfessorController::class, 'filtrar'])->name('gest_direcao_professor.filtrar');
 Route::delete('/gestao_direcao_professor/{id}', [GestaoEscDirProfessorController::class, 'destroy'])->name('gest_direcao_professor.delete');
 Route::get('/gestao_direcao_professor/list', [GestaoEscDirProfessorController::class, 'exibirLista'])->name('gest_direcao_professor.listar');
+
+//Cache Município Comparativo
+Route::get('/manutencao/cache/municipio_comp_disc', [CacheCompMunicipioController::class, 'carregarDisciplinaMunicipio'])->name('cache.disc_municipio');
+Route::get('/manutencao/cache/municipio_comp_tema', [CacheCompMunicipioController::class, 'carregarTemaMunicipio'])->name('cache.tema_municipio');
+Route::get('/manutencao/cache/municipio_comp_esc', [CacheCompMunicipioController::class, 'carregarEscolaMunicipio'])->name('cache.esc_municipio');
+Route::get('/manutencao/cache/municipio_comp_esc_disc', [CacheCompMunicipioController::class, 'carregarEscolaDisciplinaMunicipio'])->name('cache.esc_disc_municipio');
+Route::get('/manutencao/cache/municipio_comp_curricular', [CacheCompMunicipioController::class, 'carregarAnoCurricularDisciplinaMunicipio'])->name('cache.curricular_municipio');
+Route::get('/manutencao/cache/municipio_comp_hab_anos_disc', [CacheCompMunicipioController::class, 'carregarHabAnosDisciplinaMunicipio'])->name('cache.hab_anos_disc_municipio');
+

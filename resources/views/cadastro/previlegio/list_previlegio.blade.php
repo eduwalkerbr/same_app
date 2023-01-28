@@ -4,8 +4,8 @@
 <div class="container" style="margin-top: 100px;">
   <div class="card text-center">
     <div class="card-body" style="background-color: #0046AD; color: white;box-shadow: 5px 5px 5px rgba(0,0, 139);">
-      <h5 class="card-title">Lista de Previlégios</h5>
-      <p class="card-text">Segue abaixo a lista de Previlégios para Visualização e ou Edição.</p>
+      <h5 class="card-title">Lista de Privilégios</h5>
+      <p class="card-text">Segue abaixo a lista de Privilégios para Visualização e ou Edição.</p>
     </div>
   </div>
   @csrf

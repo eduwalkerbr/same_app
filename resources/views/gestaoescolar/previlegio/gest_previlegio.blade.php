@@ -4,7 +4,7 @@
 <div class="container" style="padding-top: 20px;margin-top: 100px; margin-bottom: 140px;box-shadow: 5px 5px 5px rgba(0,0, 139);background-color:white;">
     <div class="row justify-content-center" style="margin-bottom: 20px;">
         <div class="col-md-10">
-            <h4 style="font-weight: bolder; font-size: 18px; color: #f9821E; margin-bottom: 20px;text-align:center;">@if(isset($previlegio)) Edição da @else Cadastro de @endif Previlégio</h4>
+            <h4 style="font-weight: bolder; font-size: 18px; color: #f9821E; margin-bottom: 20px;text-align:center;">@if(isset($previlegio)) Edição da @else Cadastro de @endif Privilégio</h4>
             <p style="color: black;text-align:center;font-weight:bold;">Realize a adição dos Dados de Registro ou Cancele a operação e retorno a página de Listagem.</p>
         </div>
     </div>

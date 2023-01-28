@@ -62,12 +62,12 @@
                 <div class="col-2 fixed-top">
                     <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4" style="margin-top:160px;margin-right:5px;">
                         <nav class="nav nav-pills flex-column" style="background-color:rgba(54, 162, 235, 0.2);">
-                            <a id="link_municipio_comparativo" onclick="manipularLink('municipio_comparativo')" class="nav-link" href="#municipio_comparativo" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Disciplinas</a>
-                            <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas</a>
-                            <a id="link_graficoescola" class="nav-link" onclick="manipularLink('graficoescola')" href="#graficoescola" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas</a>
-                            <a id="link_graficoescoladisciplina" class="nav-link" onclick="manipularLink('graficoescoladisciplina')" href="#graficoescoladisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas por Disciplina</a>
-                            <a id="link_graficocurriculardisciplina" class="nav-link" onclick="manipularLink('graficocurriculardisciplina')" href="#graficocurriculardisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Anos Curriculares por Disciplina</a>
-                            <a id="link_graficohabilidadeanodisciplina" class="nav-link" onclick="manipularLink('graficohabilidadeanodisciplina')" href="#graficohabilidadeanodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habiliade por Disciplina e Ano</a>
+                        <a id="link_municipio_comparativo" class="nav-link" onclick="manipularLink('municipio_comparativo')" href="#municipio_comparativo" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas</a>
+                        <a id="link_graficoescoladisciplina" class="nav-link" onclick="manipularLink('graficoescoladisciplina')" href="#graficoescoladisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas por Disciplina</a>
+                        <a id="link_graficodisciplina" onclick="manipularLink('graficodisciplina')" class="nav-link" href="#graficodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Disciplinas</a>
+                        <a id="link_graficocurriculardisciplina" class="nav-link" onclick="manipularLink('graficocurriculardisciplina')" href="#graficocurriculardisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Anos Curriculares por Disciplina</a>
+                        <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas</a>
+                        <a id="link_graficohabilidadeanodisciplina" class="nav-link" onclick="manipularLink('graficohabilidadeanodisciplina')" href="#graficohabilidadeanodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habilidades por Disciplina e Ano</a>
                         </nav>
                     </nav>
                 </div>
@@ -191,7 +191,7 @@
                     labels: {
                         //color: 'rgb(255, 99, 132)',
                         font: {
-                            size: 14
+                            size: 14,
                         },
                         usePointStyle: true,
                         pointStyle: 'rect',
@@ -357,11 +357,6 @@
         type: 'bar',
         data: dataTema,
         options: {
-            layout: {
-                padding: {
-                    left: -12
-                },
-            },
             responsive: true,
             animation: {
                 onComplete: () => {
@@ -384,7 +379,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Comparativo de Proficiência do Município entre os Temas nos Anos SAME',
+                    text: 'Comparativo de Proficiência do Município nos Temas em ' + <?php echo json_encode($disciplina_selecionada[0]->desc) ?> + ' no ' + <?php echo json_encode($ano[0]) ?> + 'º Ano entre os Anos SAME',
                     font: {
                         size: 14,
                         family: 'arial',
@@ -396,10 +391,9 @@
                     display: true,
                     position: 'top',
                     labels: {
-                        padding: 14,
-                        boxHeight: 8,
+                        boxHeight: 10,
                         font: {
-                            size: 12,
+                            size: 13,
                         },
                         usePointStyle: true,
                         pointStyle: 'rect',

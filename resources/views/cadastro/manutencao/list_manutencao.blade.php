@@ -38,7 +38,7 @@
                   <a href="{{ route('dados_unificados.carregar') }}"><button type="button" class="btn btn-outline-primary btn-sm">Carregar Dados Unificados</button></a>
                 </div>
               </div>
-            </div>  
+            </div>
           </form>
         </div>
       </div>
@@ -192,6 +192,60 @@
               <div class="col-md-3">
                 <div class="form-group">
                   <a href="{{ route('cache.turma_alunos') }}"><button type="button" class="btn btn-outline-secondary btn-sm">Alunos Turma</button></a>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="accordion" id="accordionComparativos">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="panelsStayHeading-Comparativos">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-Comparativos" aria-expanded="true" aria-controls="panelsStayOpen-Comparativos" style="background-color:white;color: #f9821e;font-weight:bold;font-size:16px;border: none;">
+          Comparativo
+        </button>
+      </h2>
+      <div id="panelsStayOpen-Comparativos" class="accordion-collapse collapse" aria-labelledby="panelsStayHeading-Comparativos">
+        <div class="accordion-body">
+          <form id="form_filter" name="form_filter" action="" method="post" enctype="multipart/form-data">
+            @csrf
+            <div class="form-group">
+              <input type="hidden" name="id_user" id="id_user" value="{{ Auth::user()->id }}">
+            </div>
+            <div class="row justify-content-begin" style="color:black;font-size:15px;">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.disc_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Disciplinas Munícipio</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.tema_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Temas Munícipio</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.esc_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Escolas Munícipio</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.esc_disc_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Escolas nas Disciplinas Munícipio</button></a>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-begin" style="color:black;font-size:15px;">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.curricular_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Anos Curriculares Disciplina Município</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.hab_anos_disc_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Habilidade por Anos e Disciplina Munícipio</button></a>
                 </div>
               </div>
             </div>
