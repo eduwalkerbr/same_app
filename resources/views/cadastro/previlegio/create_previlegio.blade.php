@@ -6,7 +6,7 @@
         <div class="col-md-9">
             <div class="card text-center">
                 <div class="card-body" style="background-color: #0046AD; color: white;box-shadow: 5px 5px 5px rgba(0,0, 139);">
-                    <h5 class="card-title">@if(isset($previlegio)) Edição da @else Cadastro de @endif Previlégio</h5>
+                    <h5 class="card-title">@if(isset($previlegio)) Edição da @else Cadastro de @endif Privilégio</h5>
                 </div>
             </div>
         </div>

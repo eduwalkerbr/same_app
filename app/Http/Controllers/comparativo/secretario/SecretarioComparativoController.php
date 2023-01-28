@@ -285,16 +285,16 @@ class SecretarioComparativoController extends Controller
     /**
      * Método que busca os dados para montar a sessão Temas Munícipio
      */
-    private function estatisticaTemas($confPresenca, $municipio){
+    private function estatisticaTemas($confPresenca, $municipio, $id_disciplina, $ano){
         //Busca os dados do gráfico de disciplina
-        if (Cache::has('compar_tema_mun_'.strval($municipio))) {
-            $dados_base_grafico_tema = Cache::get('compar_tema_mun_'.strval($municipio));
+        if (Cache::has('compar_tema_mun_'.strval($municipio).strval($id_disciplina).strval($ano))) {
+            $dados_base_grafico_tema = Cache::get('compar_tema_mun_'.strval($municipio).strval($id_disciplina).strval($ano));
         } else {
             $dados_base_grafico_tema = DB::select('SELECT REPLACE(nome_tema,\'.\', \'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
-                 FROM dado_unificados WHERE id_municipio = :id_municipio AND presenca > :presenca GROUP BY SAME, nome_tema, id_tema ORDER BY SAME, nome_tema', 
-                 ['presenca' => $confPresenca, 'id_municipio' => $municipio]);   
+                 FROM dado_unificados WHERE id_municipio = :id_municipio AND presenca > :presenca AND id_disciplina = :id_disciplina AND ano = :ano GROUP BY SAME, nome_tema, id_tema ORDER BY SAME, nome_tema', 
+                 ['presenca' => $confPresenca, 'id_municipio' => $municipio, 'id_disciplina' => $id_disciplina, 'ano' => $ano]);   
             
-            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_mun_'.strval($municipio));     
+            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_mun_'.strval($municipio).strval($id_disciplina).strval($ano));     
         }
 
         return $dados_base_grafico_tema;
@@ -685,7 +685,7 @@ class SecretarioComparativoController extends Controller
         $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
-        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio, $disciplina_selecionada[0]->id, $ano);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
         $itens_tema = $dados_comp_grafico_tema[2];
@@ -813,7 +813,7 @@ class SecretarioComparativoController extends Controller
         $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
-        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio, $disciplina_selecionada[0]->id, $ano);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
         $itens_tema = $dados_comp_grafico_tema[2];
@@ -942,7 +942,7 @@ class SecretarioComparativoController extends Controller
         $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
-        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio);
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $municipio, $disciplina_selecionada[0]->id, $ano);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
         $itens_tema = $dados_comp_grafico_tema[2];

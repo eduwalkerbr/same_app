@@ -77,7 +77,7 @@
                             </a>
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size: 15px;color: black;">
                                 <a class="dropdown-item" href="{{ route('gest_previlegio.filtrar') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                    Previlégios
+                                    Privilégios
                                 </a>
                                 <a class="dropdown-item" href="{{ route('gest_direcao_professor.filtrar') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                     Direção Professor
