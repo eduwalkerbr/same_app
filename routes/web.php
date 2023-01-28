@@ -422,3 +422,9 @@ Route::get('/manutencao/cache/municipio_comp_esc_disc', [CacheCompMunicipioContr
 Route::get('/manutencao/cache/municipio_comp_curricular', [CacheCompMunicipioController::class, 'carregarAnoCurricularDisciplinaMunicipio'])->name('cache.curricular_municipio');
 Route::get('/manutencao/cache/municipio_comp_hab_anos_disc', [CacheCompMunicipioController::class, 'carregarHabAnosDisciplinaMunicipio'])->name('cache.hab_anos_disc_municipio');
 
+//Cache Escola Comparativo
+Route::get('/manutencao/cache/comp_disc_escola', [CacheCompEscolaController::class, 'carregarDisciplinaEscola'])->name('cache.disc_escola');
+Route::get('/manutencao/cache/comp_tema_escola', [CacheCompEscolaController::class, 'carregarTemaEscola'])->name('cache.tema_escola');
+Route::get('/manutencao/cache/comp_curricular_escola', [CacheCompEscolaController::class, 'carregarAnoCurricularDisciplinaEscola'])->name('cache.curricular_escola');
+Route::get('/manutencao/cache/comp_hab_anos_disc_escola', [CacheCompEscolaController::class, 'carregarHabAnosDisciplinaEscola'])->name('cache.hab_anos_disc_escola');
+

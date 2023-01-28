@@ -62,10 +62,10 @@
                     <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4" style="margin-top:160px;margin-right:5px;">
                         <nav class="nav nav-pills flex-column" style="background-color:rgba(54, 162, 235, 0.2);">
                             <a id="link_escola_comparativo" onclick="manipularLink('escola_comparativo')" class="nav-link" href="#escola_comparativo" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Disciplinas</a>
-                            <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas</a>
                             <a id="link_graficocurricular" class="nav-link" onclick="manipularLink('graficocurricular')" href="#graficocurricular" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Ano Curricular por Disciplina</a>
-                            <a id="link_graficoturma" class="nav-link" onclick="manipularLink('graficoturma')" href="#graficoturma" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Turmas por Disciplina</a>
-                            <a id="link_graficohabilidade" class="nav-link" onclick="manipularLink('graficohabilidade')" href="#graficohabilidade" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habilidades por Disciplina e Ano</a>
+                            <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas por Disciplina e Ano Curricular</a>
+                            <!--<a id="link_graficoturma" class="nav-link" onclick="manipularLink('graficoturma')" href="#graficoturma" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Turmas por Disciplina</a>-->
+                            <a id="link_graficohabilidade" class="nav-link" onclick="manipularLink('graficohabilidade')" href="#graficohabilidade" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habilidades por Disciplina e Ano Curricular</a>
                         </nav>
                     </nav>
                 </div>
@@ -176,7 +176,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Comparativo de Proficiência da Escolas entre as Disciplinas nos Anos SAME',
+                    text: 'Comparativo de Proficiência da Escola entre as Disciplinas nos Anos SAME',
                     font: {
                         size: 14,
                         family: 'arial',
@@ -353,11 +353,6 @@
         type: 'bar',
         data: dataTema,
         options: {
-            layout: {
-                padding: {
-                    left: -12
-                },
-            },
             responsive: true,
             animation: {
                 onComplete: () => {
@@ -380,7 +375,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Comparativo de Proficiência da Escola entre os Temas nos Anos SAME',
+                    text: 'Comparativo de Proficiência da Escola nos Temas em ' + <?php echo json_encode($disciplina_selecionada[0]->desc) ?> + ' no ' + <?php echo json_encode($ano[0]) ?> + 'º Ano entre os Anos SAME',
                     font: {
                         size: 14,
                         family: 'arial',
