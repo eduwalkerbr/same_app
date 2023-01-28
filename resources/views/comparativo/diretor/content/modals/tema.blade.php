@@ -5,7 +5,7 @@
 
             <!-- Modal Header -->
             <div class="modal-header" style="background-color:#0046AD;">
-                <h4 class="modal-title" style="background-color:#0046AD; color:white;font-size:15px;font-weight:bold;">Comparativo da Escola {{$escola_selecionada[0]->nome}} entre os Temas</h4>
+                <h4 class="modal-title" style="background-color:#0046AD; color:white;font-size:15px;font-weight:bold;">Comparativo de {{$escola_selecionada[0]->nome}} nos Temas em {{$disciplina_selecionada[0]->desc}} no {{$ano[0]}}º Ano</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <!-- Modal Header -->

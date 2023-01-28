@@ -571,19 +571,16 @@ class CacheCompEscolaController extends Controller
     /**
      * Método que busca os dados para montar a sessão Temas Escola
      */
-    private function estatisticaTemas($confPresenca, $escola)
-    {
+    private function estatisticaTemas($confPresenca, $escola, $id_disciplina, $ano){
         //Busca os dados do gráfico de disciplina
-        if (Cache::has('compar_tema_esc_' . strval($escola))) {
-            $dados_base_grafico_tema = Cache::get('compar_tema_esc_' . strval($escola));
+        if (Cache::has('compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano))) {
+            $dados_base_grafico_tema = Cache::get('compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano));
         } else {
-            $dados_base_grafico_tema = DB::select(
-                'SELECT REPLACE(nome_tema,\'.\', \'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
-                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca GROUP BY SAME, nome_tema',
-                ['presenca' => $confPresenca, 'id_escola' => $escola]
-            );
-
-            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_esc_' . strval($escola));
+            $dados_base_grafico_tema = DB::select('SELECT REPLACE(nome_tema,\'.\', \'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
+                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca AND id_disciplina = :id_disciplina AND ano = :ano GROUP BY SAME, nome_tema', 
+                 ['presenca' => $confPresenca, 'id_escola' => $escola, 'id_disciplina' => $id_disciplina, 'ano' => $ano]);   
+            
+            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano));     
         }
 
         return $dados_base_grafico_tema;
@@ -691,8 +688,12 @@ class CacheCompEscolaController extends Controller
         //Lista os Munícipios
         $municipios = $this->getMunicipios();
 
-        //Carrega os dados do Município
+        //Lista as Disciplinas
+        $disciplinas = $this->getDisciplinas();
+
         foreach ($municipios as $municipio) {
+
+            $this->getMunicipioSelecionado($municipio->id);
 
             $escolas = $this->getEscolasDiretor($municipio->id);
 
@@ -700,7 +701,26 @@ class CacheCompEscolaController extends Controller
 
                 $this->getEscolaSelecionada($escola->id);
 
-                $this->estatisticaTemas($this->confPresenca, $escola->id);
+                $turmas = $this->getTurmasEscola($escola);
+                $anos = [];
+                for ($i = 0; $i < sizeof($turmas); $i++) {
+                    if (!in_array(substr(trim($turmas[$i]->DESCR_TURMA), 0, 2), $anos)) {
+                        $anos[$i] = substr(trim($turmas[$i]->DESCR_TURMA), 0, 2);
+                    }
+                }
+
+                foreach ($disciplinas as $disciplina) {
+
+                    $this->getDisciplinaSelecionada($disciplina->id);
+    
+                    foreach ($anos as $ano) {
+    
+                        $ano = intval($ano);
+    
+                        $this->estatisticaTemas($this->confPresenca, $escola->id, $disciplina->id, $ano);
+                    }
+                }
+
             }
 
         }

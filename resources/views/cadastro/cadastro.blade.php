@@ -182,10 +182,10 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size: 15px;color: black;">
                                             <a class="dropdown-item" href="{{ route('cadastro_previlegio') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Cadastro - Previlégio
+                                                Cadastro - Privilégio
                                             </a>
                                             <a class="dropdown-item" href="{{ route('previlegio.filtrar') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Listagem - Previlégio
+                                                Listagem - Privilégio
                                             </a>
                                             <hr>
                                             <a class="dropdown-item" href="{{ route('cadastro_direcao_professor') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>

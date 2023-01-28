@@ -66,8 +66,8 @@
                         <a id="link_graficoescoladisciplina" class="nav-link" onclick="manipularLink('graficoescoladisciplina')" href="#graficoescoladisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Escolas por Disciplina</a>
                         <a id="link_graficodisciplina" onclick="manipularLink('graficodisciplina')" class="nav-link" href="#graficodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Disciplinas</a>
                         <a id="link_graficocurriculardisciplina" class="nav-link" onclick="manipularLink('graficocurriculardisciplina')" href="#graficocurriculardisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Anos Curriculares por Disciplina</a>
-                        <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas</a>
-                        <a id="link_graficohabilidadeanodisciplina" class="nav-link" onclick="manipularLink('graficohabilidadeanodisciplina')" href="#graficohabilidadeanodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habilidades por Disciplina e Ano</a>
+                        <a id="link_graficotema" class="nav-link" onclick="manipularLink('graficotema')" href="#graficotema" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Temas por Disciplina e Ano Curricular</a>
+                        <a id="link_graficohabilidadeanodisciplina" class="nav-link" onclick="manipularLink('graficohabilidadeanodisciplina')" href="#graficohabilidadeanodisciplina" style="font-size:15px;font-weight:bold;color:#0046AD;border: round 0;padding-top:20px;padding-bottom:20px;">Habilidades por Disciplina e Ano Curricular</a>
                         </nav>
                     </nav>
                 </div>
@@ -391,9 +391,10 @@
                     display: true,
                     position: 'top',
                     labels: {
-                        boxHeight: 10,
+                        padding: 14,
+                        boxHeight: 8,
                         font: {
-                            size: 13,
+                            size: 12,
                         },
                         usePointStyle: true,
                         pointStyle: 'rect',

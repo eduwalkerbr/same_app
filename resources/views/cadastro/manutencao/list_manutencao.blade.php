@@ -223,7 +223,7 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <a href="{{ route('cache.tema_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Temas Munícipio</button></a>
+                  <a href="{{ route('cache.tema_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Temas por Anos e Disciplinas Munícipio</button></a>
                 </div>
               </div>
               <div class="col-md-3">
@@ -245,7 +245,30 @@
               </div>
               <div class="col-md-3">
                 <div class="form-group">
-                  <a href="{{ route('cache.hab_anos_disc_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Habilidade por Anos e Disciplina Munícipio</button></a>
+                  <a href="{{ route('cache.hab_anos_disc_municipio') }}"><button type="button" class="btn btn-outline-primary btn-sm">Habilidade por Anos e Disciplinas Munícipio</button></a>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row justify-content-begin" style="color:black;font-size:15px;">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.disc_escola') }}"><button type="button" class="btn btn-outline-danger btn-sm">Disciplinas Escola</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.tema_escola') }}"><button type="button" class="btn btn-outline-danger btn-sm">Temas por Anos e Disciplinas Escola</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.curricular_escola') }}"><button type="button" class="btn btn-outline-danger btn-sm">Anos Curriculares Disciplina Escola</button></a>
+                </div>
+              </div>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <a href="{{ route('cache.hab_anos_disc_escola') }}"><button type="button" class="btn btn-outline-danger btn-sm">Habilidade por Anos e Disciplinas Escola</button></a>
                 </div>
               </div>
             </div>

@@ -362,16 +362,16 @@ class DiretorComparativoController extends Controller
     /**
      * Método que busca os dados para montar a sessão Temas Escola
      */
-    private function estatisticaTemas($confPresenca, $escola){
+    private function estatisticaTemas($confPresenca, $escola, $id_disciplina, $ano){
         //Busca os dados do gráfico de disciplina
-        if (Cache::has('compar_tema_esc_'.strval($escola))) {
-            $dados_base_grafico_tema = Cache::get('compar_tema_esc_'.strval($escola));
+        if (Cache::has('compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano))) {
+            $dados_base_grafico_tema = Cache::get('compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano));
         } else {
             $dados_base_grafico_tema = DB::select('SELECT REPLACE(nome_tema,\'.\', \'\') as item, CONCAT(\'Ano \',SAME) AS label,(SUM(acerto)*100)/(count(id)) AS percentual
-                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca GROUP BY SAME, nome_tema', 
-                 ['presenca' => $confPresenca, 'id_escola' => $escola]);   
+                 FROM dado_unificados WHERE id_escola = :id_escola AND presenca > :presenca AND id_disciplina = :id_disciplina AND ano = :ano GROUP BY SAME, nome_tema', 
+                 ['presenca' => $confPresenca, 'id_escola' => $escola, 'id_disciplina' => $id_disciplina, 'ano' => $ano]);   
             
-            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_esc_'.strval($escola));     
+            $dados_base_grafico_tema = $this->getDataSet($dados_base_grafico_tema, 'compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano));     
         }
 
         return $dados_base_grafico_tema;
@@ -748,7 +748,7 @@ class DiretorComparativoController extends Controller
         $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
-        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola);
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola, $disciplina_selecionada[0]->id, $ano);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
         $itens_tema = $dados_comp_grafico_tema[2];
@@ -880,7 +880,7 @@ class DiretorComparativoController extends Controller
         $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
-        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola);
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola, $disciplina_selecionada[0]->id, $ano);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
         $itens_tema = $dados_comp_grafico_tema[2];
@@ -1016,7 +1016,7 @@ class DiretorComparativoController extends Controller
         $map_itens_disc = $dados_comp_grafico_disciplina[3];
 
         //Busca dados da Sessão de Temas
-        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola);
+        $dados_comp_grafico_tema=$this->estatisticaTemas($this->confPresenca, $escola, $disciplina_selecionada[0]->id, $ano);
         $label_tema = $dados_comp_grafico_tema[0];
         $dados_tema = $dados_comp_grafico_tema[1];
         $itens_tema = $dados_comp_grafico_tema[2];
