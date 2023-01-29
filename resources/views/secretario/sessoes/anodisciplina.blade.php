@@ -41,7 +41,7 @@
                     * Os presentes dados representam o percentual de proficiência do Município na Disciplina de {{$disciplina_selecionada[0]->desc}}, para cada Ano Curricular.
                 </p>
                 <!------------------------------------ Legenda ------------------->
-                <div class="row justify-content-center" style="margin-top:30px;">
+                <div class="row justify-content-center" style="margin-top:30px;" id="curriculardisciplinagrafico" >
                     <div class="col-md-6" style="border: 1px solid white;background-color:white;">
                         <div class="row justify-content-center">
                             @foreach($legendas as $legenda)
@@ -55,34 +55,6 @@
                 <!------------------------------------ Legenda ------------------->
                 <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
             </div>
-            <!------------------------------------ Navegação ------------------->
-            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="grafico_matematica">
-                <div class="row justify-content-center">
-                    @if(count($dados_base_grafico_escola) > 1)
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescoladisciplina">
-                            Voltar para Gráfico Escolas {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @else
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescola">
-                            Anos Curriculares {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @endif
-
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#grafico_matematica">
-                            Gráfico Ano Curricular {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!------------------------------------ Navegação ------------------->
         </div>
     </div>
     <!------------------------------------ Card Ano Curricular Disciplina ------------------->

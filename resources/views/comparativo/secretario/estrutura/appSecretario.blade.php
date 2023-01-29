@@ -79,6 +79,7 @@
                     </script>
                     @endif
                 </div>
+            </div>
         </main>
         <!------------------------------------ Rodapé ------------------->
         @include('layouts/_parciais.footer')

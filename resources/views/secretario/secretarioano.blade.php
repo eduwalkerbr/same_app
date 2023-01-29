@@ -50,18 +50,6 @@
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:30px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="escolas">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#escolas">
-                                                Escolas &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                             <!------------------------------------ Sessão Disciplina Município Gráfico ------------------->
                         </div>
@@ -92,29 +80,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="escolasdisciplina">
                                         * O presente gráfico representa o Percentual de Proficiência das Escolas do Município.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do Município ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="escolasmatematica">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#escolas">
-                                                Voltar para Escolas &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#escolasmatematica">
-                                                Escolas {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                         <!------------------------------------ Card Escola Município Gráfico ------------------->
@@ -146,29 +116,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="curriculardisciplina">
                                         * O presente gráfico representa o Percentual de Proficiência das Escolas do Município na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do Município ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="graficomatematica">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#escolasmatematica">
-                                                Voltar para Escolas {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficomatematica">
-                                                Anos Curriculares {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                         <!-----------------------------Card Escola Disciplina Munícipio Gráfico ------------------->
@@ -199,38 +151,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="habilidadeanodisciplina">
                                         * O presente gráfico representa o Percentual de Proficiência do Município em cada Ano Curricular na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do Município ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="fim">
-                                    <div class="row justify-content-center">
-                                        @if(count($dados_base_grafico_escola) > 1)
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficomatematica">
-                                                Voltar para Ano Curricular {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @else
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficoescoladisciplina">
-                                                Voltar para Ano Curricular {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#fim">
-                                                Habilidades em {{$disciplina_selecionada[0]->desc}} nos Anos &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                         <!---------------------------- Card Ano Curricular Disciplina Gráfico ------------------->
@@ -260,29 +185,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="habilidadeselecionadadisciplina">
                                         * O presente gráfico representa o percentual de Proficiência por Habilidades da Turma selecionada, na Disciplina de {{$disciplina_selecionada[0]->desc}} no {{$ano[0]}}º Ano.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="graficohabilidadeanodisciplina">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#fim">
-                                                Voltar para Habilidades em {{$disciplina_selecionada[0]->desc}} nos Anos &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficohabilidadeanodisciplina">
-                                                Habilidade Selecionada em {{$disciplina_selecionada[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                         <!----------------------- Card Habilidades Disciplina Anos Gráfico ------------------->
@@ -319,24 +226,6 @@
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="graficohabilidadedisciplinahabilidade">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficohabilidadeanodisciplina">
-                                                Habilidade Selecionada em {{$disciplina_selecionada[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#municipio">
-                                                Voltar para o Início &emsp;<i class="fa-solid fa-door-closed"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>

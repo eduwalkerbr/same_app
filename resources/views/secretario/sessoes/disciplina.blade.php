@@ -42,7 +42,7 @@
         </p>
 
         <!------------------------------------ Legenda ------------------->
-        <div class="row justify-content-center" style="margin-top:30px;">
+        <div class="row justify-content-center" style="margin-top:30px;" id="escolas">
             <div class="col-md-11" style="border: 1px solid white;background-color:white;">
                 <div class="row justify-content-center">
                     @foreach($legendas as $legenda)
@@ -60,18 +60,5 @@
         <!---- Rodapé Card Disciplinas Município ---->
 
     </div>
-
-    <!------------------------------------ Navegação Card Disciplinas Município ------------------->
-    <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="escolas">
-        <div class="row justify-content-center">
-            <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#escolas">
-                    Escolas &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                </a>
-            </div>
-        </div>
-    </div>
-    <!------------------------------------ Navegação Card Disciplinas Município ------------------->
 </div>
 <!---- Card Disciplinas Município ---->
