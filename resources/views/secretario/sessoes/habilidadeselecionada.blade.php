@@ -273,48 +273,20 @@
 
                 </p>
                 <!------------------------------------ Legenda ------------------->
-                <div class="row justify-content-center" style="margin-top:15px;">
+                <div class="row justify-content-center" style="margin-top:15px;" id="habilidadeselecionadadisciplinagrafico">
                     <div class="col-md-6" style="border: 1px solid white;background-color:white;">
                         <div class="row justify-content-center">
                             @foreach($legendas as $legenda)
                             <div class="col-md-3" style="border: 1px solid white;background-color:white;" data-bs-toggle="tooltip" data-bs-placement="right" title="{{$legenda->descricao}}">
-                                <p style="color:black;font-size: 11px;text-align:center;font-weight:normal;"><i class="fa-solid fa-cube" style="color:{{$legenda->cor_fundo}};"></i>&nbsp;<b>{{$legenda->exibicao}}</b><br>{{$legenda->titulo}}</p>
+                                <p style="color:black;font-size: 11px;text-align:center;font-weight:normal;" ><i class="fa-solid fa-cube" style="color:{{$legenda->cor_fundo}};"></i>&nbsp;<b>{{$legenda->exibicao}}</b><br>{{$legenda->titulo}}</p>
                             </div>
                             @endforeach
                         </div>
                     </div>
                 </div>
                 <!------------------------------------ Legenda ------------------->
-                <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;margin-bottom:0;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
-
+                <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;margin-bottom:0;font-weight:bold;" >Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>                                                      
             </div>
-            <!------------------------------------ Navegação ------------------->
-            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="habilidadedisciplinahabilidade">
-                <div class="row justify-content-center">
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#habilidadeanodisciplina">
-                            Voltar para Gráfico Habilidades em {{$disciplina_selecionada[0]->desc}} no Ano &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @if(count($dados_base_habilidade_disciplina_grafico) > 1)
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#habilidadedisciplinahabilidade">
-                            Gráfico Habilidade Selecionada em {{$disciplina_selecionada[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @else
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#municipio">
-                            Voltar para o Início &emsp;<i class="fa-solid fa-door-closed"></i>
-
-                        </a>
-                    </div>
-                    @endif
-                </div>
-            </div>
-            <!------------------------------------ Navegação ------------------->
         </div>
 
     </div>

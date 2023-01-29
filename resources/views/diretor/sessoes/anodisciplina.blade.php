@@ -41,7 +41,7 @@
                     * Os presentes dados representam o percentual de proficiência da Escola na Disciplina de {{$disciplina_selecionada[0]->desc}}, para cada Ano Curricular.
                 </p>
                 <!------------------------------------ Legenda ------------------->
-                <div class="row justify-content-center" style="margin-top:20px;">
+                <div class="row justify-content-center" style="margin-top:20px;" id="curriculardisciplinagrafico">
                     <div class="col-md-6" style="border: 1px solid white;background-color:white;">
                         <div class="row justify-content-center">
                             @foreach($legendas as $legenda)
@@ -57,24 +57,6 @@
 
 
             </div>
-            <!------------------------------------ Navegação ------------------->
-            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="grafico_matematica">
-                <div class="row justify-content-center">
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#disciplina_detalhado">
-                            Voltar para Disciplinas &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#grafico_matematica">
-                            Gráfico Ano Curricular {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!------------------------------------ Navegação ------------------->
         </div>
     </div>
     <!------------------------------------ Card Ano Curricular Disciplina ------------------->

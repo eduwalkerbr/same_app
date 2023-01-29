@@ -53,12 +53,4 @@
 
 
     </div>
-    <!------------------------------------ Navegação ------------------->
-    <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:right;">
-        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;" href="#disciplina_detalhado">
-            Seguir para Disciplinas &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-        </a>
-    </div>
-    <!------------------------------------ Navegação ------------------->
 </div>

@@ -57,12 +57,39 @@
         </header>
 
         <main class="py-4">
-            @yield('content')
-            @if (session('status'))
-            <script>
-                alert("{{ session('status') }}");
-            </script>
-            @endif
+            <div class="row">
+                <div class="col-2 fixed-top">
+                    <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4" style="margin-top:155px;margin-right:5px;">
+                        <nav class="nav nav-pills flex-column" style="background-color:rgba(54, 162, 235, 0.2);">
+                            <a id="link_municipio" onclick="manipularLink('municipio')" class="nav-link" href="#municipio" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Disciplinas</a>
+                            <a id="link_escolas" class="nav-link" onclick="manipularLink('escolas')" href="#escolas" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Escolas</a>
+                            @if(count($dados_base_grafico_escola) > 1)
+                            <a id="link_escolasgrafico" class="nav-link" onclick="manipularLink('escolasgrafico')" href="#escolasgrafico" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Escolas Gráfico</a>
+                            @endif
+                            <a id="link_escolasdisciplina" class="nav-link" onclick="manipularLink('escolasdisciplina')" href="#escolasdisciplina" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Escolas por Disciplina</a>
+                            @if(count($dados_base_grafico_escola) > 1)
+                            <a id="link_escolasdisciplinagrafico" class="nav-link" onclick="manipularLink('escolasdisciplinagrafico')" href="#escolasdisciplinagrafico" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Escolas por Disciplina Gráfico</a>
+                            @endif
+                            <a id="link_curriculardisciplina" class="nav-link" onclick="manipularLink('curriculardisciplina')" href="#curriculardisciplina" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Anos Curriculares por Disciplina</a>
+                            <a id="link_curriculardisciplinagrafico" class="nav-link" onclick="manipularLink('curriculardisciplinagrafico')" href="#curriculardisciplinagrafico" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Anos Curriculares por Disciplina Gráfico</a>
+                            <a id="link_habilidadeanodisciplina" class="nav-link" onclick="manipularLink('habilidadeanodisciplina')" href="#habilidadeanodisciplina" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Habilidades por Disciplina e Ano Curricular</a>
+                            <a id="link_habilidadeanodisciplinagrafico" class="nav-link" onclick="manipularLink('habilidadeanodisciplinagrafico')" href="#habilidadeanodisciplinagrafico" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Habilidades por Disciplina e Ano Curricular Gráfico</a>
+                            <a id="link_habilidadeselecionadadisciplina" class="nav-link" onclick="manipularLink('habilidadeselecionadadisciplina')" href="#habilidadeselecionadadisciplina" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Habilidades Selecionada por Disciplina e Ano Curricular</a>
+                            @if(count($dados_base_habilidade_disciplina_grafico) > 1)
+                            <a id="link_habilidadeselecionadadisciplinagrafico" class="nav-link" onclick="manipularLink('habilidadeselecionadadisciplinagrafico')" href="#habilidadeselecionadadisciplinagrafico" style="font-size:14px;font-weight:bold;color:#0046AD;border: round 0;padding-top:10px;padding-bottom:10px;">Habilidades Selecionada por Disciplina e Ano Curricular Gráfico</a>
+                            @endif    
+                        </nav>
+                    </nav>
+                </div>
+                <div  class="scrollspy-example-2 col-12">
+                    @yield('content')
+                    @if (session('status'))
+                    <script>
+                        alert("{{ session('status') }}");
+                    </script>
+                    @endif
+                </div>
+            </div>
         </main>
         <!------------------------------------ Rodapé ------------------->
         @include('layouts/_parciais.footer')
@@ -1043,6 +1070,31 @@
     ctxHabilidadeDisciplinaHabilidade.onclick = clickHandler;
 </script>
 <!------------------------------------ Posição ao Abrir o Site ------------------->
+
+<script>
+    var sessao_historico = '';
+
+    function manipularLink(sessao) {
+        if(sessao_historico != ''){
+            var component_link = document.getElementById('link_' + sessao_historico);
+            component_link.style.color='#0046AD';
+            component_link.style.backgroundColor='transparent';
+        }
+
+        sessao_historico = sessao;
+
+        var component_link = document.getElementById('link_' + sessao);
+        component_link.style.color='white';
+        component_link.style.backgroundColor='#0046AD';
+    }    
+</script>
+
+<script>
+    window.onload = function () {
+        manipularLink('municipio');
+    }
+</script>
+
 <script>
     window.location.href = '#fullpage';
 </script>

@@ -53,22 +53,4 @@
 
 
     </div>
-    <!------------------------------------ Navegação ------------------->
-    <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="ano_matematica">
-        <div class="row justify-content-center">
-            <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#escola">
-                    Voltar para Escola &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                </a>
-            </div>
-            <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#ano_matematica">
-                    Ano Curricular {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                </a>
-            </div>
-        </div>
-    </div>
-    <!------------------------------------ Navegação ------------------->
 </div>
