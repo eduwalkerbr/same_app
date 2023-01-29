@@ -53,12 +53,4 @@
         <!------------------------------------ Legenda ------------------->
         <p style="color:black;font-size: 12px;text-align:right;margin-top:50px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
     </div>
-    <!------------------------------------ Navegação ------------------->
-    <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:right;" id="tema_detalhado">
-        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;" href="#tema_detalhado">
-            Seguir para @if($disciplina_selecionada[0]->id == 1) Temas @else Eixos/Temas @endif &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-        </a>
-    </div>
-    <!------------------------------------ Navegação ------------------->
 </div>

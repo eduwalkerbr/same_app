@@ -44,19 +44,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:30px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:30px;" id="temas">
                                         * O presente gráfico representa um Comparativo entre a Proficiência da Turma em questão, comparada a Média de Proficiência calculada entre as Turmas do {{$ano[0]}}º Ano.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:30px;font-weight:bold;">Fonte: Dados oriundos de bases internas do Município ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:right;" id="tema_detalhado">
-                                    <a class=" btn btn-link" style="color:#f9821E;font-size:13px;" href="#tema_detalhado">
-                                        Seguir para @if($disciplina_selecionada[0]->id == 1) Temas @else Eixos/Temas @endif na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                    </a>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                             <!------------------------------------ Gráfico Média Turma ------------------->
                         </div>
@@ -85,29 +77,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="habilidadedisciplina">
                                         * O presente gráfico representa o percentual de Proficiências por @if($disciplina_selecionada[0]->id == 1) Temas @else Eixos/Temas @endif da Turma selecionada na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:0px;margin-bottom:5px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="habilidade">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#tema_detalhado">
-                                                Voltar para Gráfico @if($disciplina_selecionada[0]->id == 1) Temas @else Eixos/Temas @endif na Disciplina de {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#habilidade">
-                                                Seguir para Habilidades {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>
@@ -135,29 +109,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="habilidadeanodisciplina">
                                         * O presente gráfico representa o percentual de Proficiências por Habilidades da Turma selecionada, na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="questaomatematica">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#habilidade">
-                                                Voltar para Habilidades em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#questaomatematica">
-                                                Seguir para Habilidades em {{$disciplina_selecionada[0]->desc}} por Ano &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>
@@ -185,29 +141,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="habilidadeselecionadadisciplina">
                                         * O presente gráfico representa o percentual de Proficiência por Habilidades da Turma selecionada, na Disciplina de {{$disciplina_selecionada[0]->desc}} no {{$ano_selecionado[0]}}º Ano.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="graficohabilidadeanodisciplina">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#questaomatematica">
-                                                Voltar para Habilidades em {{$disciplina_selecionada[0]->desc}} nos Anos &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficohabilidadeanodisciplina">
-                                                Habilidade Selecionada em {{$disciplina_selecionada[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>
@@ -236,29 +174,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:30px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:30px;" id="questoesobjetivas">
                                         * O presente gráfico representa o percentual de Proficiências da Habilidade selecionada, na Disciplina de {{$disciplina_selecionada[0]->desc}} da presente Turma no transcorrer dos Anos.<br>* Ponha o mouse sobre as Colunas do Gráfico para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:30px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="questoesobjetivas">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#graficohabilidadeanodisciplina">
-                                                Habilidade Selecionada em {{$disciplina_selecionada[0]->desc}} no transcorrer dos Anos &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#questoesobjetivas">
-                                                Questões Objetivas em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>
@@ -301,72 +221,11 @@
                                         </div>
                                         <!------------------------------------ Gráfico ------------------->
                                     </div>
-                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
+                                    <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;" id="alunos">
                                         * O presente gráfico representa o percentual de Proficiências por Questão na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Ponha o mouse sobre as Colunas do Gráfico ou clique nas mesmas para visualizar dados detalhados.
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:15px;margin-bottom:15px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="aluno">
-                                    <div class="row justify-content-center">
-                                        <!------------------------------------------------------- Voltar ---------------------------------------------------------------------->
-                                        @if((count($tipos_questoes) == 1) && (count($dados_base_habilidade_disciplina_grafico_habilidade) > 1))
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#questoesobjetivas">
-                                                Voltar para Questões Objetivas em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-
-                                        @if((count($tipos_questoes) == 1) && (count($dados_base_habilidade_disciplina_grafico_habilidade) == 1))
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#habilidadedisciplinahabilidade">
-                                                Voltar para Questões Objetivas em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-
-                                        @if(count($tipos_questoes) == 2)
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#proximoquestoesobjetivas">
-                                                Questões {{$tipos_questoes[1]}} em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-
-                                        @if(count($tipos_questoes) == 3)
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#{{$tipos_questoes[1]}}">
-                                                Questões {{$tipos_questoes[2]}} em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-                                        <!------------------------------------------------------- Voltar ---------------------------------------------------------------------->
-                                        @php
-                                        $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                                        @endphp
-                                        @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#aluno">
-                                                Alunos em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @else
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#turma">
-                                                Voltar para o Início &emsp;<i class="fa-solid fa-door-closed"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>
@@ -403,24 +262,6 @@
                                     </p>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:30px;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
                                 </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0.3rem;padding-bottom: 0.3rem;border-top:none;text-align:justify;">
-                                    <div class="row justify-content-center">
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#aluno">
-                                                Voltar para Alunos {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#turma">
-                                                Voltar para o Início &emsp;<i class="fa-solid fa-door-closed"></i>
-
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
                             </div>
                         </div>
                     </div>
