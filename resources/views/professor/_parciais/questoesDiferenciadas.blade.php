@@ -290,7 +290,15 @@
                                         * Os presentes dados representam o percentual de proficiência por Questão {{$tipo_questao}} na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Caso deseje visualizar as informações detalhadas de cada sessão da plataforma, adicione o mouse sobre o ícone &ensp;<i class="fa-solid fa-circle-question"></i>
                                     </p>
                                     <!------------------------------------ Legenda ------------------->
-                                    <div class="row justify-content-center" style="margin-top:15px;">
+                                    @php
+                                        if(count($tipos_questoes) == $conttq)
+                                           $id_sessao_questao_dif = 'questoesgrafico';                                                                                                          
+                                        else if(count($tipos_questoes) > 2)
+                                            $id_sessao_questao_dif = 'questoesdif2';    
+                                        else      
+                                            $id_sessao_questao_dif = 'questoesgrafico';   
+                                    @endphp
+                                    <div class="row justify-content-center" style="margin-top:15px;" id="{{$id_sessao_questao_dif}}">
                                         <div class="col-md-6" style="border: 1px solid white;background-color:white;">
                                             <div class="row justify-content-center">
                                                 @foreach($legendas as $legenda)
@@ -302,41 +310,6 @@
                                         </div>
                                     </div>
                                     <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;margin-bottom:0;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
-                                </div>
-                                <!------------------------------------ Navegação ------------------->
-                                <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="{{$tipo_questao}}">
-                                    <div class="row justify-content-center">
-                                        @if(count($dados_base_habilidade_disciplina_grafico_habilidade) > 1)
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#questoesobjetivas">
-                                                Questões Objetivas em {{$disciplina_selecionada[0]->desc}}&emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @else
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#habilidadedisciplinahabilidade">
-                                                Questões Objetivas em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-                                        @if(count($tipos_questoes) == $conttq)
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#{{$tipo_questao}}">
-                                                Gráfico Questões em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @else
-                                        <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                                            <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#{{$tipo_questao}}">
-                                                Questões {{$tipos_questoes[2]}} em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                                            </a>
-                                        </div>
-                                        @endif
-                                    </div>
                                 </div>
                             </div>
                         </div>

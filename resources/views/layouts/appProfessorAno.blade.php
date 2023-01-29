@@ -52,12 +52,17 @@
         </header>
 
         <main class="py-4">
-            @yield('content')
-            @if (session('status'))
-            <script>
-                alert("{{ session('status') }}");
-            </script>
-            @endif
+        <div class="row">
+            @include('layouts/professor.menulateral');
+                <div class="scrollspy-example-2 col-12">
+                    @yield('content')
+                    @if (session('status'))
+                    <script>
+                        alert("{{ session('status') }}");
+                    </script>
+                    @endif
+                </div>
+            </div>
         </main>
         <!------------------------------------ Rodapé ------------------->
         @include('layouts/_parciais.footer')
@@ -1099,7 +1104,31 @@
     }
     ctxHabilidadeDisciplinaHabilidade.onclick = clickHandler;
 </script>
+
+<script>
+    var sessao_historico = '';
+
+    function manipularLink(sessao) {
+        if (sessao_historico != '') {
+            var component_link = document.getElementById('link_' + sessao_historico);
+            component_link.style.color = '#0046AD';
+            component_link.style.backgroundColor = 'transparent';
+        }
+
+        sessao_historico = sessao;
+
+        var component_link = document.getElementById('link_' + sessao);
+        component_link.style.color = 'white';
+        component_link.style.backgroundColor = '#0046AD';
+    }
+</script>
+
+<script>
+    window.onload = function() {
+        manipularLink('habilidadeanodisciplina');
+    }
+</script>
 <!------------------------------------ Posição ao Abrir o Site ------------------->
 <script>
-    window.location.href = '#questaomatematica';
+    window.location.href = '#habilidadeanodisciplina';
 </script>

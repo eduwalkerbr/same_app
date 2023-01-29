@@ -148,7 +148,7 @@
                     * Os presentes dados representam o percentual de proficiência por Aluno na Disciplina de {{$disciplina_selecionada[0]->desc}}.<br>* Caso deseje visualizar as informações detalhadas do aluno, clique sobre o ícone &ensp;<i class="fa-solid fa-circle-question"></i>
                 </p>
                 <!------------------------------------ Legenda ------------------->
-                <div class="row justify-content-center" style="margin-top:15px;">
+                <div class="row justify-content-center" style="margin-top:15px;" id="alunosgrafico">
                     <div class="col-md-6" style="border: 1px solid white;background-color:white;">
                         <div class="row justify-content-center">
                             @foreach($legendas as $legenda)
@@ -163,46 +163,6 @@
                 <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;margin-bottom:0;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
 
             </div>
-            <!------------------------------------ Navegação ------------------->
-            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="alunograficomatematica">
-                <div class="row justify-content-center">
-                    <!------------------------------------------------------- Voltar ---------------------------------------------------------------------->
-                    @if(count($tipos_questoes) == 1)
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#proximoquestoesobjetivas">
-                            Gráfico Questões em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @endif
-
-                    @if(count($tipos_questoes) == 2)
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#{{$tipos_questoes[1]}}">
-                            Gráfico Questões em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @endif
-
-                    @if(count($tipos_questoes) == 3)
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#{{$tipos_questoes[2]}}">
-                            Gráfico Questões em {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    @endif
-                    <!------------------------------------------------------- Voltar ---------------------------------------------------------------------->
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#alunograficomatematica">
-                            Gráfico Alunos {{$disciplina_selecionada[0]->desc}} &emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!------------------------------------ Navegação ------------------->
         </div>
 
     </div>

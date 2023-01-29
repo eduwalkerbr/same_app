@@ -40,7 +40,7 @@
                     * Os presentes dados representam o percentual de proficiência por @if($disciplina_selecionada[0]->id == 1) Temas @else Eixos/Temas @endif da Turma selecionda na Disciplina de {{$disciplina_selecionada[0]->desc}}.
                 </p>
                 <!------------------------------------ Legenda ------------------->
-                <div class="row justify-content-center" style="margin-top:15px;">
+                <div class="row justify-content-center" style="margin-top:15px;" id="temasgrafico">
                     <div class="col-md-6" style="border: 1px solid white;background-color:white;">
                         <div class="row justify-content-center">
                             @foreach($legendas as $legenda)
@@ -54,24 +54,6 @@
                 <!------------------------------------ Legenda ------------------->
                 <p style="color:black;font-size: 12px;text-align:right;margin-top:10px;margin-bottom:0;font-weight:bold;">Fonte: Dados oriundos de bases internas do SAME ({{strval($ano_same_selecionado)}}).</p>
             </div>
-            <!------------------------------------ Navegação ------------------->
-            <div class="card-footer text-muted" style="background-color: white;padding-top: 0em;padding-bottom: 0.3rem;border-top:none;text-align:justify;" id="tema_grafico">
-                <div class="row justify-content-center">
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:left;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#turma">
-                            Voltar para Turma &emsp;<i class="fa-solid fa-arrow-up-short-wide"></i>
-
-                        </a>
-                    </div>
-                    <div class="col-md-6" style="background-color: white;border: 1px solid white;text-align:right;">
-                        <a class=" btn btn-link" style="color:#f9821E;font-size:13px;text-decoration:none;" href="#tema_grafico">
-                            Gráfico Proficiência @if($disciplina_selecionada[0]->id == 1) Temas @else Eixos/Temas @endif na Disciplina de {{$disciplina_selecionada[0]->desc}}&emsp;<i class="fa-solid fa-arrow-down-short-wide"></i>
-
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!------------------------------------ Navegação ------------------->
         </div>
 
     </div>
