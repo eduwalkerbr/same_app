@@ -1,4 +1,4 @@
-@extends('comparativo\secretario\estrutura.appSecretario')
+@extends('comparativo/secretario/estrutura.appSecretario')
 
 @section('content')
 @if (session('status'))

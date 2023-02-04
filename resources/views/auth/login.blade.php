@@ -16,9 +16,9 @@
                         <h4 style="font-weight: bolder; font-size: 18px; color: #f9821E; margin-bottom: 20px;">
                                  SEJA BEM VINDO(A) A PLATAFORMA SAME!
                         </h4>
-                    <h6 style="color: black; font-weight: bold;">Para usufluir dos resultados e análises da Plataforma do SAME, siga as etapas abaixo, que a equipe gestora do vosso município, analisará os acessos possiveis.</h6>
+                    <h6 style="color: black; font-weight: bold;">Para usufluir dos resultados e análises da Plataforma do SAME, siga as etapas abaixo, que a equipe gestora do vosso município, analisará os acessos possíveis.</h6>
                     <h6 style="color: black; font-weight: bold;">Siga as etapas abaixo para solicitar acesso:</h6>
-                    <h6> - Registo (caso ainda não o tenha feito)</h6>
+                    <h6> - Registro (caso ainda não o tenha feito)</h6>
                     <h6> - Aguardar as devidas autorizações</h6>
                     <h6> - Login</h6>
                     <h6 style="color: black; font-weight: bold;">Estas etapas podem ser efetuadas nos campos abaixo ou no Menu Superior Direito</h6>

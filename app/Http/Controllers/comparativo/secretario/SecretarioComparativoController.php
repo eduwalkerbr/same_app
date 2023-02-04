@@ -286,6 +286,9 @@ class SecretarioComparativoController extends Controller
      * Método que busca os dados para montar a sessão Temas Munícipio
      */
     private function estatisticaTemas($confPresenca, $municipio, $id_disciplina, $ano){
+
+        $ano = intval($ano);
+
         //Busca os dados do gráfico de disciplina
         if (Cache::has('compar_tema_mun_'.strval($municipio).strval($id_disciplina).strval($ano))) {
             $dados_base_grafico_tema = Cache::get('compar_tema_mun_'.strval($municipio).strval($id_disciplina).strval($ano));
@@ -358,6 +361,9 @@ class SecretarioComparativoController extends Controller
      * Método que busca os dados para montar a sessão Temas Munícipio
      */
     private function estatisticaHabilidadeAnoDisciplina($confPresenca, $municipio, $id_disciplina, $ano){
+
+        $ano = intval($ano);
+        
         //Busca os dados do gráfico de disciplina
         if (Cache::has('compar_hab_ano_mun_'.strval($municipio).strval($id_disciplina).strval($ano))) {
             $dados_base_grafico_hab_ano_disc = Cache::get('compar_hab_ano_mun_'.strval($municipio).strval($id_disciplina).strval($ano));

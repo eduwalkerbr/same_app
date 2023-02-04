@@ -363,6 +363,9 @@ class DiretorComparativoController extends Controller
      * Método que busca os dados para montar a sessão Temas Escola
      */
     private function estatisticaTemas($confPresenca, $escola, $id_disciplina, $ano){
+
+        $ano = intval($ano);
+        
         //Busca os dados do gráfico de disciplina
         if (Cache::has('compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano))) {
             $dados_base_grafico_tema = Cache::get('compar_tema_esc_'.strval($escola).strval($id_disciplina).strval($ano));
@@ -417,6 +420,9 @@ class DiretorComparativoController extends Controller
      * Método que busca os dados para montar a sessão Temas Munícipio
      */
     private function estatisticaHabilidadeAnoDisciplina($confPresenca, $escola, $id_disciplina, $ano){
+
+        $ano = intval($ano);
+
         //Busca os dados do gráfico de disciplina
         if (Cache::has('compar_hab_ano_esc_'.strval($escola).strval($id_disciplina).strval($ano))) {
             $dados_base_grafico_hab_ano_disc = Cache::get('compar_hab_ano_esc_'.strval($escola).strval($id_disciplina).strval($ano));

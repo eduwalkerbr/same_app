@@ -76,12 +76,19 @@ class GestaoEscPrevilegioController extends Controller
                 $query->where('previlegios.'.$nome,$valor);
             }
         }
-
+        if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+            $query->where('previlegios.municipios_id',$previlegio[0]->municipios_id);    
+        }
         $previlegios = $query->orderBy('updated_at', 'desc')->paginate(7);
         $usuarios = $this->objUser->all();
         $funcaos = $this->objFuncao->all();
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
-        $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->where(['id' => $previlegio[0]->municipios_id])->get();
+        if (auth()->user()->perfil == 'Administrador') {
+            $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
+        } else {
+            $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->where(['id' => $previlegio[0]->municipios_id])->get();
+        }
+        
         return view('gestaoescolar/previlegio/gest_list_previlegio', compact('previlegios','usuarios','funcaos','municipios','solRegistro','solAltCadastral','solAddTurma','anossame'));  
 
     }
@@ -115,15 +122,25 @@ class GestaoEscPrevilegioController extends Controller
                 }
             }
             Cache::put('Filtros_Consulta_Previlegio_'.strval(auth()->user()->id), $parametros, now()->addMinutes(5));
+            if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+                $query->where('previlegios.municipios_id',$previlegio[0]->municipios_id);    
+            }
             $previlegios = $query->orderBy('updated_at', 'desc')->paginate(7);
         } else {
+            if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+                $query->where('previlegios.municipios_id',$previlegio[0]->municipios_id);    
+            }
             $previlegios = $this->objPrevilegio->orderBy('updated_at', 'desc')->paginate(7);
         }
 
         $usuarios = $this->objUser->all();
         $funcaos = $this->objFuncao->all();
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
-        $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->where(['id' => $previlegio[0]->municipios_id])->get();
+        if (auth()->user()->perfil == 'Administrador') {
+            $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
+        } else {
+            $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->where(['id' => $previlegio[0]->municipios_id])->get();
+        }
         return view('gestaoescolar/previlegio/gest_list_previlegio', compact('previlegios','usuarios','funcaos','municipios','solRegistro','solAltCadastral','solAddTurma','anossame'));  
 
     }
