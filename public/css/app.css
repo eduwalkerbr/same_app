@@ -582,14 +582,14 @@ pre code {
 @media (min-width: 576px) {
     .container-sm,
     .container {
-        max-width: 540px;
+        max-width: 460px;
     }
 }
 @media (min-width: 768px) {
     .container-md,
     .container-sm,
     .container {
-        max-width: 720px;
+        max-width: 615px;
     }
 }
 @media (min-width: 992px) {
@@ -597,16 +597,52 @@ pre code {
     .container-md,
     .container-sm,
     .container {
-        max-width: 960px;
+        max-width: 795px;
     }
 }
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
     .container-xl,
     .container-lg,
     .container-md,
     .container-sm,
     .container {
-        max-width: 1160px;
+        max-width: 970px;
+    }
+}
+@media (min-width: 1360px) {
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container {
+        max-width: 1010px;
+    }
+}
+@media (min-width: 1400px) {
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container {
+        max-width: 1180px;
+    }
+}
+@media (min-width: 1600px) {
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container {
+        max-width: 1180px;
+    }
+}
+@media (min-width: 1920px) {
+    .container-xl,
+    .container-lg,
+    .container-md,
+    .container-sm,
+    .container {
+        max-width: 1436px;
     }
 }
 .row {

@@ -88,6 +88,10 @@ class GestaoEscDirProfessorController extends Controller
         }
 
         //dump($query->toSql());
+        if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+            $query->where('direcao_professors.id_escola',$direcao_professor[0]->id_escola);    
+        }
+
         $direcao_professores = $query->orderBy('direcao_professors.updated_at', 'desc')->paginate(7);
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
         if(isset($direcao_professor) && sizeof($direcao_professor) > 0){
@@ -142,8 +146,14 @@ class GestaoEscDirProfessorController extends Controller
                 }
             }
             Cache::put('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id), $parametros, now()->addMinutes(5));
+            if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+                $query->where('direcao_professors.id_escola',$direcao_professor[0]->id_escola);    
+            }
             $direcao_professores = $query->orderBy('direcao_professors.updated_at', 'desc')->paginate(7);
         } else {
+            if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+                $query->where('direcao_professors.id_escola',$direcao_professor[0]->id_escola);    
+            }
             $direcao_professores = $this->objDirecaoProfessor->orderBy('updated_at', 'desc')->paginate(7);
         }
 

@@ -1,4 +1,4 @@
-@extends('comparativo\diretor\estrutura.appDiretor')
+@extends('comparativo/diretor/estrutura.appDiretor')
 
 @section('content')
 @if (session('status'))

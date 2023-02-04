@@ -44,18 +44,23 @@
                         <i class="fa-solid fa-memo-circle-info"></i> &emsp; Sobre Nós
                     </div>
                     <div class="card-body" style="padding-top:0.5rem;padding-bottom:0.5rem;">
-                        <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
-                            SAME é um Sistema de Avaliação Municipal da Educação Básica, que tem por objetivo desenvolver uma Avaliação Diagnóstica de caráter censitária envolvendo todos os alunos das redes de educação matriculados entre o 2º e 9º anos do Ensino Fundamental, que sustente um planejamento dos processos educacionais para os próximos anos.<br>
+                        <p style="color:rgba(107,114,128);font-size: 14px;text-align:justify;margin-top:10px;">
+                            SAME é um Sistema de Avaliação Municipal da Educação Básica, que tem por objetivo desenvolver uma Avaliação Diagnóstica de caráter censitária envolvendo todos os alunos das redes de educação matriculados entre o 2º e 9º anos do Ensino Fundamental, que sustente um planejamento dos processos educacionais para os próximos anos.
                         </p>
-                        <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
-                            Envolve duas áreas de conhecimento, Matemática e Português, a partir de uma prova organizada em questões de múltipla escolha e resposta construída ou produção textual.
+                        <p style="color:rgba(107,114,128);font-size: 14px;text-align:justify;margin-top:10px;">
+                            Este Sistema de Avaliação, foi aplicado nos anos de 2021 e 2022, envolvendo diferentes municípios da região Noroeste do Rio Grande do Sul. Alguns destes municípios realizaram a avaliação somente em um ano e outros realizaram nos dois anos.
                         </p>
-                        <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
-
-                            <br>As questões da prova são organizadas a partir de Matrizes de Referências (ANA - Avaliação Nacional de Alfabetização e Matriz de Referência de Língua Portuguesa e Matemática do SAEB), identificando Habilidades/Descritores em cada ano e área de conhecimento.
+                        <p style="color:rgba(107,114,128);font-size: 14px;text-align:justify;margin-top:10px;">
+                            Esta plataforma possibilita, a partir dos resultados da avaliação, o comparativo do desempenho dos alunos em cada ano escolar e entre os anos de realização da avaliação. 
                         </p>
-                        <p style="color:rgba(107,114,128);font-size: 13px;text-align:justify;margin-top:10px;">
-                            <br>Os resultados, a partir do nível de proficiência (AVANÇADO, PROFICIENTE, BÁSICO, INSUFICIENTE) é organizado em uma escala e apresentado a partir desta plataforma, com escopos diferentes ao gestor municipal, gestor escolar e professor da turma, por disciplina.
+                        <p style="color:rgba(107,114,128);font-size: 14px;text-align:justify;margin-top:10px;">
+                            Envolve duas áreas de conhecimento, Matemática e Português, a partir de uma prova organizada em questões de múltipla escolha e resposta construída ou produção textual. 
+                        </p>
+                        <p style="color:rgba(107,114,128);font-size: 14px;text-align:justify;margin-top:10px;">
+                            As questões da prova são organizadas a partir de Matrizes de Referências (ANA - Avaliação Nacional de Alfabetização e Matriz de Referência de Língua Portuguesa e Matemática do SAEB), identificando Habilidades/Descritores em cada ano escolar e área de conhecimento.
+                        </p>
+                        <p style="color:rgba(107,114,128);font-size: 14px;text-align:justify;margin-top:10px;">
+                            Os resultados, a partir do nível de proficiência (AVANÇADO, PROFICIENTE, BÁSICO, INSUFICIENTE), são organizados em uma escala e apresentados a partir desta plataforma, com escopos diferentes ao gestor municipal, gestor escolar e professor da turma, por disciplina.
                         </p>
                     </div>
                 </div>

@@ -7,7 +7,7 @@
             <a class="navbar-brand" href="#" style="margin-top: 50px; font-weight: bolder; font-size: 18px;">
                 <h2 style="font-weight: bolder; font-size: 35px; color: black; margin-bottom: 20px;">SEJA BEM VINDO AO SAME! - welcome</h2>
                 <h6 style="color: black; font-weight: bold;">Para usufruir de todos os recusos do SAME, siga as etapas abaixo:</h6>
-                <h6> - Registo (caso ainda não o tenha feito)</h6>
+                <h6> - Registro (caso ainda não o tenha feito)</h6>
                 <h6> - Aguardar as devidas autorizações</h6>
                 <h6> - Login</h6>
                 <h6 style="color: black; font-weight: bold;margin-bottom: 20px;">Pode executar as mesmas nos campos abaixo ou no Menu Superior Direito</h6>
