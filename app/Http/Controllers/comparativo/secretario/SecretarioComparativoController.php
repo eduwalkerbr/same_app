@@ -51,10 +51,18 @@ class SecretarioComparativoController extends Controller
         $this->objCriterioQuestao = new CriterioQuestao();
         $this->confPresenca = 1;
         $this->previlegio = [];
-        $this->backgroundColors = ['rgba(255, 26, 104, 0.2)','rgba(54, 162, 235, 0.2)','rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)','rgba(153, 102, 255, 0.2)','rgba(255, 159, 64, 0.2)','rgba(0, 0, 0, 0.2)'];
-        $this->borderColors = ['rgba(255, 26, 104, 1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)','rgba(153, 102, 255, 1)','rgba(255, 159, 64, 1)','rgba(0, 0, 0, 1)'];
+        $this->backgroundColors = [
+            'rgba(139,0,0, 0.2)','rgba(54, 162, 235, 0.2)','rgba(255, 206, 86, 0.2)','rgba(75, 192, 192, 0.2)','rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)','rgba(0, 0, 0, 0.2)','rgba(220,220,220,0.3)','rgba(0,0,139,0.2)','rgba(160,82,45,0.2)',
+            'rgba(255,0,255,0.2)','rgba(0,128,0,0.2)','rgba(255,255,0,0.2)','rgba(0,0,255,0.2)','rgba(0,255,0,0.2)','rgba(255,255,255,0.2)',
+            'rgba(255,0,0,0.2)','rgba(255,140,0,0.3)','rgba(128,128,0,0.3)','rgba(255,20,147,0.3)','rgba(250,128,114,0.3)','rgba(0,255,0,0.3)',
+            'rgba(255,215,0,0.4)'];
+        $this->borderColors = [
+            'rgba(128,0,0, 1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)','rgba(75, 192, 192, 1)','rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)','rgba(0, 0, 0, 1)','rgba(54,54,54,1)','rgba(25,25,112,1)','rgba(139,69,19,1)',
+            'rgba(139,0,139,1)','rgba(0,100,0,1)','rgba(255,215,0,1)','rgba(0,0,139,1)','rgba(0,100,0,1)','rgba(0,0,0,1)',
+            'rgba(128,0,0,1)','rgba(255,69,0,1)','rgba(107,142,35,1)','rgba(199,21,133,1)','rgba(165,42,42,1)','rgba(0,100,0,1)',
+            'rgba(184,134,11,1)'];
         $this->horasCache = 4;
     }
 
@@ -475,7 +483,7 @@ class SecretarioComparativoController extends Controller
                 ];   
     
                 $dataSet[$i] = $item_data_set;
-                if($contColors == 6){   
+                if($contColors == 22){   
                     $contColors = 0;
                 } else {
                     $contColors++;
@@ -587,7 +595,7 @@ class SecretarioComparativoController extends Controller
                 ];   
     
                 $dataSet[$i] = $item_data_set;
-                if($contColors == 6){   
+                if($contColors == 22){   
                     $contColors = 0;
                 } else {
                     $contColors++;
