@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\proficiencia\diretor;
 use App\Models\CriterioQuestao;
 use App\Models\DadoUnificado;
 use App\Models\DestaqueModel;
@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
+use App\Http\Controllers\Controller;
 
 class DiretorController extends Controller
 {
@@ -923,6 +924,8 @@ class DiretorController extends Controller
 
        //Busca todos os Critérios
        $criterios_questaoAll = $this->getCriterios();
+
+       $sessao_inicio = "escola";
   
         return view('diretor/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','dados_base_escola','dados_comparacao_escola',
@@ -930,7 +933,7 @@ class DiretorController extends Controller
             'dados_base_turmas_disciplina_grafico','dados_base_turmas_disciplina','disciplinas','disciplina_selecionada','municipio_selecionado','legendas',
             'dados_base_habilidade_ano_disciplina_grafico','dados_base_habilidades_ano_disciplina','anos','ano','dados_base_habilidade_ano_questao','habilidades',
             'habilidade_selecionada','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_habilidade_questao','dados_ajuste_percentual',
-            'dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado'));
+            'dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
     //
 
@@ -1072,12 +1075,14 @@ class DiretorController extends Controller
         //Busca todos os Critérios
         $criterios_questaoAll = $this->getCriterios();
 
+        $sessao_inicio = "escola";
+
         return view('diretor/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','dados_base_escola','dados_comparacao_escola',
             'escola_selecionada','dados_base_grafico_disciplina','dados_base_disciplina','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','dados_base_turmas_disciplina_grafico',
             'dados_base_turmas_disciplina','disciplinas','disciplina_selecionada','municipio_selecionado','legendas','dados_base_habilidade_ano_disciplina_grafico','dados_base_habilidades_ano_disciplina',
             'anos','ano','dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_habilidade_questao',
-            'dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado'));
+            'dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 
     /**
@@ -1217,12 +1222,14 @@ class DiretorController extends Controller
         //Busca todos os Critérios
         $criterios_questaoAll = $this->getCriterios();
 
-        return view('diretor/diretorano', compact(
+        $sessao_inicio = "habilidadeanodisciplina";
+
+        return view('diretor/diretor', compact(
             'criterios_questaoAll','solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','dados_base_escola','dados_comparacao_escola','escola_selecionada',
             'dados_base_grafico_disciplina','dados_base_disciplina','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','dados_base_turmas_disciplina_grafico','dados_base_turmas_disciplina',
             'disciplinas','disciplina_selecionada','municipio_selecionado','legendas','dados_base_habilidade_ano_disciplina_grafico','dados_base_habilidades_ano_disciplina','anos','ano',
             'dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_habilidade_questao',
-            'dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado'));
+            'dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 
     /**
@@ -1360,11 +1367,13 @@ class DiretorController extends Controller
 
         $dados_base_habilidade_questao = $this->getHabilidadeQuestaoCriterio($dados_base_habilidade_questao);
 
-        return view('diretor/diretorhabilidade', compact(
+        $sessao_inicio = "habilidadeselecionadadisciplina";
+
+        return view('diretor/diretor', compact(
             'solRegistro','solAltCadastral','solAddTurma','turmas','escolas','municipios','destaques','dados_base_escola','dados_comparacao_escola','escola_selecionada',
             'dados_base_grafico_disciplina','dados_base_disciplina','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','dados_base_turmas_disciplina_grafico',
             'dados_base_turmas_disciplina','disciplinas','disciplina_selecionada','municipio_selecionado','legendas','dados_base_habilidade_ano_disciplina_grafico',
             'dados_base_habilidades_ano_disciplina','anos','ano','dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico',
-            'dados_base_habilidades_disciplina','dados_base_habilidade_questao','dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado'));
+            'dados_base_habilidades_disciplina','dados_base_habilidade_questao','dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 }

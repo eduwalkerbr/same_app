@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\proficiencia\professor;
 
 use App\Models\CriterioQuestao;
 use App\Models\DadoUnificado;
@@ -19,6 +19,7 @@ use App\Models\Turma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 
 class ProfessorController extends Controller
 {
@@ -1140,6 +1141,8 @@ class ProfessorController extends Controller
 
         $dados_base_habilidade_questao = $this->getHabilidadesCriterios($this->confPresenca, $turma, $disciplina_selecionada[0]->id, $ano_same_selecionado);
 
+        $sessao_inicio = "turma";
+
         return view('professor/professor', compact(
 
             'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','dados_base_turma','turma_selecionada','destaques',
@@ -1148,7 +1151,7 @@ class ProfessorController extends Controller
             'dados_base_aluno_grafico_disciplina','dados_base_aluno_disciplina','anos','dados_base_habilidade_questao','ano','dados_base_habilidade_disciplina_ano_grafico',
             'dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao','criterios_questao','habilidades','habilidade_selecionada',
             'dados_base_habilidade_disciplina_grafico_habilidade','dados_base_habilidades_disciplina_habilidade','dados_base_habilidade_questao_habilidade','tipos_questoes',
-            'dados_ajuste_percentual','dados_ajuste_percentual_ano','dados_ajuste_percentual_base','dados_ajuste_percentual_questao','anos_same','ano_same_selecionado','dados_comparacao_turma'));
+            'dados_ajuste_percentual','dados_ajuste_percentual_ano','dados_ajuste_percentual_base','dados_ajuste_percentual_questao','anos_same','ano_same_selecionado','dados_comparacao_turma','sessao_inicio'));
     }
     
 
@@ -1313,6 +1316,8 @@ class ProfessorController extends Controller
 
         $dados_base_habilidade_questao = $this->getHabilidadesCriterios($this->confPresenca, $turma, $disciplina_selecionada[0]->id, $ano_same_selecionado);
 
+        $sessao_inicio = "turma";
+
         return view('professor/professor', compact(
             'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
             'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina','dados_base_questao_disciplina','escolas','disciplinas',
@@ -1320,7 +1325,7 @@ class ProfessorController extends Controller
             'dados_base_habilidade_questao','ano','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao',
             'tipos_questoes','criterios_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico_habilidade','dados_base_habilidades_disciplina_habilidade',
             'dados_base_habilidade_questao_habilidade','dados_ajuste_percentual','dados_ajuste_percentual_ano','dados_ajuste_percentual_base','dados_ajuste_percentual_questao','anos_same',
-            'ano_same_selecionado','dados_comparacao_turma'));
+            'ano_same_selecionado','dados_comparacao_turma','sessao_inicio'));
     }
 
     /**
@@ -1490,14 +1495,16 @@ class ProfessorController extends Controller
 
         $dados_base_habilidade_questao = $this->getHabilidadesCriterios($this->confPresenca, $turma, $disciplina_selecionada[0]->id, $ano_same_selecionado);
 
-        return view('professor/professorano', compact(
+        $sessao_inicio = "habilidadeanodisciplina";
+
+        return view('professor/professor', compact(
             'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','turma_selecionada',
             'dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina',
             'dados_base_aluno_disciplina','anos','dados_base_habilidade_questao','ano_selecionado','dados_base_habilidade_disciplina_ano_grafico','ano_selecionado','ano',
             'dados_base_habilidade_ano_questao','criterios_questao','tipos_questoes','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico_habilidade',
             'dados_base_habilidades_disciplina_habilidade','dados_base_habilidade_questao_habilidade','dados_ajuste_percentual','dados_ajuste_percentual_ano','dados_ajuste_percentual_base',
-            'dados_ajuste_percentual_questao','anos_same','ano_same_selecionado','dados_comparacao_turma','dados_base_habilidades_ano_disciplina'));
+            'dados_ajuste_percentual_questao','anos_same','ano_same_selecionado','dados_comparacao_turma','dados_base_habilidades_ano_disciplina','sessao_inicio'));
     }
 
     /**
@@ -1669,14 +1676,16 @@ class ProfessorController extends Controller
 
         $dados_base_habilidade_questao = $this->getHabilidadesCriterios($this->confPresenca, $turma, $disciplina_selecionada[0]->id, $ano_same_selecionado);
 
-        return view('professor/professorhabilidade', compact(
+        $sessao_inicio = "habilidadeselecionadadisciplina";
+
+        return view('professor/professor', compact(
             'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','dados_comparacao_turma','ano',
             'turma_selecionada','dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina',
             'dados_base_aluno_disciplina','anos','dados_base_habilidade_questao','ano_selecionado','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina',
             'dados_base_habilidade_ano_questao','criterios_questao','tipos_questoes','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico_habilidade',
             'dados_base_habilidades_disciplina_habilidade','dados_base_habilidade_questao_habilidade','dados_ajuste_percentual','dados_ajuste_percentual_ano','dados_ajuste_percentual_base',
-            'dados_ajuste_percentual_questao','anos_same','ano_same_selecionado'));
+            'dados_ajuste_percentual_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 
     /**
@@ -1833,6 +1842,8 @@ class ProfessorController extends Controller
          //---------------------------------------------------------------------------------------------------------------------------------------------------------------
  
          $dados_base_habilidade_questao = $this->getHabilidadesCriterios($this->confPresenca, $turma, $disciplina_selecionada[0]->id, $ano_same_selecionado);
+
+         $sessao_inicio = "turma";
  
          return view('professor/professor', compact(
              'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
@@ -1841,7 +1852,7 @@ class ProfessorController extends Controller
              'dados_base_habilidade_questao','ano','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao',
              'tipos_questoes','criterios_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico_habilidade','dados_base_habilidades_disciplina_habilidade',
              'dados_base_habilidade_questao_habilidade','dados_ajuste_percentual','dados_ajuste_percentual_ano','dados_ajuste_percentual_base','dados_ajuste_percentual_questao','anos_same',
-             'ano_same_selecionado','dados_comparacao_turma'));
+             'ano_same_selecionado','dados_comparacao_turma','sessao_inicio'));
      }
 
 }

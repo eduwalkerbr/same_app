@@ -1058,12 +1058,12 @@
 </script>
 
 <script>
-    window.onload = function() {
-        manipularLink('escola');
+    window.onload = function () {
+        manipularLink(<?php echo json_encode($sessao_inicio) ?>);
     }
 </script>
 
-<!------------------------------------ Posição ao Abrir a Página ------------------->
+<!------------------------------------ Posição ao Abrir o Site ------------------->
 <script>
-    window.location.href = '#escola';
+    window.location.href = "#" + <?php echo json_encode($sessao_inicio) ?>;
 </script>

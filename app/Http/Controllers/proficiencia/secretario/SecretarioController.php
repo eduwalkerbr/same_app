@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\proficiencia\secretario;
 
 use App\Models\CriterioQuestao;
 use App\Models\DadoUnificado;
@@ -19,6 +19,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 
 use function Symfony\Component\String\b;
 
@@ -823,13 +824,15 @@ class SecretarioController extends Controller
         $criterios_questao = $this->getCriteriosQuestao($ano, $disciplina_selecionada[0]->id);
 
         $turmas = null;
+
+        $sessao_inicio = "municipio";
               
         return view('secretario/secretario', compact(
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina',
             'dados_base_disciplina','dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas',
             'disciplina_selecionada','legendas','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','escola_selecionada','anos','ano','dados_base_habilidade_disciplina_ano_grafico',
             'dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina',
-            'dados_base_habilidade_questao','dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado'));
+            'dados_base_habilidade_questao','dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
     //
 
@@ -971,6 +974,8 @@ class SecretarioController extends Controller
 
         $turmas = null;
 
+        $sessao_inicio = "municipio";
+
         return view('secretario/secretario', compact(
 
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina',
@@ -978,7 +983,7 @@ class SecretarioController extends Controller
             'disciplina_selecionada','legendas','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','escola_selecionada',
             'anos','ano','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada',
             'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_habilidade_questao','dados_ajuste_percentual','dados_ajuste_percentual_ano',
-            'criterios_questao','anos_same','ano_same_selecionado'));
+            'criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 
     /**
@@ -1115,13 +1120,15 @@ class SecretarioController extends Controller
 
         $turmas = null;
 
-        return view('secretario/secretarioano', compact(
+        $sessao_inicio = "habilidadeanodisciplina";
+
+        return view('secretario/secretario', compact(
             
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina','dados_base_disciplina',
             'dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas','disciplina_selecionada','legendas',
             'dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','escola_selecionada','anos','ano','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina',
             'dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_habilidade_questao',
-            'dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado'));
+            'dados_ajuste_percentual','dados_ajuste_percentual_ano','criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 
     /**
@@ -1260,14 +1267,16 @@ class SecretarioController extends Controller
         $dados_base_habilidade_questao = $this->getHabilidadesCriterios($dados_base_habilidade_questao);
 
         $turmas = null;
+
+        $sessao_inicio = "habilidadeselecionadadisciplina";
          
-        return view('secretario/secretariohabilidade', compact(
+        return view('secretario/secretario', compact(
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina',
             'dados_base_disciplina','dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas',
             'disciplina_selecionada','legendas','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','escola_selecionada','anos','ano',
             'dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao','habilidades','habilidade_selecionada',
             'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_habilidade_questao','dados_ajuste_percentual','dados_ajuste_percentual_ano' 
-            ,'criterios_questao','anos_same','ano_same_selecionado'));
+            ,'criterios_questao','anos_same','ano_same_selecionado','sessao_inicio'));
     }
 }
 
