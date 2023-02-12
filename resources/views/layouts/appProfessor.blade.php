@@ -1129,11 +1129,12 @@
 </script>
 
 <script>
-    window.onload = function() {
-        manipularLink('turma');
+    window.onload = function () {
+        manipularLink(<?php echo json_encode($sessao_inicio) ?>);
     }
 </script>
 
+<!------------------------------------ Posição ao Abrir o Site ------------------->
 <script>
-    window.location.href = '#fullpage';
+    window.location.href = "#" + <?php echo json_encode($sessao_inicio) ?>;
 </script>
