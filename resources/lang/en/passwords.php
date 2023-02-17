@@ -20,7 +20,7 @@ return [
     'user' => "We can't find a user with that email address.",
 */
     'reset' => 'Sua senha foi redefinida!',
-    'sent' => 'Enviamos o link de redefinição de senha por e-mail!',
+    'sent' => 'Enviamos o link de redefinição de senha por e-mail! Por favor verifique seu e-mail, inclusive na sessão de spans e siga as orientações presentes no mesmo.',
     'throttled' => 'Por favor, aguarde antes de tentar novamente.',
     'token' => 'Este token de redefinição de senha é inválido.',
     'user' => "Não conseguimos encontrar um usuário com esse endereço de e-mail.",
