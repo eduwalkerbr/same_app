@@ -167,6 +167,11 @@
                             </ul>
                         </li>
                         @endif
+                        @if($previlegio->funcaos_id == 7 && isset($escola_selecionada))
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
+                        </li>
+                        @endif
                     </ul>
                     <ul class="navbar-nav mr-4">
                         <!------------------------------------ Turma ------------------->
@@ -178,7 +183,7 @@
                                 @php
                                 $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
                                 @endphp
-                                @if($previlegio->funcaos_id == 7)
+                                @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                                 @php
                                 $escola = $turma->find($turma->id)->relEscolas;
                                 $descricao_professor = $turma->DESCR_TURMA.' (Escola '.$escola->nome.')';

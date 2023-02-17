@@ -365,7 +365,7 @@ class CacheTurmaController extends Controller
             $dados_base_turma = Cache::get('prof_dados_base'.strval($turma).strval($ano).strval($ano_same));
         } else {
             $dados_base_turma = DB::select(
-                'SELECT (ac.acertos*100)/(qtd_questao.num) AS num_alunos, \'Proficência Média\' AS descricao FROM dado_unificados du 
+                'SELECT (ac.acertos*100)/(qtd_questao.num) AS num_alunos, \'Proficiência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num 
                                 FROM dado_unificados 
                                 WHERE presenca > :presenca1 AND SAME = :same AND id_escola = (SELECT id_escola FROM turmas WHERE id = :id_turma1 AND SAME = :same1) AND ano = :ano1) AS qtd_questao ON TRUE 
@@ -404,7 +404,7 @@ class CacheTurmaController extends Controller
                     LEFT JOIN ( SELECT count(id) AS num FROM dado_unificados WHERE presenca > :presenca1 AND SAME = :same AND id_turma = :id_turma1       ) AS qtd_questao ON TRUE 
                     LEFT JOIN ( SELECT SUM(acerto) AS acertos FROM dado_unificados WHERE presenca > :presenca2 AND SAME = :same2 AND id_turma = :id_turma2 ) AS ac ON TRUE 
                     UNION 
-                    SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficência Média\' AS descricao FROM dado_unificados du 
+                    SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficiência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num FROM dado_unificados 
                             WHERE 
                                 id_escola = (SELECT id_escola FROM turmas WHERE presenca > :presenca3 AND SAME = :same3 AND id = :id_turma3) AND ano = :ano1) AS qtd_questao ON TRUE 

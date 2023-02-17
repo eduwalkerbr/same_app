@@ -342,7 +342,7 @@ class CacheEscolaController extends Controller
             $dados_base_escola = Cache::get('dir_est_esc_'.strval($escola).strval($ano_same));
         } else {
             $dados_base_escola = DB::select(
-                'SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual_escola, \'Proficência Média\' AS descricao FROM dado_unificados du 
+                'SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual_escola, \'Proficiência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num 
                                 FROM dado_unificados 
                                 WHERE presenca > :presenca1 AND SAME = :SAME AND 
@@ -388,7 +388,7 @@ class CacheEscolaController extends Controller
                     LEFT JOIN ( SELECT SUM(acerto) AS acertos FROM dado_unificados 
                                 WHERE presenca > :presenca2 AND id_escola = :id_escola2 AND SAME = :SAME2) AS ac ON TRUE 
                     UNION 
-                    SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficência Média\' AS descricao FROM dado_unificados du 
+                    SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficiência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num FROM dado_unificados 
                                 WHERE presenca > :presenca3 AND SAME = :SAME3 AND id_municipio = (SELECT municipios_id FROM escolas WHERE id = :id_escola3 AND SAME = :SAME4)) AS qtd_questao ON TRUE 
                     LEFT JOIN ( SELECT SUM(acerto) AS acertos FROM dado_unificados 

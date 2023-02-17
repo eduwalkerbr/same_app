@@ -291,7 +291,7 @@ class DiretorController extends Controller
             $dados_base_escola = Cache::get('dir_est_esc_'.strval($escola).strval($ano_same));
         } else {
             $dados_base_escola = DB::select(
-                'SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual_escola, \'Proficência Média\' AS descricao FROM dado_unificados du 
+                'SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual_escola, \'Proficiência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num 
                                 FROM dado_unificados 
                                 WHERE presenca > :presenca1 AND SAME = :SAME AND 

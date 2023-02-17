@@ -37,9 +37,17 @@ class AlterarRegistroController extends Controller
         $previlegio = $this->objPrevilegio->where(['users_id' => auth()->user()->id])->get();
         $sugestoes = $this->objSugestao->orderBy('updated_at', 'desc')->paginate(2);
 
-        $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
-        $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
-        $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
+        //Caso seja administrados tem acesso a todas as solicitações em aberto
+        if (auth()->user()->perfil == 'Administrador') {
+            $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
+            $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
+            $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
+            //Caso seja gestor, tem acesso a todas as solicitações do município que esta vinculado
+        } else if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+            $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+            $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+            $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3, 'id_municipio' => $previlegio[0]->municipios_id])->get();
+        }
 
         return view('cadastro/registro/alterar_registro', compact('solRegistro', 'solAltCadastral', 'solAddTurma', 'sugestoes'));
     }
