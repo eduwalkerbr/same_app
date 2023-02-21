@@ -27,7 +27,7 @@
                 <a id="link_habilidadeselecionadadisciplina" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" onclick="manipularLink('habilidadeselecionadadisciplina')" href="#" style="font-size:90%;font-weight:bold;color:#0046AD;border: 0.1em solid #0046AD;border-radius:0;border-bottom:none;padding-top:5%;padding-bottom:5%;white-space:normal;">Habilidade Selecionada por Disciplina e Ano Curricular</a>
                 <ul class="dropdown-menu">
                     <li class="nav-item dropdown"><a id="link_habilidadeselecionadadisciplina" class="nav-link" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="#0046AD"' onclick="manipularLink('habilidadeselecionadadisciplina')" href="#habilidadeselecionadadisciplina" style="font-size:90%;font-weight:bold;color:#0046AD;border:none;padding-top:5%;padding-bottom:5%;">Dados Gerais</a></li>
-                    @if(count($dados_base_habilidade_disciplina_grafico) > 1)
+                    @if(count($dados_base_habilidade_disciplina_grafico_habilidade) > 1)
                     <li class="nav-item dropdown"><a id="link_habilidadeselecionadadisciplinagrafico" class="nav-link" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="#0046AD"' onclick="manipularLink('habilidadeselecionadadisciplina')" href="#habilidadeselecionadadisciplinagrafico" style="font-size:90%;font-weight:bold;color:#0046AD;border:none;padding-top:5%;padding-bottom:5%;">Gráfico</a></li>
                     @endif
                 </ul>

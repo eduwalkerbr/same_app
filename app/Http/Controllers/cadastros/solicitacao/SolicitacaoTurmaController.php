@@ -65,7 +65,7 @@ class SolicitacaoTurmaController extends Controller
         } else {
             $params = explode('_',$request->escola_id);
             $html = '<option value=""></option>';
-            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->orderBy('TURMA', 'asc')->get();
             foreach ($turmas as $turma) {
                 $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
             }

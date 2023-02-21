@@ -294,17 +294,17 @@ class ProfessorController extends Controller
                 }
             } else {
                 //Restante vê apenas município do previlégio
-                if(Cache::has('escolas_prev'.strval($this->getPrevilegio()[0]->id))){
-                    $escolasListadas = Cache::get('escolas_prev'.strval($this->getPrevilegio()[0]->id));
+                if(Cache::has('escolas_prev'.strval($this->getPrevilegio()[0]->id).strval($ano_same))){
+                    $escolasListadas = Cache::get('escolas_prev'.strval($this->getPrevilegio()[0]->id).strval($ano_same));
                 } else {
                     $direcaoProfessores = $this->objDirecaoProfessores->where(['id_previlegio' => $this->getPrevilegio()[0]->id])->get();
                     $id_escolas = [];
                     for ($e = 0; $e < sizeof($direcaoProfessores); $e++) {
                         $id_escolas[$e] = $direcaoProfessores[$e]->id_escola;
                     }
-                    $escolasListadas = $this->objEscola->whereIn('id', $id_escolas)->get();
+                    $escolasListadas = $this->objEscola->whereIn('id', $id_escolas)->where('SAME',$ano_same)->get();
                     //Adiciona ao Cache
-                    Cache::put('escolas_prev'.strval($this->getPrevilegio()[0]->id), $escolasListadas, now()->addHours($this->horasCache));
+                    Cache::put('escolas_prev'.strval($this->getPrevilegio()[0]->id).strval($ano_same), $escolasListadas, now()->addHours($this->horasCache));
                 }
             }
             
@@ -324,16 +324,16 @@ class ProfessorController extends Controller
                 Cache::put('turmas_prof'.strval($id_escola).strval($ano_same), $turmas, now()->addHours($this->horasCache));
             }
         } else {
-            if(Cache::has('turmas_prof_prev'.strval($this->getPrevilegio()[0]->id))){
-                $turmas = Cache::get('turmas_prof_prev'.strval($this->getPrevilegio()[0]->id));
+            if(Cache::has('turmas_prof_prev'.strval($this->getPrevilegio()[0]->id).strval($ano_same))){
+                $turmas = Cache::get('turmas_prof_prev'.strval($this->getPrevilegio()[0]->id).strval($ano_same));
             } else {
                 $direcaoProfessores = $this->objDirecaoProfessores->where(['id_previlegio' => $this->getPrevilegio()[0]->id])->get();
                 $id_turmas = [];
                 for ($r = 0; $r < sizeof($direcaoProfessores); $r++) {
                     $id_turmas[$r] = $direcaoProfessores[$r]->id_turma;
                 }
-                $turmas = $this->objTurma->whereIn('id', $id_turmas)->orderBy('TURMA','asc')->get();
-                Cache::put('turmas_prov_prev'.strval($this->getPrevilegio()[0]->id), $turmas, now()->addHours($this->horasCache));
+                $turmas = $this->objTurma->whereIn('id', $id_turmas)->where('SAME', $ano_same)->orderBy('TURMA','asc')->get();
+                Cache::put('turmas_prov_prev'.strval($this->getPrevilegio()[0]->id).strval($ano_same), $turmas, now()->addHours($this->horasCache));
             }
         }
         

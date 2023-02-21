@@ -16,7 +16,7 @@
                                 <li class="breadcrumb-item">
                                 <li class="nav-item dropdown nav-fill">
                                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color:black;font-size: 13px;border: 1px solid black;border-radius: 10px;"><i class="fa-brands fa-wpforms"></i>&emsp;@php $hab_nome = substr($habilidade_selecionada[0]->nome_habilidade,0,150);@endphp {{$hab_nome}}</a>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu navbar-nav-scroll" style="max-height:220px;">
                                         @foreach($habilidades as $habilidade)
                                         <li><a class="dropdown-item" style="color:black;font-size: 13px;" href="{{ route('professor.exibirTurmaHabilidade', ['id' => $turma_selecionada[0]->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'id_escola' => $escola_selecionada[0]->id,'ano' => $ano[0],'id_habilidade' => $habilidade->id_habilidade, 'ano_same' => $ano_same_selecionado]) }}">
                                                 @php $hab_nome = substr($habilidade->nome_habilidade,0,150);@endphp @if(strlen($habilidade->nome_habilidade)>149) {{$hab_nome}}... @else {{$hab_nome}} @endif
@@ -275,7 +275,7 @@
                 </p>
                 <!------------------------------------ Legenda ------------------->
                 @php
-                    if(count($dados_base_habilidade_disciplina_grafico) > 1)
+                    if(intval(count($dados_base_habilidade_disciplina_grafico_habilidade)) > 1)
                         $id_sessao_habilidade = 'habilidadeselecionadadisciplinagrafico';    
                     else      
                         $id_sessao_habilidade = 'questoesobjetivas';   

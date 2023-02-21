@@ -76,11 +76,12 @@ class GestaoEscDirProfessorController extends Controller
         //$parametros = $request->only('id_previlegio','id_escola','id_turma','SAME','users_id');
         $query->leftjoin('escolas', ['direcao_professors.id_escola' => 'escolas.id','direcao_professors.SAME' => 'escolas.SAME'])
               ->leftjoin('turmas', ['direcao_professors.id_turma' => 'turmas.id','direcao_professors.SAME' => 'turmas.SAME']);
+        $query->join('previlegios', ['direcao_professors.id_previlegio' => 'previlegios.id']);
         $query->select('direcao_professors.id', 'direcao_professors.id_previlegio','direcao_professors.id_escola','direcao_professors.id_turma',
               'direcao_professors.created_at','direcao_professors.updated_at','direcao_professors.SAME','escolas.nome as nome_escola','turmas.DESCR_TURMA as nome_turma');
         foreach($parametros as $nome => $valor){
             if($nome == 'users_id' && $valor){
-                $query->join('previlegios', 'direcao_professors.id_previlegio', '=', 'previlegios.id');
+               // $query->join('previlegios', 'direcao_professors.id_previlegio', '=', 'previlegios.id');
                 $query->where('previlegios.users_id',$valor);
             } else if($valor){
                 $query->where('direcao_professors.'.$nome,$valor);
@@ -135,11 +136,12 @@ class GestaoEscDirProfessorController extends Controller
             $parametros = Cache::get('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id));
             $query->leftjoin('escolas', ['direcao_professors.id_escola' => 'escolas.id','direcao_professors.SAME' => 'escolas.SAME'])
                   ->leftjoin('turmas', ['direcao_professors.id_turma' => 'turmas.id','direcao_professors.SAME' => 'turmas.SAME']);
+            $query->join('previlegios', ['direcao_professors.id_previlegio' => 'previlegios.id']);
             $query->select('direcao_professors.id', 'direcao_professors.id_previlegio','direcao_professors.id_escola','direcao_professors.id_turma',
                 'direcao_professors.created_at','direcao_professors.updated_at','direcao_professors.SAME','escolas.nome as nome_escola','turmas.DESCR_TURMA as nome_turma');
             foreach($parametros as $nome => $valor){
                 if($nome == 'users_id' && $valor){
-                    $query->join('previlegios', 'direcao_professors.id_previlegio', '=', 'previlegios.id');
+              //      $query->join('previlegios', 'direcao_professors.id_previlegio', '=', 'previlegios.id');
                     $query->where('previlegios.users_id',$valor);
                 } else if($valor){
                     $query->where('direcao_professors.'.$nome,$valor);
@@ -255,6 +257,7 @@ class GestaoEscDirProfessorController extends Controller
         $direcao_professors = $this->objDirecaoProfessor
                 ->leftjoin('escolas', ['direcao_professors.id_escola' => 'escolas.id','direcao_professors.SAME' => 'escolas.SAME'])
                 ->leftjoin('turmas', ['direcao_professors.id_turma' => 'turmas.id','direcao_professors.SAME' => 'turmas.SAME'])
+                ->join('previlegios', ['direcao_professors.id_previlegio' => 'previlegios.id'])
                 ->select('direcao_professors.*','turmas.id as id_turma','turmas.DESCR_TURMA as nome_turma','turmas.SAME as SAME_turma','escolas.id as id_escola', 
                 'escolas.nome as nome_escola','escolas.SAME as SAME_escola')->where(['direcao_professors.id' => $id])->get();
         $direcao_professor = $direcao_professors[0];     

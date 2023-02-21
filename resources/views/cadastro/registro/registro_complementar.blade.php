@@ -38,7 +38,7 @@
                             <label for="id_escola" class="col-md-4 col-form-label text-md-right">{{ __('Escola') }}</label>
 
                             <div class="col-md-6">
-                                <select class="form-control" id="id_escola" name="id_escola">
+                                <select class="form-control" id="id_escola" name="id_escola" required>
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -50,7 +50,7 @@
                             <label for="id_turma" class="col-md-4 col-form-label text-md-right">{{ __('Turma') }}</label>
 
                             <div class="col-md-6">
-                                <select class="form-control" id="id_turma" name="id_turma">
+                                <select class="form-control" id="id_turma" name="id_turma" required>
                                     <option value=""></option>
                                 </select>
                             </div>

@@ -61,9 +61,9 @@
                         <div class="row justify-content-center" style="color:black;font-size:13px;">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="id_funcao">Escola</label>
+                                    <label for="id_escola">Escola</label>
 
-                                    <select class="form-control" id="id_escola" name="id_escola">
+                                    <select class="form-control" id="id_escola" name="id_escola" required>
                                         <option style="color:black;font-size:13px;" value=" {{ $escola->id }}">{{ $escola->nome.' ('.$escola->SAME.')' ?? ''}}</option>
                                     </select>
                                 </div>
@@ -71,10 +71,17 @@
                             @if(isset($funcao) && $funcao->desc == 'Professor(a)')
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label for="id_funcao">Turma</label>
+                                    <label for="id_turma">Turma</label>
 
-                                    <select class="form-control" id="id_turma" name="id_turma">
+                                    <select class="form-control" id="id_turma" name="id_turma" required>
+                                        @if(isset($turma))
                                         <option style="color:black;font-size:13px;" value=" {{ $turma->id }}">{{ $turma->DESCR_TURMA.' ('.$turma->SAME.')' ?? ''}}</option>
+                                        @else
+                                        <option value=""></option>
+                                        @foreach($turmas as $turma)
+                                        <option value="{{ $turma->id.'_'.$turma->SAME }}">{{ $turma->DESCR_TURMA.' ('.$turma->SAME.')'  ?? ''}}</option>
+                                        @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
