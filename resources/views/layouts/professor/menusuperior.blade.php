@@ -144,7 +144,7 @@
                         @if($previlegio->funcaos_id == 6 || $previlegio->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || (($previlegio->funcaos_id == 13 || $previlegio->funcaos_id == 14) && $previlegio->municipios_id == 5))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$municipio_selecionado[0]->nome ?? 'Município'}}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($municipios as $municipio)
                                 <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario.exibirMunicipio', ['id' => $municipio->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $municipio->nome ?? ''}}</a></li>
                                 @endforeach
@@ -160,7 +160,7 @@
                         @if($previlegio->funcaos_id == 5 || $previlegio->funcaos_id == 6 || $previlegio->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || (($previlegio->funcaos_id == 13 || $previlegio->funcaos_id == 14) && $previlegio->municipios_id == 5))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($escolas as $escola)
                                 <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor.exibirEscola', ['id' => $escola->id, 'id_municipio' => $municipio_selecionado[0]->id , 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano_same' => $ano_same_selecionado]) }}">{{ $escola->nome ?? ''}}</a></li>
                                 @endforeach
@@ -178,7 +178,7 @@
                         @if(isset($turmas))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$turma_selecionada[0]->DESCR_TURMA ?? 'Turma'}}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($turmas as $turma)
                                 @php
                                 $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
@@ -205,7 +205,7 @@
                     <ul class="navbar-nav ml-4">
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{strval($ano_same_selecionado) ?? 'Anos'}}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($anos_same as $ano_same)
                                 <li><a class="dropdown-item" style="color:black;" href="{{ route('professor.exibirTurmaAnoSame', ['id_disciplina' => $disciplina_selecionada[0]->id, 'id_escola' => $escola_selecionada[0]->id, 'ano_same' => $ano_same->SAME]) }}">{{ $ano_same->SAME ?? ''}}</a></li>
                                 @endforeach

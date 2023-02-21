@@ -186,4 +186,42 @@ class SolicitacaoRegistroController extends Controller
     {
         //
     }
+
+    /**
+     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
+     */
+    public function get_by_escola(Request $request)
+    {
+        if (!$request->escola_id) {
+            $html = '<option value="">' . trans('') . '</option>';
+        } else {
+            $params = explode('_',$request->escola_id);
+            $html = '<option value=""></option>';
+            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($turmas as $turma) {
+                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    /**
+     * Método ajax para listar as escolas pelo munícipio selecionada na página de solicitação de turma 
+     */
+    public function get_by_municipio(Request $request)
+    {
+        if (!$request->municipio_id) {
+            $html = '<option value="">' . trans('') . '</option>';
+        } else {
+            $params = explode('_',$request->municipio_id);
+            $html = '<option value=""></option>';
+            $escolas = Escola::where([['municipios_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($escolas as $escola) {
+                $html .= '<option value="' . $escola->id.'_'.$escola->SAME . '">' . $escola->nome . ' ('.$escola->SAME.')'. '</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
+    }
 }

@@ -106,10 +106,14 @@ class SolicitacaoController extends Controller
             if($escolas && sizeof($escolas) > 0){
                 $escola = $escolas[0];
             }
+            $turmas = null;
+            $turmas = $this->objTurma->where(['escolas_id' => $solicitacao->id_escola])->where(['SAME' => $solicitacao->SAME])->get();
+
             $turma = $this->objTurma->find($solicitacao->id_turma);
             $usuarios = $this->objUser->where(['email' => $solicitacao->email])->get();
             $turmasprevias = $this->objTurmaPrevia->where(['email' => $solicitacao->email])->whereNotIn('id_turma', [$solicitacao->id_turma])->get();
-            return view('cadastro/solicitacao/autoriza_registro', compact('solicitacao', 'funcao', 'municipio', 'escola', 'turma', 'usuarios', 'solRegistro', 'solAltCadastral', 'solAddTurma', 'turmasprevias'));
+            return view('cadastro/solicitacao/autoriza_registro', compact('solicitacao', 'funcao', 'municipio', 'escola', 'turma', 'usuarios', 'solRegistro', 'solAltCadastral', 'solAddTurma', 
+            'turmasprevias','turmas'));
         }
         //Exibe a solicitação de turma realizada
         if ($solicitacao->id_tipo_solicitacao == 3) {
@@ -189,5 +193,45 @@ class SolicitacaoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
+     */
+    public function get_by_escola(Request $request)
+    {
+        dump($request);
+        if (!$request->id_escola) {
+            $html = '<option value="">' . trans('') . '</option>';
+        } else {
+            $params = explode('_',$request->id_escola);
+            $html = '<option value=""></option>';
+            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($turmas as $turma) {
+                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
+    /**
+     * Método ajax para listar as escolas pelo munícipio selecionada na página de solicitação de turma 
+     */
+    public function get_by_municipio(Request $request)
+    {
+        dump($request);
+        if (!$request->municipio_id) {
+            $html = '<option value="">' . trans('') . '</option>';
+        } else {
+            $params = explode('_',$request->municipio_id);
+            $html = '<option value=""></option>';
+            $escolas = Escola::where([['municipios_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($escolas as $escola) {
+                $html .= '<option value="' . $escola->id.'_'.$escola->SAME . '">' . $escola->nome . ' ('.$escola->SAME.')'. '</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
     }
 }

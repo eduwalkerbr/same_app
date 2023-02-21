@@ -144,7 +144,7 @@
                         @if($previlegio->funcaos_id == 6 || $previlegio->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || (($previlegio->funcaos_id == 13 || $previlegio->funcaos_id == 14) && $previlegio->municipios_id == 5))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$municipio_selecionado[0]->nome ?? 'Município'}}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($municipios as $municipio)
                                 <li><a class="dropdown-item" style="color:black;" href="{{ route('secretario_comparativo.exibirMunicipioComparativo', ['id' => $municipio->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'municipio_comparativo']) }}">{{ $municipio->nome ?? ''}}</a></li>
                                 @endforeach
@@ -160,7 +160,7 @@
                         @if($previlegio->funcaos_id == 5 || $previlegio->funcaos_id == 6 || $previlegio->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || (($previlegio->funcaos_id == 13 || $previlegio->funcaos_id == 14) && $previlegio->municipios_id == 5))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
-                            <ul class="dropdown-menu">
+                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($escolas as $escola)
                                 <li><a class="dropdown-item" style="color:black;" href="{{ route('diretor_comparativo.exibirEscolaComparativo', ['id' => $escola->id, 'id_municipio' => $municipio_selecionado[0]->id , 'id_disciplina' => $disciplina_selecionada[0]->id, 'sessao' => 'escola_comparativo']) }}">{{ $escola->nome ?? ''}}</a></li>
                                 @endforeach

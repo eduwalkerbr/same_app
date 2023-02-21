@@ -224,7 +224,7 @@
                                                         <li class="breadcrumb-item">
                                                         <li class="nav-item dropdown">
                                                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color:black;font-size: 13px;border: 1px solid black;border-radius: 10px;"><i class="fa-brands fa-wpforms"></i>&emsp;{{$ano[0]}}º Ano</a>
-                                                            <ul class="dropdown-menu">
+                                                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:220px;">
                                                                 @foreach($anos as $ano_principal)
                                                                 <li><a class="dropdown-item" style="color:black;font-size: 13px;" href="{{ route('secretario_comparativo.exibirMunicipioComparativoAno', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano' => $ano_principal[0], 'sessao' => 'graficotema']) }}">{{ $ano_principal[0]}}º Ano</a></li>
                                                                 @endforeach
@@ -294,7 +294,7 @@
                                                         <li class="breadcrumb-item">
                                                         <li class="nav-item dropdown">
                                                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" style="color:black;font-size: 13px;border: 1px solid black;border-radius: 10px;"><i class="fa-brands fa-wpforms"></i>&emsp;{{$ano[0]}}º Ano</a>
-                                                            <ul class="dropdown-menu">
+                                                            <ul class="dropdown-menu navbar-nav-scroll" style="max-height:220px;">
                                                                 @foreach($anos as $ano_principal)
                                                                 <li><a class="dropdown-item" style="color:black;font-size: 13px;" href="{{ route('secretario_comparativo.exibirMunicipioComparativoAno', ['id' => $municipio_selecionado[0]->id, 'id_disciplina' => $disciplina_selecionada[0]->id, 'ano' => $ano_principal[0], 'sessao' => 'graficohabilidadeanodisciplina']) }}">{{ $ano_principal[0]}}º Ano</a></li>
                                                                 @endforeach

@@ -37,7 +37,7 @@
                             <div class="col-md-10">
                                 <div class="form-group">
                                     <label for="id_sala">Turma</label>
-                                    <select class="form-control" id="id_turma" name="id_turma" required disabeld>
+                                    <select class="form-control" id="id_turma" name="id_turma" required disabled>
                                         <option value="{{ $turma->id }}">{{ $turma->DESCR_TURMA.' ('.$turma->SAME.')'  ?? ''}}</option>
                                     </select>
                                 </div>
@@ -47,7 +47,7 @@
                             <div class="col-md-10">
                                 <div class="form-group">
                                     <label for="id_escola">Escola</label>
-                                    <select class="form-control" id="id_escola" name="id_escola" required disabeld>
+                                    <select class="form-control" id="id_escola" name="id_escola" required disabled>
                                         <option value="{{ $escolas->id }}">{{ $escolas->nome.' ('.$escolas->SAME.')'  ?? ''}}</option>
                                     </select>
                                 </div>

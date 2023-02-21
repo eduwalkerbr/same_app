@@ -229,9 +229,13 @@ Route::get('/solicitacao/{id}/negar', [SolicitacaoController::class, 'negar'])->
 Route::get('/solicitacao/lista_registro_usuario', [SolicitacaoController::class, 'listar_registros_usuario'])->name('lista_registros_usuario');
 Route::get('/solicitacao/lista_solicitacao_turma', [SolicitacaoController::class, 'listar_solicitacao_turma'])->name('lista_solicitacao_turma');
 Route::post('/solicitacao/aprovar', [SolicitacaoController::class, 'store'])->name('solicitacao.store');
+Route::get('/solicitacao_aut/get_by_escola', [SolicitacaoController::class, 'get_by_escola'])->name('solicitacao_aut.get_by_escola');
+Route::get('/solicitacao_aut/get_by_municipio', [SolicitacaoController::class, 'get_by_municipio'])->name('solicitacao_aut.get_by_municipio');
 
 //SolicitacaoRegistro
 Route::post('/solicitacao/aprovar', [SolicitacaoRegistroController::class, 'store'])->name('solicitacao_registro.store');
+Route::get('/solicitacao_registro/get_by_escola', [SolicitacaoRegistroController::class, 'get_by_escola'])->name('solicitacao_registro.get_by_escola');
+Route::get('/solicitacao_registro/get_by_municipio', [SolicitacaoRegistroController::class, 'get_by_municipio'])->name('solicitacao_registro.get_by_municipio');
 
 //Solicitacao Turma
 Route::get('/solicitacao/turma', [SolicitacaoTurmaController::class, 'index'])->name('solicitacao_turma.index');
