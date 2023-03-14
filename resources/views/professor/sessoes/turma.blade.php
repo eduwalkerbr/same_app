@@ -15,7 +15,7 @@
             @foreach ($group as $dados_base)
             @foreach($legendas as $legenda)
             @php
-            if(number_format($dados_base->num_alunos, 0, '.', '') >= $legenda->valor_inicial && number_format($dados_base->num_alunos, 0, '.', '') <= $legenda->valor_final){
+            if(number_format($dados_base->percentual, 0, '.', '') >= $legenda->valor_inicial && number_format($dados_base->percentual, 0, '.', '') <= $legenda->valor_final){
                 $corFundo = $legenda->cor_fundo;
                 $corLetra = $legenda->cor_letra;
                 }
@@ -27,7 +27,7 @@
                             {{$dados_base->descricao}}
                         </div>
                         <div class="card-body" style="padding-bottom:0.5em;padding-top:0.5em;">
-                            <h5 class="card-title" style="text-align: center;background-color:{{$corFundo}}; border-radius:50%;border-bottom:none;font-size:25px;color:{{$corLetra}};font-weight:bold;"><?php echo number_format($dados_base->num_alunos, 0, '.', '') ?>%</h5>
+                            <h5 class="card-title" style="text-align: center;background-color:{{$corFundo}}; border-radius:50%;border-bottom:none;font-size:25px;color:{{$corLetra}};font-weight:bold;"><?php echo number_format($dados_base->percentual, 0, '.', '') ?>%</h5>
                         </div>
                     </div>
                 </div>

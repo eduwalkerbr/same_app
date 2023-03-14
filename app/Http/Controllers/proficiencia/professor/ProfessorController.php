@@ -349,7 +349,7 @@ class ProfessorController extends Controller
             $dados_base_turma = Cache::get('prof_dados_base'.strval($turma).strval($ano).strval($ano_same));
         } else {
             $dados_base_turma = DB::select(
-                'SELECT (ac.acertos*100)/(qtd_questao.num) AS num_alunos, \'Proficiência Média\' AS descricao FROM dado_unificados du 
+                'SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficiência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num 
                                 FROM dado_unificados 
                                 WHERE presenca > :presenca1 AND SAME = :same AND id_escola = (SELECT id_escola FROM turmas WHERE id = :id_turma1 AND SAME = :same1) AND ano = :ano1) AS qtd_questao ON TRUE 
@@ -357,7 +357,7 @@ class ProfessorController extends Controller
                                 FROM dado_unificados 
                                 WHERE presenca > :presenca2 AND SAME = :same2 AND id_escola = (SELECT id_escola FROM turmas WHERE id = :id_turma2 AND SAME = :same3) AND ano = :ano2) AS ac ON TRUE 
                 UNION
-                    SELECT (ac.acertos*100)/(qtd_questao.num) AS num_alunos,\'Proficiência Turma\' AS descricao  
+                    SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual,\'Proficiência Turma\' AS descricao  
                         FROM dado_unificados du 
                     LEFT JOIN (SELECT count(id) AS num FROM dado_unificados 
                                 WHERE id_turma = :id_turma3 AND SAME = :same4 
@@ -385,8 +385,8 @@ class ProfessorController extends Controller
             $dados_comparacao_turma = DB::select(
                 'SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficiência Turma\' AS descricao 
                     FROM dado_unificados du 
-                    LEFT JOIN ( SELECT count(id) AS num FROM dado_unificados WHERE presenca > :presenca1 AND SAME = :same AND id_turma = :id_turma1       ) AS qtd_questao ON TRUE 
-                    LEFT JOIN ( SELECT SUM(acerto) AS acertos FROM dado_unificados WHERE presenca > :presenca2 AND SAME = :same2 AND id_turma = :id_turma2 ) AS ac ON TRUE 
+                    LEFT JOIN ( SELECT count(id) AS num FROM dado_unificados WHERE presenca > :presenca1 AND SAME = :same AND id_turma = :id_turma1) AS qtd_questao ON TRUE 
+                    LEFT JOIN ( SELECT SUM(acerto) AS acertos FROM dado_unificados WHERE presenca > :presenca2 AND SAME = :same2 AND id_turma = :id_turma2) AS ac ON TRUE 
                     UNION 
                     SELECT (ac.acertos*100)/(qtd_questao.num) AS percentual, \'Proficência Média\' AS descricao FROM dado_unificados du 
                     LEFT JOIN ( SELECT count(id) AS num FROM dado_unificados 
@@ -1071,13 +1071,11 @@ class ProfessorController extends Controller
         $criterios_questao = $this->getCriteriosQuestao($ano,$disciplina_selecionada[0]->id);
 
         //Busca dados Média Turma ---------------------------------------------------------------------------------------------------------------
-        $dados_base_turma = $this-> estatisticaBaseTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
+        $dados_base_turma_grafico = $this-> estatisticaBaseTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
         $dados_comparacao_turma = $this->estatisticaComparacaoTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
         //Divide em 2 por linha para gerar os cards
-        $dados_base_turma = array_chunk($dados_base_turma, 2);
+        $dados_base_turma = array_chunk($dados_base_turma_grafico, 2);
         //---------------------------------------------------------------------------------------------------------------------------------------
-
-
 
         //Busca dados Sessão Tema na Disciplina -------------------------------------------------------------------------------------------------
         $dados_base_grafico = $this-> estatisticaBaseGrafico($this->confPresenca, $turma, $disciplina_selecionada[0]->id, $ano_same_selecionado);
@@ -1145,7 +1143,7 @@ class ProfessorController extends Controller
 
         return view('professor/professor', compact(
 
-            'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','dados_base_turma','turma_selecionada','destaques',
+            'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','dados_base_turma_grafico','dados_base_turma','turma_selecionada','destaques',
             'dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas',
             'dados_base_aluno_grafico_disciplina','dados_base_aluno_disciplina','anos','dados_base_habilidade_questao','ano','dados_base_habilidade_disciplina_ano_grafico',
@@ -1247,10 +1245,10 @@ class ProfessorController extends Controller
         $municipio_selecionado = $this->getMunicipioSelecionado($turma_selecionada[0]->escolas_municipios_id, $ano_same_selecionado);
 
         //Busca dados Média Turma ---------------------------------------------------------------------------------------------------------------
-        $dados_base_turma = $this-> estatisticaBaseTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
+        $dados_base_turma_grafico = $this-> estatisticaBaseTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
         $dados_comparacao_turma = $this->estatisticaComparacaoTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
         //Divide em 2 por linha para gerar os cards
-        $dados_base_turma = array_chunk($dados_base_turma, 2);
+        $dados_base_turma = array_chunk($dados_base_turma_grafico, 2);
         //---------------------------------------------------------------------------------------------------------------------------------------
 
         //Busca dados Sessão Tema na Disciplina -------------------------------------------------------------------------------------------------
@@ -1319,7 +1317,7 @@ class ProfessorController extends Controller
         $sessao_inicio = "turma";
 
         return view('professor/professor', compact(
-            'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
+            'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
             'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina','dados_base_questao_disciplina','escolas','disciplinas',
             'disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina','dados_base_aluno_disciplina','anos',
             'dados_base_habilidade_questao','ano','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao',
@@ -1414,10 +1412,10 @@ class ProfessorController extends Controller
         $municipio_selecionado = $this->getMunicipioSelecionado($turma_selecionada[0]->escolas_municipios_id, $ano_same_selecionado);
 
         //Busca dados Média Turma ---------------------------------------------------------------------------------------------------------------
-        $dados_base_turma = $this-> estatisticaBaseTurma($this->confPresenca,$turma,substr(trim($turma_selecionada[0]->DESCR_TURMA), 0, 2),$ano_same_selecionado);
+        $dados_base_turma_grafico = $this-> estatisticaBaseTurma($this->confPresenca,$turma,substr(trim($turma_selecionada[0]->DESCR_TURMA), 0, 2),$ano_same_selecionado);
         $dados_comparacao_turma = $this->estatisticaComparacaoTurma($this->confPresenca,$turma,substr(trim($turma_selecionada[0]->DESCR_TURMA), 0, 2),$ano_same_selecionado);
         //Divide em 2 por linha para gerar os cards
-        $dados_base_turma = array_chunk($dados_base_turma, 2);
+        $dados_base_turma = array_chunk($dados_base_turma_grafico, 2);
         //---------------------------------------------------------------------------------------------------------------------------------------
 
         //Busca dados Sessão Tema na Disciplina -------------------------------------------------------------------------------------------------
@@ -1498,7 +1496,7 @@ class ProfessorController extends Controller
         $sessao_inicio = "habilidadeanodisciplina";
 
         return view('professor/professor', compact(
-            'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','turma_selecionada',
+            'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','turma_selecionada',
             'dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina',
             'dados_base_aluno_disciplina','anos','dados_base_habilidade_questao','ano_selecionado','dados_base_habilidade_disciplina_ano_grafico','ano_selecionado','ano',
@@ -1595,10 +1593,10 @@ class ProfessorController extends Controller
         $municipio_selecionado = $this->getMunicipioSelecionado($turma_selecionada[0]->escolas_municipios_id, $ano_same_selecionado);
 
         //Busca dados Média Turma ---------------------------------------------------------------------------------------------------------------
-        $dados_base_turma = $this-> estatisticaBaseTurma($this->confPresenca,$turma,substr(trim($turma_selecionada[0]->DESCR_TURMA), 0, 2),$ano_same_selecionado);
+        $dados_base_turma_grafico = $this-> estatisticaBaseTurma($this->confPresenca,$turma,substr(trim($turma_selecionada[0]->DESCR_TURMA), 0, 2),$ano_same_selecionado);
         $dados_comparacao_turma = $this->estatisticaComparacaoTurma($this->confPresenca,$turma,substr(trim($turma_selecionada[0]->DESCR_TURMA), 0, 2),$ano_same_selecionado);
         //Divide em 2 por linha para gerar os cards
-        $dados_base_turma = array_chunk($dados_base_turma, 2);
+        $dados_base_turma = array_chunk($dados_base_turma_grafico, 2);
         //---------------------------------------------------------------------------------------------------------------------------------------
    
         //Busca dados Sessão Tema na Disciplina -------------------------------------------------------------------------------------------------
@@ -1679,7 +1677,7 @@ class ProfessorController extends Controller
         $sessao_inicio = "habilidadeselecionadadisciplina";
 
         return view('professor/professor', compact(
-            'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','dados_comparacao_turma','ano',
+            'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','dados_comparacao_turma','ano',
             'turma_selecionada','dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina',
             'dados_base_aluno_disciplina','anos','dados_base_habilidade_questao','ano_selecionado','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina',
@@ -1774,10 +1772,10 @@ class ProfessorController extends Controller
          $municipio_selecionado = $this->getMunicipioSelecionado($turma_selecionada[0]->escolas_municipios_id, $ano_same_selecionado);
  
          //Busca dados Média Turma ---------------------------------------------------------------------------------------------------------------
-         $dados_base_turma = $this-> estatisticaBaseTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
+         $dados_base_turma_grafico = $this-> estatisticaBaseTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
          $dados_comparacao_turma = $this->estatisticaComparacaoTurma($this->confPresenca,$turma,$ano,$ano_same_selecionado);
          //Divide em 2 por linha para gerar os cards
-         $dados_base_turma = array_chunk($dados_base_turma, 2);
+         $dados_base_turma = array_chunk($dados_base_turma_grafico, 2);
          //---------------------------------------------------------------------------------------------------------------------------------------
  
          //Busca dados Sessão Tema na Disciplina -------------------------------------------------------------------------------------------------
@@ -1846,7 +1844,7 @@ class ProfessorController extends Controller
          $sessao_inicio = "turma";
  
          return view('professor/professor', compact(
-             'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
+             'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
              'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina','dados_base_questao_disciplina','escolas','disciplinas',
              'disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina','dados_base_aluno_disciplina','anos',
              'dados_base_habilidade_questao','ano','dados_base_habilidade_disciplina_ano_grafico','dados_base_habilidades_ano_disciplina','dados_base_habilidade_ano_questao',

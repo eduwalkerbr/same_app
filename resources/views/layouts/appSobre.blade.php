@@ -47,7 +47,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <nav class="navbar fixed-top navbar-expand-lg navbar-light" style="padding: 0.5em 0 0.5em 0; background-color: white;box-shadow: 5px 5px 5px rgba(0,0,139);font-size: 17px;">
-                        <div class="container">
+                        <div class="container" style="font-size: 14px;">
                             <a class="navbar-brand" href="{{route('home.index')}}">
                                 <img src="{{ asset('img/logo.png') }}" width="70" height="70" class="d-inline-block align-center" alt="" loading="lazy"></a>
                             </a>
@@ -55,107 +55,31 @@
                                 <span class="navbar-toggler-icon"></span>
                             </button>
 
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-weight:bold;">
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-weight:bold;font-size:15px;">
                                 <!-- Left Side Of Navbar -->
                                 <ul class="navbar-nav mr-auto">
                                     <li class="nav-item">
-                                        <a id="navbar" class="nav-link" href="{{ route('home.index')}}" role="button" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                        <a id="navbar" class="nav-link" href="{{ route('home.index')}}" role="button" aria-haspopup="true" aria-expanded="false" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                             Home
                                         </a>
                                     </li>
                                 </ul>
+                                
                                 @if(Auth::check() )
-                                @php
-                                $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                                @endphp
-                                @if (((isset($previlegio) && $previlegio->funcaos_id == 6) || Auth::user()->perfil == 'Administrador') && ( ((isset($solRegistro) && count($solRegistro) > 0)) || ((isset($solAltCadastral) && count($solAltCadastral) > 0)) || ((isset($solAddTurma) && count($solAddTurma) > 0))))
-                                <ul class="navbar-nav mr-auto">
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                            Solicitações Pendentes <span class="badge badge-danger" style="background-color:red;color: white; font-weight: normal; font-size: 12px;">{{sizeof($solRegistro) + sizeof($solAltCadastral) + sizeof($solAddTurma)}}</span>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size: 15px;color: black;">
-                                            @if(isset($solRegistro) && count($solRegistro) > 0)
-                                            <a class="dropdown-item" href="{{ route('lista_registros_usuario') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Registros de Usuário <span class="badge badge-danger" style="background-color:red;color: white; font-weight: normal; font-size: 12px;"> {{sizeof($solRegistro)}}</span>
-                                            </a>
-                                            @endif
-                                            @if(isset($solAltCadastral) && count($solAltCadastral) > 0)
-                                            <a class="dropdown-item" href="" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Alteração Cadastral <span class="badge badge-danger" style="background-color:red;color: white; font-weight: normal; font-size: 12px;"> {{sizeof($solAltCadastral)}}</span>
-                                            </a>
-                                            @endif
-                                            @if(isset($solAddTurma) && count($solAddTurma) > 0)
-                                            <a class="dropdown-item" href="{{ route('lista_solicitacao_turma') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Adição de Turmas <span class="badge badge-danger" style="background-color:red;color: white; font-weight: normal; font-size: 12px;"> {{sizeof($solAddTurma)}}</span>
-                                            </a>
-                                            @endif
-                                        </div>
-                                    </li>
+                                
+                                <!-- Sessão de Solicitações -->
+                                @include('layouts/menu_superior.sessao_solicitacoes')
 
-                                </ul>
+                                <!-- Sessão de Solicitação de Turma -->
+                                @include('layouts/menu_superior.solicitacao_turma')
 
-                                @include('layouts/menu.solicitacao_turma')
-                                @if ((isset($previlegio) && $previlegio->funcaos_id == 6) || Auth::user()->perfil == 'Administrador')
-                                <ul class="navbar-nav mr-auto">
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                            Gestão Escolar
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="font-size: 15px;color: black;">
-                                            <a class="dropdown-item" href="{{ route('gest_previlegio.filtrar') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Previlégios
-                                            </a>
-                                            <a class="dropdown-item" href="{{ route('gest_direcao_professor.filtrar') }}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Direção Professor
-                                            </a>
-                                        </div>
-                                    </li>
-
-                                </ul>
+                                <!-- Sessão de Gestão Escolar -->
+                                @include('layouts/menu_superior.sessao_gestao_escolar')
+                                
                                 @endif
-                                @endif
-                                @endif
+                                
                                 <!-- Right Side Of Navbar -->
-                                <ul class="navbar-nav ml-auto">
-                                    <!-- Authentication Links -->
-                                    @guest
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" style="font-size: 15px;color: black;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre onmouseover='this.style.backgroundColor="black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                            Convidado
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;font-size: 15px">
-                                            <a class="dropdown-item" href="{{ route('registro_base.index') }}" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Registrar
-                                            </a>
-                                            <hr>
-                                            <a class="dropdown-item" href="{{ route('login') }}" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>{{ __('Login') }}</a>
-                                        </div>
-
-                                    </li>
-                                    @else
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"' class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                            {{ Auth::user()->name }}
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;font-size: 16px">
-                                            <a class="dropdown-item" href="{{ route('alterar_registro.index')}}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Alterar Registro
-                                            </a>
-                                            <hr>
-                                            <a class="dropdown-item" style="font-size: 15px;color: black;" href="{{ route('home.index') }}" onclick="event.preventDefault();
-                                                        document.getElementById('logout-form').submit();" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                {{ __('Logout') }}
-                                            </a>
-
-
-                                            <form id="logout-form" action="{{ route('deslogar') }}" method="POST" class="d-none">
-                                                @csrf
-                                            </form>
-                                        </div>
-                                    </li>
-                                    @endguest
-                                </ul>
+                                @include('layouts/menu_superior.sessao_usuario')
 
                             </div>
 
