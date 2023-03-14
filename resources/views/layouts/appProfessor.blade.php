@@ -93,7 +93,7 @@
     const data = {
         datasets: [{
             label: "Proficiência Turma",
-            data: <?php echo json_encode($dados_comparacao_turma) ?>,
+            data: <?php echo json_encode($dados_base_turma_grafico) ?>,
             backgroundColor: [
                 'rgba(255, 26, 104, 0.2)',
                 'rgba(54, 162, 235, 0.2)',
@@ -175,7 +175,7 @@
             plugins: {
                 title: {
                     display: true,
-                    text: 'Comparativo de Proficiência da Turma com a Média de Turmas do ' + <?php echo $ano[0] ?> + 'º Ano',
+                    text: 'Comparativo de Proficiência da Turma com a Média das Turmas do Município',
                     font: {
                         size: 13,
                         family: 'tahoma',

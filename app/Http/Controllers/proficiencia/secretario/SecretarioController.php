@@ -285,6 +285,19 @@ class SecretarioController extends Controller
         return $escolasListadas;
     }
 
+    /*public static function getEscolasMunicipio($id_municipio, $ano_same){
+
+        if(Cache::has('escolas_'.strval($id_municipio).strval($ano_same))){
+            $escolasListadas = Cache::get('escolas_'.strval($id_municipio).strval($ano_same));
+        } else {
+            $escolasListadas = Escola::where(['status' => 'Ativo', 'municipios_id' => $id_municipio, 'SAME' => $ano_same])->get();
+            //Adiciona ao Cache
+            Cache::put('escolas_'.strval($id_municipio).strval($ano_same), $escolasListadas, now()->addHours(config('constants.horas_cache')));
+        }
+        
+        return $escolasListadas;
+    }*/
+
     /**
      * Método que óbtem os dados da Disciplina Selecionada utilizando Cache
      */

@@ -55,62 +55,15 @@
                                 <span class="navbar-toggler-icon"></span>
                             </button>
 
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-weight:bold;">
+                            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="font-weight:bold;font-size:15px;">
                                 <!-- Left Side Of Navbar -->
-                                <ul class="navbar-nav mr-auto">
-                                    <li class="nav-item">
-                                        <a id="navbar" class="nav-link" href="{{ route('home.index')}}" role="button" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                            Home
-                                        </a>
-                                    </li>
-                                </ul>
-                                <ul class="navbar-nav mr-auto">
-                                    <li class="nav-item">
-                                        <a id="navbar" class="nav-link" href="{{route('sobre.index')}}" role="button" aria-haspopup="true" aria-expanded="false" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                            Sobre Nós
-                                        </a>
-                                    </li>
-                                </ul>
+                                
+                                <!-- Sessão de Solicitações -->
+                                @include('layouts/menu_superior.sessao_base')
+
                                 <!-- Right Side Of Navbar -->
-                                <ul class="navbar-nav ml-auto">
-                                    <!-- Authentication Links -->
-                                    @guest
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" style="font-size: 15px;color: black;" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                            Convidado
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;font-size: 15px">
-                                            <a class="dropdown-item" href="{{ route('registro_base.index') }}" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Registrar
-                                            </a>
-                                            <hr>
-                                            <a class="dropdown-item" href="{{ route('login') }}" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>{{ __('Login') }}</a>
-                                        </div>
+                                @include('layouts/menu_superior.sessao_usuario')
 
-                                    </li>
-                                    @else
-                                    <li class="nav-item dropdown">
-                                        <a id="navbarDropdown" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"' class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                            {{ Auth::user()->name }}
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;font-size: 16px">
-                                            <a class="dropdown-item" href="{{ route('alterar_registro.index')}}" style="font-size: 15px;color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                Alterar Registro
-                                            </a>
-                                            <hr>
-                                            <a class="dropdown-item" style="font-size: 15px;color: black;" href="{{ route('home.index') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                                {{ __('Logout') }}
-                                            </a>
-
-
-                                            <form id="logout-form" action="{{ route('deslogar') }}" method="POST" class="d-none">
-                                                @csrf
-                                            </form>
-                                        </div>
-                                    </li>
-                                    @endguest
-                                </ul>
                             </div>
                         </div>
                     </nav>

@@ -20,6 +20,7 @@ use App\Models\Sugestao;
 use App\Models\Turma;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\proficiencia\secretario\SecretarioController;
 
 class CacheMunicipioController extends Controller
 {
@@ -672,6 +673,9 @@ class CacheMunicipioController extends Controller
                 $this->getMunicipioSelecionado($municipio->id, $ano_same->SAME);
 
                 //Busca e carrega as Escolas Ativas do Munícipio
+                //$escolas = SecretarioController::getEscolasMunicipio($municipio->id, $ano_same->SAME);
+                //dump($escolas);
+
                 $escolas = $this->getEscolasMunicipio($municipio->id, $ano_same->SAME);
                 foreach($escolas as $escola){
                     $this->getEscolaSelecionada($escola->id, $ano_same->SAME);    

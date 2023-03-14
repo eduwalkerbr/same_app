@@ -36,9 +36,9 @@
                         <div class="row justify-content-center" style="color:black;font-size:14px;">
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <label for="id_sala">Turma</label>
-                                    <select class="form-control" id="id_turma" name="id_turma" required disabled>
-                                        <option value="{{ $turma->id }}">{{ $turma->DESCR_TURMA.' ('.$turma->SAME.')'  ?? ''}}</option>
+                                    <label for="id_escola">Escola</label>
+                                    <select class="form-control" id="id_escola" name="id_escola" required disabled>
+                                        <option value="{{ $escolas->id }}">{{ $escolas->nome.' ('.$escolas->SAME.')'  ?? ''}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -46,9 +46,9 @@
                         <div class="row justify-content-center" style="color:black;font-size:14px;">
                             <div class="col-md-10">
                                 <div class="form-group">
-                                    <label for="id_escola">Escola</label>
-                                    <select class="form-control" id="id_escola" name="id_escola" required disabled>
-                                        <option value="{{ $escolas->id }}">{{ $escolas->nome.' ('.$escolas->SAME.')'  ?? ''}}</option>
+                                    <label for="id_turma">Turma</label>
+                                    <select class="form-control" id="id_turma" name="id_turma" required disabled>
+                                        <option value="{{ $turma->id }}">{{ $turma->DESCR_TURMA.' ('.$turma->SAME.')'  ?? ''}}</option>
                                     </select>
                                 </div>
                             </div>
@@ -58,6 +58,9 @@
                         </div>
                         <div class="form-group">
                             <input type="hidden" name="id_escola" id="id_escola" value="{{ $escolas->id }}">
+                        </div>
+                        <div class="form-group">
+                            <input type="hidden" name="id_turma" id="id_turma" value="{{ $turma->id }}">
                         </div>
                         <div class="form-group">
                             <input type="hidden" name="SAME" id="SAME" value="{{ $solicitacao->SAME }}">
