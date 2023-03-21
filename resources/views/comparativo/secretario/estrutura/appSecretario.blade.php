@@ -1213,11 +1213,11 @@
                             if (label) {
                                 label += ': ';
                             }
+                            let nome_habilidade = 'nome_habilidade' + context.dataset.label;
                             if (context.parsed.y !== null) {
                                 label += valor[context.dataset.label] || '';
-                                label += '% (';
-                                label += valor.nome_habilidade;
-                                label += ')';
+                                label += '% ';
+                                label += valor[nome_habilidade];
                             }
                             return label;
                         }

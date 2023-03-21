@@ -51,18 +51,6 @@ class CacheCompEscolaController extends Controller
         $this->confPresenca = 1;
         $this->previlegio = [];
         $this->horasCache = 4;
-        $this->backgroundColors = [
-            'rgba(139,0,0, 0.2)','rgba(54, 162, 235, 0.2)','rgba(255, 206, 86, 0.2)','rgba(75, 192, 192, 0.2)','rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)','rgba(0, 0, 0, 0.2)','rgba(220,220,220,0.3)','rgba(0,0,139,0.2)','rgba(160,82,45,0.2)',
-            'rgba(255,0,255,0.2)','rgba(0,128,0,0.2)','rgba(255,255,0,0.2)','rgba(0,0,255,0.2)','rgba(0,255,0,0.2)','rgba(255,255,255,0.2)',
-            'rgba(255,0,0,0.2)','rgba(255,140,0,0.3)','rgba(128,128,0,0.3)','rgba(255,20,147,0.3)','rgba(250,128,114,0.3)','rgba(0,255,0,0.3)',
-            'rgba(255,215,0,0.4)'];
-        $this->borderColors = [
-            'rgba(128,0,0, 1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)','rgba(75, 192, 192, 1)','rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)','rgba(0, 0, 0, 1)','rgba(54,54,54,1)','rgba(25,25,112,1)','rgba(139,69,19,1)',
-            'rgba(139,0,139,1)','rgba(0,100,0,1)','rgba(255,215,0,1)','rgba(0,0,139,1)','rgba(0,100,0,1)','rgba(0,0,0,1)',
-            'rgba(128,0,0,1)','rgba(255,69,0,1)','rgba(107,142,35,1)','rgba(199,21,133,1)','rgba(165,42,42,1)','rgba(0,100,0,1)',
-            'rgba(184,134,11,1)'];
     }
 
     /**
@@ -346,7 +334,7 @@ class CacheCompEscolaController extends Controller
                                 $novo_item_array = array(
                                     'x' => $resultSet[$k]->label,
                                     $resultSet[$k]->item => $resultSet[$k]->percentual,
-                                    'nome_habilidade' => $resultSet[$k]->nome,
+                                    'nome_habilidade'.$resultSet[$k]->item => $resultSet[$k]->nome,
                                 );
                                 //Combina os Itens para criar o Array completo    
                                 $map_itens_label[$labels_hab[$j]] = array_merge($item_array, $novo_item_array);
@@ -355,7 +343,7 @@ class CacheCompEscolaController extends Controller
                                 $map_itens_label[$resultSet[$k]->label] = array(
                                     'x' => $resultSet[$k]->label,
                                     $resultSet[$k]->item => $resultSet[$k]->percentual,
-                                    'nome_habilidade' => $resultSet[$k]->nome
+                                    'nome_habilidade'.$resultSet[$k]->item => $resultSet[$k]->nome
                                 );
                             }
                         }
@@ -368,7 +356,7 @@ class CacheCompEscolaController extends Controller
                             $novo_item_array = array(
                                 'x' => $labels_hab[$j],
                                 $itens_hab[$i] => "Ausente",
-                                'nome_habilidade' => $nome_hab[$i],
+                                'nome_habilidade'.$itens_hab[$i] => $nome_hab[$i],
                             );
                             //Combina os Itens para criar o Array completo    
                             $map_itens_label[$labels_hab[$j]] = array_merge($item_array, $novo_item_array);
@@ -377,7 +365,7 @@ class CacheCompEscolaController extends Controller
                             $map_itens_label[$labels_hab[$j]] = array(
                                 'x' => $labels_hab[$j],
                                 $itens_hab[$i] => "Ausente",
-                                'nome_habilidade' => $nome_hab[$i]
+                                'nome_habilidade'.$itens_hab[$i] => $nome_hab[$i]
                             );
                         }
                     }
@@ -390,8 +378,8 @@ class CacheCompEscolaController extends Controller
                 $item_data_set = [
                     'label' => $itens_hab[$i],
                     'data' => array_values($map_itens_label),
-                    'backgroundColor' => $this->backgroundColors[$contColors],
-                    'borderColor' => $this->borderColors[$contColors],
+                    'backgroundColor' => config('constants.options.graficsBackgroundColors')[$contColors],
+                    'borderColor' => config('constants.options.graficsBorderColors')[$contColors],
                     'borderWidth' => 1,
                     'hoverBorderWidth' => 2,
                     'hoverBorderColor' => 'green',
@@ -504,8 +492,8 @@ class CacheCompEscolaController extends Controller
                 $item_data_set = [
                     'label' => $itens_disc[$i],
                     'data' => array_values($map_itens_label),
-                    'backgroundColor' => $this->backgroundColors[$contColors],
-                    'borderColor' => $this->borderColors[$contColors],
+                    'backgroundColor' => config('constants.options.graficsBackgroundColors')[$contColors],
+                    'borderColor' => config('constants.options.graficsBorderColors')[$contColors],
                     'borderWidth' => 1,
                     'hoverBorderWidth' => 2,
                     'hoverBorderColor' => 'green',
