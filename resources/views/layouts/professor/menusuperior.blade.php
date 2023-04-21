@@ -16,17 +16,29 @@
                     <!-- Sessão de Solicitações -->
                     @include('layouts/menu_superior.sessao_base')
 
+                    
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item dropdown">
+                    @php
+                    $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
+                    @endphp
+                    @if ($previlegio->funcaos_id != 7)
+                    <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ route('secretario.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                             Proficiências
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
+                            <a class="dropdown-item" href="{{ route('secretario_comparativo.index') }}" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                Comparativos
                             </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                <a class="dropdown-item" href="{{ route('secretario_comparativo.index') }}" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
-                                    Comparativos
-                                </a>
-                            </div>
-                        </li>
+                        </div>
+                    </li>
+                    @else
+                    <li class="nav-item">
+                        <a id="navbar" class="nav-link" href="" role="button" aria-haspopup="true" aria-expanded="false" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                            Proficiências
+                        </a>
+                    </li>
+                    @endif
                     </ul>
                     
                     <!-- Sessão de Solicitações -->
