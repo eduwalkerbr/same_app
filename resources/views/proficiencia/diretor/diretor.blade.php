@@ -27,7 +27,7 @@
                     <div class="row justify-content-center">
                         <div class="card-deck" style="background-color: white;padding-top:16px;border: 1px solid white;">
                             
-                            @include('diretor/sessoes.escola')
+                            @include('proficiencia/diretor/sessoes.escola')
 
                             <!------------------------------------ Card Gráfico Média Escola ------------------->
                             <div class="card text-center" style="box-shadow: 5px 5px 5px rgba(156,163,175);">
@@ -61,7 +61,7 @@
                         <!------------------------------------ Card Disciplinas ------------------->
                         <div class="card-deck" style="background-color: white;padding-top:16px;border: 1px solid white;">
 
-                            @include('diretor/sessoes.disciplina'); 
+                            @include('proficiencia/diretor/sessoes.disciplina'); 
 
                             <!------------------------------------ Card Gráfico Escola Disciplinas ------------------->
                             <div class="card text-center" style="box-shadow: 5px 5px 5px rgba(156,163,175);">
@@ -91,7 +91,7 @@
                     </div>
 
                     <!------------------------------------------------------------------------------------------ Sessão Ano Curricular Disciplina Cards ---------------------------------------------------------------------->
-                    @include('diretor/sessoes.anodisciplina')
+                    @include('proficiencia/diretor/sessoes.anodisciplina')
                     <!------------------------------------------------------------------------------------------ Sessão Ano Curricular Disciplina Cards ---------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------------------------------ Sessão Ano Curricular Disciplina Gráfico ---------------------------------------------------------------------->
@@ -125,7 +125,7 @@
                     <!------------------------------------------------------------------------------------------ Sessão Ano Curricular Disciplina Gráfico ---------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------------------------------ Sessão Turma Disciplina Cards ---------------------------------------------------------------------->
-                    @include('diretor/sessoes.turmadisciplina')
+                    @include('proficiencia/diretor/sessoes.turmadisciplina')
                     <!------------------------------------------------------------------------------------------ Sessão Turma Disciplina Cards ---------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------------------------------ Sessão Turma Disciplina Gráfico ---------------------------------------------------------------------->
@@ -159,7 +159,7 @@
                     <!------------------------------------------------------------------------------------------ Sessão Turma Disciplina Gráfico ---------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------------------------------ Sessão Habilidades na Disciplina por Ano Cards ---------------------------------------------------------------------->
-                    @include('diretor/sessoes.habilidade')
+                    @include('proficiencia/diretor/sessoes.habilidade')
                     <!------------------------------------------------------------------------------------------ Sessão Habilidades na Disciplina por Ano Cards ---------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------------------------------ Sessão Habilidades na Disciplina por Ano Gráfico ---------------------------------------------------------------------->
@@ -193,7 +193,7 @@
                     <!------------------------------------------------------------------------------------------ Sessão Habilidades na Disciplina por Ano Gráfico ---------------------------------------------------------------------->
 
                     <!-- Início Sessão de Habilidade Selecionada Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                    @include('diretor/sessoes.habilidadeselecionada')
+                    @include('proficiencia/diretor/sessoes.habilidadeselecionada')
                     <!-- Início Sessão de Habilidade Selecionada Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------------------------------ Sessão Habilidades na Disciplina Gráfico ---------------------------------------------------------------------->

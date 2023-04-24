@@ -26,7 +26,7 @@
                     <div class="row justify-content-center">
                         <div class="card-deck" style="background-color: white;padding-top:16px;border: 1px solid white;">
 
-                            @include('professor/sessoes.turma');
+                            @include('proficiencia/professor/sessoes.turma');
 
                             <!------------------------------------ Card Gráfico Média Turma ------------------->
                             <div class="card text-center" style="box-shadow: 5px 5px 5px rgba(156,163,175);">
@@ -56,7 +56,7 @@
                     <!------------------------------------------------------------------------------------------ Sessão Média Turma ---------------------------------------------------------------------->
 
                     <!------------------------------------------------------------------- Sessão Tema Disciplina -------------------------------------------------------------------->
-                    @include('professor/sessoes.temadisciplina');
+                    @include('proficiencia/professor/sessoes.temadisciplina');
                     <!------------------------------------------------------------------- Sessão Tema Disciplina -------------------------------------------------------------------->
 
                     <!------------------------------------ Sessão Tema Disciplina Gráfico ------------------------------------------------------>
@@ -88,7 +88,7 @@
                     <!------------------------------------ Sessão Tema Disciplina Gráfico ------------------------------------------------------>
 
                     <!------------------------------------ Habilidades Disciplina ------------------->
-                    @include('professor/sessoes.habilidadesdisciplina');
+                    @include('proficiencia/professor/sessoes.habilidadesdisciplina');
                     <!------------------------------------ Habilidades Disciplina ------------------->
 
                     <!------------------------------------ Gráfico Habilidade Disciplina ------------------->
@@ -118,7 +118,7 @@
                     <!------------------------------------ Gráfico Habilidade Disciplina ------------------->
 
                     <!-- Início Sessão de Habilidades Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                    @include('professor/sessoes.habilidade');
+                    @include('proficiencia/professor/sessoes.habilidade');
                     <!-- Início Sessão de Habilidades Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
                     <!------------------------------------ Gráfico Habilidade Disciplina Ano ------------------->
@@ -150,7 +150,7 @@
                     <!------------------------------------ Gráfico Habilidade Disciplina Ano ------------------->
 
                     <!-- Início Sessão de Habilidade Selecionada Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                    @include('professor/sessoes.habilidadeselecionada');
+                    @include('proficiencia/professor/sessoes.habilidadeselecionada');
                     <!-- Fim Sessão de Habilidade Selecionada Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
                     <!------------------------------------ Habilidade Individual Gráfico ------------------->
@@ -193,11 +193,11 @@
                     @endphp
                     <!------------------------------------ Card Questões Objetivas ------------------->
                     @if($tipo_questao == 'Objetivas')
-                    @include('professor/sessoes.questoes');
+                    @include('proficiencia/professor/sessoes.questoes');
                     <!------------------------------------ Card Questões Objetivas ------------------->
                     @else
                     <!------------------------------------ Questões Diferenciadas ------------------->
-                    @include('professor/_parciais.questoesDiferenciadas')
+                    @include('proficiencia/professor/_parciais.questoesDiferenciadas')
                     <!------------------------------------ Questões Diferenciadas ------------------->
                     @endif
                     @endforeach
@@ -235,7 +235,7 @@
                     $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
                     @endphp
                     @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
-                    @include('professor/sessoes.aluno');
+                    @include('proficiencia/professor/sessoes.aluno');
                     @endif
                     <!-- Fim Sessão de Alunos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
