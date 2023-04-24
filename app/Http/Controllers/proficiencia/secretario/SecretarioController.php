@@ -143,7 +143,7 @@ class SecretarioController extends Controller
 
         $sessao_inicio = "municipio";
               
-        return view('secretario/secretario', compact(
+        return view('proficiencia/secretario/secretario', compact(
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina',
             'dados_base_disciplina','dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas',
             'disciplina_selecionada','legendas','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','escola_selecionada','anos','ano','dados_base_habilidade_disciplina_ano_grafico',
@@ -282,7 +282,7 @@ class SecretarioController extends Controller
 
         $sessao_inicio = "municipio";
 
-        return view('secretario/secretario', compact(
+        return view('proficiencia/secretario/secretario', compact(
 
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina',
             'dados_base_disciplina','dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas',
@@ -419,7 +419,7 @@ class SecretarioController extends Controller
 
         $sessao_inicio = "habilidadeanodisciplina";
 
-        return view('secretario/secretario', compact(
+        return view('proficiencia/secretario/secretario', compact(
             
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina','dados_base_disciplina',
             'dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas','disciplina_selecionada','legendas',
@@ -558,7 +558,7 @@ class SecretarioController extends Controller
 
         $sessao_inicio = "habilidadeselecionadadisciplina";
          
-        return view('secretario/secretario', compact(
+        return view('proficiencia/secretario/secretario', compact(
             'solRegistro','solAltCadastral','solAddTurma','sugestoes','turmas','escolas','municipios','destaques','municipio_selecionado','dados_base_grafico_disciplina',
             'dados_base_disciplina','dados_base_grafico_escola','dados_base_escola','dados_base_grafico_escola_disciplina','dados_base_escola_disciplina','disciplinas',
             'disciplina_selecionada','legendas','dados_base_anos_disciplina_grafico','dados_base_anos_disciplina','escola_selecionada','anos','ano',

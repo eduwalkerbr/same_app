@@ -1141,7 +1141,7 @@ class ProfessorController extends Controller
 
         $sessao_inicio = "turma";
 
-        return view('professor/professor', compact(
+        return view('proficiencia/professor/professor', compact(
 
             'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','dados_base_turma_grafico','dados_base_turma','turma_selecionada','destaques',
             'dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
@@ -1316,7 +1316,7 @@ class ProfessorController extends Controller
 
         $sessao_inicio = "turma";
 
-        return view('professor/professor', compact(
+        return view('proficiencia/professor/professor', compact(
             'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
             'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina','dados_base_questao_disciplina','escolas','disciplinas',
             'disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina','dados_base_aluno_disciplina','anos',
@@ -1495,7 +1495,7 @@ class ProfessorController extends Controller
 
         $sessao_inicio = "habilidadeanodisciplina";
 
-        return view('professor/professor', compact(
+        return view('proficiencia/professor/professor', compact(
             'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','turma_selecionada',
             'dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina',
@@ -1676,7 +1676,7 @@ class ProfessorController extends Controller
 
         $sessao_inicio = "habilidadeselecionadadisciplina";
 
-        return view('professor/professor', compact(
+        return view('proficiencia/professor/professor', compact(
             'criterios_questaoAno','solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','dados_comparacao_turma','ano',
             'turma_selecionada','dados_base_tema','dados_base_grafico','dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina',
             'dados_base_questao_disciplina','escolas','disciplinas','disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina',
@@ -1843,7 +1843,7 @@ class ProfessorController extends Controller
 
          $sessao_inicio = "turma";
  
-         return view('professor/professor', compact(
+         return view('proficiencia/professor/professor', compact(
              'solRegistro','solAltCadastral','solAddTurma','turmas','municipios','questoes','destaques','dados_base_turma_grafico','dados_base_turma','turma_selecionada','dados_base_tema','dados_base_grafico',
              'dados_base_habilidade_disciplina_grafico','dados_base_habilidades_disciplina','dados_base_questao_grafico_disciplina','dados_base_questao_disciplina','escolas','disciplinas',
              'disciplina_selecionada','escola_selecionada','municipio_selecionado','legendas','dados_base_aluno_grafico_disciplina','dados_base_aluno_disciplina','anos',

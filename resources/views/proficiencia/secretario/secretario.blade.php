@@ -28,7 +28,7 @@
                         <div class="card-deck" style="background-color: white;padding-top:16px;border: 1px solid white;">
 
                             <!---- Card Disciplinas Município ---->
-                            @include('secretario/sessoes.disciplina')
+                            @include('proficiencia/secretario/sessoes.disciplina')
                             <!---- Card Disciplinas Município ---->
 
                             <!------------------------------------ Sessão Disciplina Município Gráfico ------------------->
@@ -69,7 +69,7 @@
                     <!------------------------------------ Sessão Disciplina Município ------------------->
   
                     <!------------------------------------ Sessão Escolas Município ------------------->
-                    @include('secretario/sessoes.escola')
+                    @include('proficiencia/secretario/sessoes.escola')
                     <!------------------------------------ Sessão Escolas Município ------------------->
 
                     <!------------------------------------ Sessão Escola Município Gráfico que Exibe quando tem mais de um Item ------------------->
@@ -108,7 +108,7 @@
                     <!------------------------------------ Sessão Escola Município Gráfico que Exibe quando tem mais de um Item ------------------->
 
                     <!------------------------------------ Sessão Escolas Disciplina Município ------------------->
-                    @include('secretario/sessoes.escoladisciplina')
+                    @include('proficiencia/secretario/sessoes.escoladisciplina')
                     <!------------------------------------ Sessão Escolas Disciplina Município ------------------->
 
                     <!------------------------------------ Sessão Escola Disciplina Município Gráfico, exibe quando tem mais de um Item ------------------->
@@ -144,7 +144,7 @@
                     <!------------------------------------ Sessão Escola Disciplina Município Gráfico, exibe quando tem mais de um Item ------------------->
 
                     <!------------------------------------ Sessão Ano Curricular Disciplina ------------------->
-                    @include('secretario/sessoes.anodisciplina')
+                    @include('proficiencia/secretario/sessoes.anodisciplina')
                     <!------------------------------------ Sessão Ano Curricular Disciplina ------------------->
 
                     <!------------------------------------ Sessão Ano Curricular Disciplina Gráfico ------------------->
@@ -178,7 +178,7 @@
                     <!------------------------------------ Sessão Ano Curricular Disciplina Gráfico ------------------->
 
                     <!-- Início Sessão de Habilidades Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                    @include('secretario/sessoes.habilidade')
+                    @include('proficiencia/secretario/sessoes.habilidade')
                     <!------------------------------------ Fim Sessão Habilidades Disciplina Anos ----------------------------------------------------------------------------->
 
                     <!------------------------------------ Sessão Habilidades Disciplina Anos Gráfico ------------------->
@@ -214,7 +214,7 @@
                     <!-- Fim Sessão de Habilidades Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
                     <!-- Início Sessão de Habilidade Selecionada Anos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                    @include('secretario/sessoes.habilidadeselecionada')
+                    @include('proficiencia/secretario/sessoes.habilidadeselecionada')
                     <!-- Fim Sessão de Habilidade Selecionada Anos ----------------------------------------------------------->
 
                     <!------------------------------------ Sessão Habilidade Individual Disciplina Gráfico ------------------->
