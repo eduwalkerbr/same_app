@@ -320,6 +320,30 @@ class MethodsGerais extends Controller
     }
 
     /**
+     * Método que lista os Critérios das Questões utilizando Cache
+     */
+    public static function getCriteriosQuestaoAno($ano)
+    {
+        $ano = intval($ano);
+        //Critérios das Disciplinas de Português utilizam critérios diferentes por ano
+        //Busca em Cache pelo Ano informado
+        if (Cache::has('criterio_ano' . strval($ano))) {
+            $criterios_questao = Cache::get('criterio_ano' . strval($ano));
+        } else {
+            //Busca do BD, pelo Ano informado
+            $criterios_questao = CriterioQuestao::where(['ano' => $ano])->get();
+            //Adiciona em Cache utilizando a constante de Horas Cache
+            Cache::put(
+                'criterio_ano' . strval($ano),
+                $criterios_questao,
+                now()->addHours(config('constants.options.horas_cache'))
+            );
+        }
+        
+        return $criterios_questao;
+    }
+
+    /**
      * Método que óbtem os dados da Habilidade Selecionada utilizando Cache
      */
     public static function getHabilidadeSelecionada($id)
