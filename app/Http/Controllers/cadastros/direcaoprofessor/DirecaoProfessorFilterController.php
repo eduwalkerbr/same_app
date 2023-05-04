@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Cache;
 
 class DirecaoProfessorFilterController extends Controller
 {
+    private $objUser;
+    private $objAnoSame;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -20,8 +23,6 @@ class DirecaoProfessorFilterController extends Controller
     {   
         $this->objUser = new User();
         $this->objAnoSame = new AnoSame();
-        $this->objEscola = new Escola();
-        $this->objTurma = new Turma();
     }
     /**
      * Método que monta a listagem de Município pelo filtro
@@ -39,7 +40,6 @@ class DirecaoProfessorFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('id_previlegio','id_escola','id_turma','SAME','users_id');
         $query->leftjoin('escolas', ['direcao_professors.id_escola' => 'escolas.id','direcao_professors.SAME' => 'escolas.SAME'])
               ->leftjoin('turmas', ['direcao_professors.id_turma' => 'turmas.id','direcao_professors.SAME' => 'turmas.SAME']);
         $query->select('direcao_professors.id', 'direcao_professors.id_previlegio','direcao_professors.id_escola','direcao_professors.id_turma',
@@ -55,10 +55,7 @@ class DirecaoProfessorFilterController extends Controller
 
         $direcao_professores = $query->orderBy('direcao_professors.updated_at', 'desc')->paginate(7);
         $anossame = $this->objAnoSame->orderBy('descricao','asc')->get();
-        //$escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
-       // $turmas = $this->objTurma->where(['status' => 'Ativo'])->get();
         $usuarios = $this->objUser->orderBy('name','asc')->get();
-
         return view('cadastro/direcao_professores/list_direcao_professor', compact('direcao_professores','anossame','usuarios'));    
     }
 

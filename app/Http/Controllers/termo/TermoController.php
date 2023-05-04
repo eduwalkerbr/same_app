@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\termo;
 
 use App\Http\Requests\TermoRequest;
 use App\Models\Termo;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class TermoController extends Controller
 {
+    private $objTermo;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -45,7 +47,6 @@ class TermoController extends Controller
      */
     public function create()
     {
-
         return view('cadastro/termo/create_termo');
     }
 
@@ -94,7 +95,6 @@ class TermoController extends Controller
     public function edit($id)
     {
         $termo = $this->objTermo->find($id);
-
         return view('cadastro/termo/create_termo', compact('termo'));
     }
 

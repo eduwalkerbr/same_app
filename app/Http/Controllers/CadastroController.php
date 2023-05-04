@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\User;
 
 class CadastroController extends Controller
 {
+    private $objUser;
+
     /**
      * Create a new controller instance.
      *

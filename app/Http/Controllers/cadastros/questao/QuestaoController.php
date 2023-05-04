@@ -10,12 +10,19 @@ use App\Models\Prova_gabarito;
 use App\Models\Questao;
 use App\Models\Tema;
 use App\Models\TipoQuestao;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class QuestaoController extends Controller
 {
+    private $objDisciplina;
+    private $objTema;
+    private $objHabilidade;
+    private $objProvaGabarito;
+    private $objQuestao;
+    private $objTipoQuestao;
+    private $objAnoSame;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -115,11 +122,17 @@ class QuestaoController extends Controller
             'SAME' => $request->SAME
         ];
 
+        //Carrega os dados da Disciplina
+        $disciplina = $this->objDisciplina->find($request->disciplinas_id);
+
+        //Verifica se já existe Questão registrada pelo Número, Modelo, Ano, Disciplina, Prova Gabarito e Same
         $questao = $this->objQuestao->where([['num_questao', '=', $request->num_questao],['modelo', '=', $request->modelo],['ano', '=', $request->ano],['disciplinas_id', '=', $request->disciplinas_id],['prova_gabaritos_id', '=', $request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
+        //Caso exista já questão
         if ($questao && sizeof($questao) > 0) {
-            $disciplina = $this->objDisciplina->find($request->disciplinas_id);
+            //Carrega os dados da Prova Gabarito pelo id e Ano SAME
             $prova_gabaritos = $this->objProvaGabarito->where([['id','=',$request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
             $prova_gabarito = $prova_gabaritos[0];
+            //Exibe a página de listagem de Questões, com mensagem informativa ao usuário
             return redirect()->route('lista_questao')->with('status', 'A Questão Número '.$request->num_questao.' da Prova '.$prova_gabarito->DESCR_PROVA.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
         }
 
@@ -155,17 +168,21 @@ class QuestaoController extends Controller
      */
     public function edit($id, $SAME)
     {
+        //Obtém dados para popular filtros
         $provas_gabaritos = $this->objProvaGabarito->where(['status' => 1])->get();
         $disciplinas = $this->objDisciplina->all();
         $temas = $this->objTema->all();
         $habilidades = $this->objHabilidade->all();
         $tipoquestaos = $this->objTipoQuestao->all();
+
+        //Obtém as questões pelo id e Ano SAME, carregando informações de prova gabarito
         $questaos = $this->objQuestao->join('prova_gabaritos', ['questaos.prova_gabaritos_id' => 'prova_gabaritos.id'])
                                      ->select('questaos.*', 'prova_gabaritos.id as id_prova_gabarito','prova_gabaritos.DESCR_PROVA as nome_prova_gabarito')
                                      ->where(['questaos.id' => $id])->where(['questaos.SAME' => $SAME])->get();
         $questao = $questaos[0];
         $anosame = $this->objAnoSame->where(['descricao' => $questao->SAME])->get();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao', 'asc')->get();
+        
         return view('cadastro/questao/create_questao', compact('questao', 'provas_gabaritos', 'disciplinas', 'temas', 'habilidades', 'tipoquestaos','anosame','anosativos'));
     }
 
@@ -194,12 +211,16 @@ class QuestaoController extends Controller
             'SAME' => $request->SAME
         ];
 
+        //Carrega dados da Disciplina
         $disciplina = $this->objDisciplina->find($request->disciplinas_id);
 
+        //Verifica se já existe Questão registrada pelo Número, Modelo, Ano, Disciplina, Prova Gabarito e Same, que tenha id deiferente do que se está alterando
         $questao = $this->objQuestao->where([['num_questao', '=', $request->num_questao],['modelo', '=', $request->modelo],['ano', '=', $request->ano],['disciplinas_id', '=', $request->disciplinas_id],['prova_gabaritos_id', '=', $request->prova_gabaritos_id],['SAME','=',$request->SAME],['id','<>',$id]])->get();
         if ($questao && sizeof($questao) > 0) {
+            //Carrega os dados da Prova Gabarito
             $prova_gabaritos = $this->objProvaGabarito->where([['id','=',$request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
             $prova_gabarito = $prova_gabaritos[0];
+            //Exibe página de listagem de Questões, com mensagem adicional de aviso ao usuário
             return redirect()->route('lista_questao')->with('status', 'A Questão Número '.$request->num_questao.' da Prova '.$prova_gabarito->DESCR_PROVA.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
         }
 
@@ -209,7 +230,10 @@ class QuestaoController extends Controller
             $data['imagem'] = $imagePath;
         }
 
+        //Atualiza a Questão em BD pelo id e Ano SAME
         $this->objQuestao->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data);
+
+        //Exibe página de Listagem das Questões
         return redirect()->route('lista_questao');
     }
 

@@ -5,13 +5,13 @@ namespace App\Http\Controllers\cadastros\municipio;
 use App\Http\Requests\MunicipioRequest;
 use App\Models\AnoSame;
 use App\Models\Municipio;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class MunicipioController extends Controller
 {
     private $objMunicipio;
+    private $objAnoSame;
 
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados

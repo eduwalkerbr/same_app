@@ -14,6 +14,7 @@ class EscolaController extends Controller
 {
     private $objEscola;
     private $objMunicipio;
+    private $objAnoSame;
 
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
@@ -42,7 +43,6 @@ class EscolaController extends Controller
      */
     public function exibirLista()
     {
-        //$municipios = $this->objMunicipio->all();
         $anossame = $this->objAnoSame->orderBy('descricao','asc')->get();
         if(Cache::has('Filtros_Consulta_Escola_'.strval(auth()->user()->id))){
             $query = Escola::query();

@@ -4,11 +4,12 @@ namespace App\Http\Controllers\cadastros\legenda;
 
 use App\Http\Requests\LegendaRequest;
 use App\Models\Legenda;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class LegendaController extends Controller
 {
+    private $objLegenda;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -98,7 +99,6 @@ class LegendaController extends Controller
     public function edit($id)
     {
         $legenda = $this->objLegenda->find($id);
-
         return view('cadastro/legenda/create_legenda', compact('legenda'));
     }
 

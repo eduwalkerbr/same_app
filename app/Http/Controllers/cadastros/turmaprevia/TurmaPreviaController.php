@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 class TurmaPreviaController extends Controller
 {
     private $objEscola;
-    private $objMunicipio;
+    private $objTurmaPrevia;
     private $objTurma;
 
     /**

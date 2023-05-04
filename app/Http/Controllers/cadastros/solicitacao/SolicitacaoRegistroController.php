@@ -12,10 +12,18 @@ use App\Models\Turma;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\AnoSame;
 
 class SolicitacaoRegistroController extends Controller
 {
+    private $objSolicitacao;
+    private $objUser;
+    private $objFuncao;
+    private $objMunicipio;
+    private $objEscola;
+    private $objTurma;
+    private $objPrevilegio;
+    private $objDirecaoProfessor;
+
     /**
      * Método construtor que inicializa as classes e seus objetos que serão utilizadas para comunicação com o banco de dados
      */
@@ -29,7 +37,6 @@ class SolicitacaoRegistroController extends Controller
         $this->objTurma = new Turma();
         $this->objPrevilegio = new Previlegio();
         $this->objDirecaoProfessor = new DirecaoProfessor();
-        $this->objAnoSame = new AnoSame();
     }
     /**
      * Display a listing of the resource.
@@ -59,8 +66,7 @@ class SolicitacaoRegistroController extends Controller
      */
     public function store(Request $request)
     {
-        //Obtem o Ano Same Atual
-        //$anosame = $this->objAnoSame->where(['descricao' => strval(date("Y"))])->get();
+        //Obtém os dados do Município pelo id e Ano SAME
         $municipios = $this->objMunicipio->where(['id' => $request->id_municipio])->where(['SAME' => $request->SAME])->get();
         $municipio = $municipios[0];
 
@@ -77,7 +83,11 @@ class SolicitacaoRegistroController extends Controller
         //Verifica se já existe um registro igual para o mesmo usuário, ocultando a solicitação e informando o usuário
         $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $request->municipios_id], ['SAME', '=', $request->SAME]])->get();
         if ($previlegio && sizeof($previlegio) > 0) {
+
+            //Carrega os dados do Usuário
             $usuario = $this->objUser->find($request->users_id);
+
+            //Carrega os dados da Função
             $funcao = $this->objFuncao->find($request->funcaos_id);
 
             //Altera o status para a solicitação não ser mais exibida
@@ -87,13 +97,16 @@ class SolicitacaoRegistroController extends Controller
             ];
             $this->objSolicitacao->where(['id' => $request->id_solicitacao])->update($solicitacao);
 
+            //Exibe página inicial com mensagem informativa ao Usuário
             return redirect()->route('home.index')->with('status', 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.' no Ano de '.$request->SAME.'!');
         }
 
+        //Registra o novo Previlégio
         $cadPrevilegio = $this->objPrevilegio->create($dataPrevilegio);
 
         //Após, verifica se o mesmo tem escola selecionada, pois nestes casos se encaixa em diretor ou professor
         if ($request->id_escola != null) {
+
             //Adiciona Escola e Turma da Solicitação realizada pelo usuário
             $dataDirecaoProfessor = [
                 'id_previlegio' => $cadPrevilegio->id,
@@ -102,6 +115,7 @@ class SolicitacaoRegistroController extends Controller
                 'SAME' => $municipio->SAME
             ];
 
+            //Busca os dados da DirecaoProfessor pelo Previlegio, Escola, Turma e Ano SAME
             $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $cadPrevilegio->id],['id_escola', '=', $request->id_escola],['id_turma','=', $request->id_turma],['SAME','=',$municipio->SAME]])->get();    
             if (!$direcao_professor || sizeof($direcao_professor) <= 0) {
                 $cadDirecaoProfessor = $this->objDirecaoProfessor->create($dataDirecaoProfessor);

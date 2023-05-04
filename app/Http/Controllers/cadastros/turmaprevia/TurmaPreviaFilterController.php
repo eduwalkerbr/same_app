@@ -10,6 +10,10 @@ use App\Http\Controllers\Controller;
 
 class TurmaPreviaFilterController extends Controller
 {
+    private $objEscola;
+    private $objTurma;
+
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -17,7 +21,6 @@ class TurmaPreviaFilterController extends Controller
     {
         $this->objEscola = new Escola();
         $this->objTurma = new Turma();
-        $this->objTurmaPrevia = new TurmaPrevia();
     }
     /**
      * Método que monta a listagem de Turma P´revia pelo filtro

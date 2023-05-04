@@ -1,13 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Mail\MensagemTesteMail;
 use App\Http\Controllers\CadastroController;
 use App\Http\Controllers\DeslogarController;
-use App\Http\Controllers\RegistroController;
+use App\Http\Controllers\registro\RegistroController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserFilter;
+use App\Http\Controllers\user\UserController;
+use App\Http\Controllers\user\UserFilter;
 use App\Http\Controllers\cadastros\tiposolicitacao\TipoSolicitacaoController;
 use App\Http\Controllers\cadastros\municipio\MunicipioController;
 use App\Http\Controllers\cadastros\municipio\MunicipioFilterController;
@@ -42,12 +41,12 @@ use App\Http\Controllers\proficiencia\secretario\SecretarioController;
 use App\Http\Controllers\comparativo\secretario\SecretarioComparativoController;
 use App\Http\Controllers\comparativo\diretor\DiretorComparativoController;
 use App\Http\Controllers\cadastros\legenda\LegendaController;
-use App\Http\Controllers\SobreController;
-use App\Http\Controllers\AlterarRegistroController;
+use App\Http\Controllers\sobre\SobreController;
+use App\Http\Controllers\registro\AlterarRegistroController;
 use App\Http\Controllers\cadastros\tipoquestao\TipoQuestaoController;
 use App\Http\Controllers\cadastros\criterioquestao\CriterioQuestaoController;
 use App\Http\Controllers\cadastros\criterioquestao\CriterioQuestaoFilterController;
-use App\Http\Controllers\TermoController;
+use App\Http\Controllers\termo\TermoController;
 use App\Http\Controllers\cadastros\turmaprevia\TurmaPreviaController;
 use App\Http\Controllers\cadastros\turmaprevia\TurmaPreviaFilterController;
 use App\Http\Controllers\cadastros\anosame\AnoSAMEController;
@@ -123,8 +122,6 @@ Route::post('/user/store', [UserController::class, 'store'])->name('user.store')
 Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
 Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
 Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.delete');
-
-
 Route::any('/user/filtrar', [UserFilter::class, 'filtrar'])->name('user.filtrar');
 
 //CRUD Tipo Solicitação
@@ -143,7 +140,6 @@ Route::put('/municipio/{id}', [MunicipioController::class, 'update'])->name('mun
 Route::get('/municipio/{id}/{anosame}/inativar', [MunicipioController::class, 'inativar'])->name('municipio.inativar');
 Route::get('/municipio/{id}/{anosame}/ativar', [MunicipioController::class, 'ativar'])->name('municipio.ativar');
 Route::any('/municipio/filtrar', [MunicipioFilterController::class, 'filtrar'])->name('municipio.filtrar');
-
 
 //CRUD Escola
 Route::get('/escola/create', [EscolaController::class, 'create'])->name('cadastro_escola');
@@ -205,7 +201,6 @@ Route::post('/aluno/store', [AlunoController::class, 'store'])->name('aluno.stor
 Route::get('/aluno/{id}/{anosame}/edit', [AlunoController::class, 'edit'])->name('aluno.edit');
 Route::put('/aluno/{id}', [AlunoController::class, 'update'])->name('aluno.update');
 Route::any('/aluno/filtrar', [AlunoFilterController::class, 'filtrar'])->name('aluno.filtrar');
-
 Route::get('/aluno/get_by_escola', [AlunoController::class, 'get_by_escola'])->name('aluno.get_by_escola');
 Route::get('/aluno/get_by_municipio', [AlunoController::class, 'get_by_municipio'])->name('aluno.get_by_municipio');
 Route::get('/aluno/get_by_same_escolav2', [AlunoController::class, 'get_by_same_escolav2'])->name('aluno.get_by_same_escolav2');

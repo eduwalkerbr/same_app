@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Cache;
 
 class ProvaGabaritoFilterController extends Controller
 {
+    private $objAnoSame;
+    private $objDisciplina;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -35,7 +38,6 @@ class ProvaGabaritoFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_ProvaGabarito_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('DESCR_PROVA','ano','disciplinas_id','SAME');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where($nome,$valor);

@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Cache;
 
 class CriterioQuestaoFilterController extends Controller
 {
+    private $objDisciplina;
+    private $objTipoQuestao;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */

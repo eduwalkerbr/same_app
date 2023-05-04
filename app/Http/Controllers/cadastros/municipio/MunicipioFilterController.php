@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Cache;
 
 class MunicipioFilterController extends Controller
 {
+    private $objAnoSame;
+    private $objMunicipio;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -34,7 +37,6 @@ class MunicipioFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_Municipio_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('nome','SAME');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where('municipios.'.$nome,$valor);

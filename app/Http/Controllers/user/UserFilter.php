@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 
 class UserFilter extends Controller
 {
-    private $objUser;
 
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
     public function __construct()
     {
-        $this->objUser = new User();
     }
     /**
      * Método que monta a listagem de Usuários pelo filtro
@@ -34,7 +32,6 @@ class UserFilter extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_User_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('name','email');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where($nome,$valor);

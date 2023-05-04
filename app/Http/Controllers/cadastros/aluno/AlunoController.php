@@ -15,9 +15,8 @@ use App\Models\AnoSame;
 class AlunoController extends Controller
 {
     private $objAluno;
-    private $objTurma;
-    private $objEscola;
     private $objMunicipio;
+    private $objAnoSame;
 
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
@@ -25,8 +24,6 @@ class AlunoController extends Controller
     public function __construct()
     {
         $this->objAluno = new Aluno();
-        $this->objTurma = new Turma();
-        $this->objEscola = new Escola();
         $this->objMunicipio = new Municipio();
         $this->objAnoSame = new AnoSame();
     }
@@ -49,8 +46,6 @@ class AlunoController extends Controller
      */
     public function exibirLista()
     {
-        //$escolas = $this->objEscola->all();
-        //$turmas = $this->objTurma->all();
         if(Cache::has('Filtros_Consulta_Aluno_'.strval(auth()->user()->id))){
             $query = Aluno::query();
             $parametros = Cache::get('Filtros_Consulta_Aluno_'.strval(auth()->user()->id));

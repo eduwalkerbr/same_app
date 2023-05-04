@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\cadastros\turma;
 
 use App\Models\AnoSame;
-use App\Models\Escola;
 use App\Models\Turma;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -11,13 +10,14 @@ use Illuminate\Support\Facades\Cache;
 
 class TurmaFilterController extends Controller
 {
+    private $objAnoSame;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
     public function __construct()
     {
         $this->objAnoSame = new AnoSame();
-        $this->objEscola = new Escola();
     }
     /**
      * Método que monta a listagem de Turma pelo filtro
@@ -46,7 +46,6 @@ class TurmaFilterController extends Controller
                         ->join('escolas', ['turmas.escolas_id' => 'escolas.id', 'turmas.SAME' => 'escolas.SAME']) 
                         ->select('turmas.*', 'municipios.nome as nome_municipio','escolas.nome as nome_escola')
                         ->orderBy('updated_at', 'desc')->paginate(7);
-        //$escolas = $this->objEscola->all();
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
 
         return view('cadastro/turma/list_turma', compact('turmas','anossame'));    

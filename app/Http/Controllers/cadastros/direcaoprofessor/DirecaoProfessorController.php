@@ -15,6 +15,13 @@ use Illuminate\Support\Facades\Cache;
 
 class DirecaoProfessorController extends Controller
 {
+    private $objUser;
+    private $objPrevilegio;
+    private $objEscola;
+    private $objTurma;
+    private $objDirecaoProfessor;
+    private $objAnoSame;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -69,10 +76,7 @@ class DirecaoProfessorController extends Controller
         }
         
         $anossame = $this->objAnoSame->orderBy('descricao','asc')->get();
-        //$escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
-        //$turmas = $this->objTurma->where(['status' => 'Ativo'])->get();
         $usuarios = $this->objUser->orderBy('name','asc')->get();
-
         return view('cadastro/direcao_professores/list_direcao_professor', compact('direcao_professores','anossame','usuarios'));
     }
 
@@ -143,7 +147,6 @@ class DirecaoProfessorController extends Controller
     public function edit($id)
     {
         $escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
-        //$turmas = $this->objTurma->where(['status' => 'Ativo'])->get();
         $turmas = null;
         $previlegios = $this->objPrevilegio->where(['status' => 1])->get();
 
@@ -153,7 +156,6 @@ class DirecaoProfessorController extends Controller
                 ->select('direcao_professors.*','turmas.id as id_turma','turmas.DESCR_TURMA as nome_turma','turmas.SAME as SAME_turma','escolas.id as id_escola', 
                 'escolas.nome as nome_escola','escolas.SAME as SAME_escola')->where(['direcao_professors.id' => $id])->get();
         $direcao_professor = $direcao_professors[0];
-        //$direcao_professor = $this->objDirecaoProfessor->find($id);
         $anosame = $this->objAnoSame->where(['descricao' => $direcao_professor->SAME])->orderBy('descricao','asc')->get();
 
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao','asc')->get();

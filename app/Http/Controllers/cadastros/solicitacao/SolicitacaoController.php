@@ -3,11 +3,9 @@
 namespace App\Http\Controllers\cadastros\solicitacao;
 
 use App\Http\Requests\SolicitacaoRequest;
-use App\Models\DirecaoProfessor;
 use App\Models\Escola;
 use App\Models\Funcao;
 use App\Models\Municipio;
-use App\Models\Previlegio;
 use App\Models\Solicitacao;
 use App\Models\Turma;
 use App\Models\TurmaPrevia;
@@ -19,6 +17,11 @@ class SolicitacaoController extends Controller
 {
     private $objSolicitacao;
     private $objUser;
+    private $objFuncao;
+    private $objMunicipio;
+    private $objEscola;
+    private $objTurma;
+    private $objTurmaPrevia;
 
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
@@ -31,8 +34,6 @@ class SolicitacaoController extends Controller
         $this->objMunicipio = new Municipio();
         $this->objEscola = new Escola();
         $this->objTurma = new Turma();
-        $this->objPrevilegio = new Previlegio();
-        $this->objDirecaoProfessor = new DirecaoProfessor();
         $this->objTurmaPrevia = new TurmaPrevia();
     }
 
@@ -60,7 +61,6 @@ class SolicitacaoController extends Controller
 
         $solicitacoes = $this->objSolicitacao->where(['id_tipo_solicitacao' => 1])->where(['aberto' => '1'])->paginate(2);
 
-
         return view('cadastro/solicitacao/list_solicitacoes', compact('solicitacoes', 'solRegistro', 'solAltCadastral', 'solAddTurma'));
     }
 
@@ -87,40 +87,63 @@ class SolicitacaoController extends Controller
      */
     public function show($id)
     {
+        //Obtém a Listagem das Solicitações
         $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
         $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
         $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
 
         //Exibe solicitação de registro realizada
         $solicitacao = $this->objSolicitacao->find($id);
+
+        //Caso a solicitação seja de Registro
         if ($solicitacao->id_tipo_solicitacao == 1) {
+            //Carrega a Função
             $funcao = $this->objFuncao->find($solicitacao->id_funcao);
+
+            //Carrega os dados do Município pelo id e SAME
             $municipio = null;
             $municipios = $this->objMunicipio->where(['id' => $solicitacao->id_municipio])->where(['SAME' => $solicitacao->SAME])->get();
             if($municipios){
                 $municipio = $municipios[0];
             }
 
+            //Carrega os dados da Escola pelo id e SAME
             $escola = null;
             $escolas = $this->objEscola->where(['id' => $solicitacao->id_escola])->where(['SAME' => $solicitacao->SAME])->get();
             if($escolas && sizeof($escolas) > 0){
                 $escola = $escolas[0];
             }
-            $turmas = null;
-            $turmas = $this->objTurma->where(['escolas_id' => $solicitacao->id_escola])->where(['SAME' => $solicitacao->SAME])->get();
 
+            //$turmas = null;
+            //$turmas = $this->objTurma->where(['escolas_id' => $solicitacao->id_escola])->where(['SAME' => $solicitacao->SAME])->get();
+            //Carrega os dados da Turma pelo id
             $turma = $this->objTurma->find($solicitacao->id_turma);
+
+            //Obtém os dados de Usuário pelo E-mail
             $usuarios = $this->objUser->where(['email' => $solicitacao->email])->get();
+
+            //Obtém as turmas prévias pelo E-mail, retirando a turma presente na Solicitação
             $turmasprevias = $this->objTurmaPrevia->where(['email' => $solicitacao->email])->whereNotIn('id_turma', [$solicitacao->id_turma])->get();
+
+            //Exibe página para autorização de Solicitação de Registro
             return view('cadastro/solicitacao/autoriza_registro', compact('solicitacao', 'funcao', 'municipio', 'escola', 'turma', 'usuarios', 'solRegistro', 'solAltCadastral', 'solAddTurma', 
             'turmasprevias','turmas'));
         }
+
         //Exibe a solicitação de turma realizada
         if ($solicitacao->id_tipo_solicitacao == 3) {
+
+            //Carrega os dados da Turma
             $turma = $this->objTurma->find($solicitacao->id_turma);
+
+            //Obtém a Escola pelo id e Ano SAME
             $escolass = $this->objEscola->where([['id','=',$turma->escolas_id],['SAME','=',$turma->SAME]])->get();
             $escolas = $escolass[0];
+
+            //Obtém dados do usuário pelo E-mail
             $usuarios = $this->objUser->where(['email' => $solicitacao->email])->get();
+
+            //Exibe página para autorização de Solicitação de Turma
             return view('cadastro/solicitacao/autoriza_solicitacao_turma', compact('solicitacao', 'escolas', 'turma', 'usuarios', 'solRegistro', 'solAltCadastral', 'solAddTurma'));
         }
     }
@@ -200,7 +223,6 @@ class SolicitacaoController extends Controller
      */
     public function get_by_escola(Request $request)
     {
-        dump($request);
         if (!$request->id_escola) {
             $html = '<option value="">' . trans('') . '</option>';
         } else {
@@ -220,7 +242,6 @@ class SolicitacaoController extends Controller
      */
     public function get_by_municipio(Request $request)
     {
-        dump($request);
         if (!$request->municipio_id) {
             $html = '<option value="">' . trans('') . '</option>';
         } else {

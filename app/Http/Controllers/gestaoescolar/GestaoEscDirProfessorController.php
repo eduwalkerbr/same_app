@@ -49,6 +49,7 @@ class GestaoEscDirProfessorController extends Controller
      */
     public function filtrar(Request $request)
     {
+        //Carrega dados do Previlégio
         $previlegio = $this->objPrevilegio->where(['users_id' => auth()->user()->id])->get();
         $direcao_professor = $this->objDirecaoProfessor->where(['id_previlegio' => $previlegio[0]->id])->get();
         if (auth()->user()->perfil == 'Administrador') {

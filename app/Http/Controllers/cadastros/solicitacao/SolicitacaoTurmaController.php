@@ -11,10 +11,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\AnoSame;
-use SebastianBergmann\Environment\Console;
 
 class SolicitacaoTurmaController extends Controller
 {
+    private $objTurma;
+    private $objSolicitacao;
+    private $objDirecaoProfessor;
+    private $objPrevilegio;
+    private $objEscola;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -24,7 +29,6 @@ class SolicitacaoTurmaController extends Controller
         $this->objSolicitacao = new Solicitacao();
         $this->objDirecaoProfessor = new DirecaoProfessor();
         $this->objPrevilegio = new Previlegio();
-        $this->objAnoSame = new AnoSame();
         $this->objEscola = new Escola();
     }
 
@@ -111,14 +115,14 @@ class SolicitacaoTurmaController extends Controller
      */
     public function store(Request $request)
     {
-        //Obtem o Ano Same Atual
-        //$anosame = $this->objAnoSame->where(['descricao' => strval(date("Y"))])->get();
-
+        //Obtém dados da Escola pelo id e Ano SAME
         $escolas = $this->objEscola->where(['id' => $request->id_escola])->where(['SAME' => $request->SAME])->get();
         $escola = $escolas[0];
 
         //Realiza o registro das escola e turma aprovada pelo gestor
         $previlegio = $this->objPrevilegio->where(['users_id' => $request->id_user])->get();
+
+        //Caso na requisição tenha escola
         if ($request->id_escola != null) {
             $dataDirecaoProfessor = [
                 'id_previlegio' => $previlegio[0]->id,
@@ -127,7 +131,9 @@ class SolicitacaoTurmaController extends Controller
                 'SAME' => $escola->SAME
             ];
 
+            //Verifica a existência de DirecaoProfessor pelo Previlegio, Escola, Turma e Ano SAME
             $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $previlegio[0]->id],['id_escola', '=', $request->id_escola],['id_turma','=', $request->id_turma],['SAME','=',$escola->SAME]])->get();    
+            //Caso já tenha direção professor registrada
             if ($direcao_professor && sizeof($direcao_professor) > 0) {
 
                 //Altera o registro da Solicitação para fechado, de forma a não ser mais exibido para o gestor
@@ -138,9 +144,11 @@ class SolicitacaoTurmaController extends Controller
 
                 $this->objSolicitacao->where(['id' => $request->id_solicitacao])->update($solicitacao);
 
+                //Exibe a página Home com mensagem ao Usuário
                 return redirect()->route('home.index')->with('status', 'A Turma solicitada já encontra-se Registrada para o Usuário!');
             }
 
+            //Caso não tenha turma já cadastrada, faz o registro em BD
             $cadDirecaoProfessor = $this->objDirecaoProfessor->create($dataDirecaoProfessor);
         }
 
@@ -151,6 +159,8 @@ class SolicitacaoTurmaController extends Controller
         ];
 
         $this->objSolicitacao->where(['id' => $request->id_solicitacao])->update($solicitacao);
+
+        //Exibe a página Inicial
         return redirect()->route('home.index');
     }
 
@@ -163,15 +173,22 @@ class SolicitacaoTurmaController extends Controller
      */
     public function show($id)
     {
+        //Carrega as Solicitações
         $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
         $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
         $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
 
+        //Carrega os dados da Solicitação selecionada
         $solicitacao = $this->objSolicitacao->find($id);
+        //Caso seja Solicitação de Turma
         if ($solicitacao->id_tipo_solicitacao == 3) {
+            //Carrega os dados da Escola pelo id e Ano SAME
             $escolas = $this->objEscola->where(['id' => $solicitacao->id_escola])->where(['SAME' => $solicitacao->SAME])->get();
             $escola = $escolas[0];
+            //Carrega os dados da Turma
             $turma = $this->objTurma->find($solicitacao->id_turma);
+
+            //Exibe página para autorização de Solicitação de Turma
             return view('cadastro/solicitacao/autoriza_solicitacao_turma', compact('solicitacao', 'escola', 'turma', 'solRegistro', 'solAltCadastral', 'solAddTurma'));
         }
     }
