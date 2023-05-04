@@ -15,6 +15,14 @@ use Illuminate\Support\Facades\Cache;
 
 class QuestaoFilterController extends Controller
 {
+    private $objAnoSame;
+    private $objDisciplina;
+    private $objTema;
+    private $objHabilidade;
+    private $objTipoQuestao;
+    private $objProvaGabarito;
+
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -43,7 +51,6 @@ class QuestaoFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_Questao_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('desc','num_questao','modelo','tipo','disciplinas_id','temas_id','habilidades_id','prova_gabaritos_id','ano','SAME');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where('questaos.'.$nome,$valor);
@@ -54,12 +61,14 @@ class QuestaoFilterController extends Controller
                           ->join('temas', ['questaos.temas_id' => 'temas.id'])
                           ->select('questaos.*', 'habilidades.desc as nome_habilidade','temas.desc as nome_tema')
                           ->orderBy('num_questao', 'asc')->paginate(7);
+                          
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
         $disciplinas = $this->objDisciplina->all();
         $temas = $this->objTema->all();
         $habilidades = $this->objHabilidade->all();
         $tipoquestaos = $this->objTipoQuestao->all();
         $provas_gabaritos = $this->objProvaGabarito->where(['status' => 1])->get();
+
         return view('cadastro/questao/list_questao', compact('questaos','anossame','disciplinas','temas','habilidades','tipoquestaos','provas_gabaritos'));    
     }
 }

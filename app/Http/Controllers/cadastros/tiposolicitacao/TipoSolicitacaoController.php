@@ -5,7 +5,6 @@ namespace App\Http\Controllers\cadastros\tiposolicitacao;
 use App\Http\Requests\TipoSolicitacaoRequest;
 use App\Http\Controllers\Controller;
 use App\Models\TipoSolicitacao;
-use Illuminate\Http\Request;
 
 class TipoSolicitacaoController extends Controller
 {

@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\user;
 
 use App\Http\Requests\UserRequest;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -79,13 +80,13 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ];
 
+        //Obtém o usuário pelo E-mail, interrompendo o processo caso já exista
         $usuario = $this->objUser->where(['email' => $request->email])->get();
         if ($usuario && sizeof($usuario) > 0) {
             return redirect()->route('lista_user')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
         }
 
         $cad = $this->objUser->create($data);
-
 
         if ($cad) {
             return redirect()->route('lista_user');
@@ -132,6 +133,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
         ];
 
+        //Obtém o usuário pelo E-mail, sendo diferente do usuário que está sendo alterado, e interrompe o processo caso exista
         $usuario = $this->objUser->where(['email' => $request->email])->where('id','<>',$id)->get();
         if ($usuario && sizeof($usuario) > 0) {
             return redirect()->route('lista_user')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
@@ -168,6 +170,5 @@ class UserController extends Controller
             $users = $this->objUser->orderBy('updated_at', 'desc')->paginate(8); 
         }
         return redirect()->route('lista_user');
-       // return view('cadastro/user/list_user', compact('users'));    
     }
 }

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\cadastros\sugestao;
 
 use App\Http\Requests\SugestaoRequest;
 use App\Models\Sugestao;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class SugestaoController extends Controller

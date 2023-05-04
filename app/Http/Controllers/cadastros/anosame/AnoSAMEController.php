@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 class AnoSAMEController extends Controller
 {
 
+    private $objAnoSame;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */

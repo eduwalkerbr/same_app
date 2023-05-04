@@ -4,7 +4,6 @@ namespace App\Http\Controllers\cadastros\funcao;
 
 use App\Http\Requests\FuncaoRequest;
 use App\Models\Funcao;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class FuncaoController extends Controller

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\cadastros\tipoquestao;
 
-use App\Http\Requests\LegendaRequest;
 use App\Http\Requests\TipoQuestaoRequest;
 use App\Models\TipoQuestao;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class TipoQuestaoController extends Controller
 {
+    private $objTipoQuestao;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -94,7 +94,6 @@ class TipoQuestaoController extends Controller
     public function edit($id)
     {
         $tipoquestao = $this->objTipoQuestao->find($id);
-
         return view('cadastro/tipoquestao/create_tipoquestao', compact('tipoquestao'));
     }
 

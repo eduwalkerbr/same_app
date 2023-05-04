@@ -1,17 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\registro;
 
-use App\Http\Requests\UserRequest;
-use App\Models\Legenda;
 use App\Models\Previlegio;
 use App\Models\Solicitacao;
 use App\Models\Sugestao;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class AlterarRegistroController extends Controller
 {
+    private $objUser;
+    private $objPrevilegio;
+    private $objSolicitacao;
+    private $objSugestao;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      *
@@ -23,7 +27,6 @@ class AlterarRegistroController extends Controller
         $this->objUser = new User();
         $this->objPrevilegio = new Previlegio();
         $this->objSolicitacao = new Solicitacao();
-        $this->objLegenda = new Legenda();
         $this->objSugestao = new Sugestao();
     }
 
@@ -34,16 +37,22 @@ class AlterarRegistroController extends Controller
      */
     public function index()
     {
+        //Lista Previlégios e Sugestões
         $previlegio = $this->objPrevilegio->where(['users_id' => auth()->user()->id])->get();
         $sugestoes = $this->objSugestao->orderBy('updated_at', 'desc')->paginate(2);
 
         //Caso seja administrados tem acesso a todas as solicitações em aberto
         if (auth()->user()->perfil == 'Administrador') {
+
+            //Lista todas as Solicitações
             $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
             $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
             $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
+
             //Caso seja gestor, tem acesso a todas as solicitações do município que esta vinculado
         } else if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+
+            //Lista as solicitações pelo Município do Usuário logado
             $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1, 'id_municipio' => $previlegio[0]->municipios_id])->get();
             $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2, 'id_municipio' => $previlegio[0]->municipios_id])->get();
             $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3, 'id_municipio' => $previlegio[0]->municipios_id])->get();

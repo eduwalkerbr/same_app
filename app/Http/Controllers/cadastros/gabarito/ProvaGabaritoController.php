@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Cache;
 
 class ProvaGabaritoController extends Controller
 {
+    private $objDisciplina;
+    private $objProvaGabarito;
+    private $objAnoSame;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -56,7 +60,6 @@ class ProvaGabaritoController extends Controller
         }
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
         $disciplinas = $this->objDisciplina->all();
-       // $prova_gabaritos = $this->objProvaGabarito->orderBy('updated_at', 'desc')->paginate(7);
         return view('cadastro/prova_gabarito/list_prova_gabarito', compact('prova_gabaritos','anossame','disciplinas'));
     }
 
@@ -67,7 +70,6 @@ class ProvaGabaritoController extends Controller
      */
     public function create()
     {
-
         $disciplinas = $this->objDisciplina->all();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao', 'asc')->get();
         return view('cadastro/prova_gabarito/create_prova_gabarito', compact('disciplinas','anosativos'));
@@ -97,7 +99,6 @@ class ProvaGabaritoController extends Controller
         }
 
         $cad = $this->objProvaGabarito->create($data);
-
 
         if ($cad) {
             return redirect()->route('lista_prova_gabarito');

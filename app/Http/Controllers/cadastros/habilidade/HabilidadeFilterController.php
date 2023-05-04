@@ -10,12 +10,13 @@ use Illuminate\Support\Facades\Cache;
 
 class HabilidadeFilterController extends Controller
 {
+    private $objDisciplina;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
     public function __construct()
     {
-        $this->objHabilidade = new Habilidade();
         $this->objDisciplina = new Disciplina();
     }
     /**
@@ -34,7 +35,6 @@ class HabilidadeFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_Habilidade_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('desc','disciplinas_id');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where($nome,$valor);

@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Cache;
 
 class EscolaFilterController extends Controller
 {
+    private $objAnoSame;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
     public function __construct()
     {
         $this->objAnoSame = new AnoSame();
-        $this->objMunicipio = new Municipio();
     }
     /**
      * Método que monta a listagem de Escola pelo filtro
@@ -35,7 +36,6 @@ class EscolaFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_Escola_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('nome','SAME','municipios_id');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where('escolas.'.$nome,$valor);
@@ -43,7 +43,6 @@ class EscolaFilterController extends Controller
         }
 
         $escolas = $query->join('municipios', ['escolas.municipios_id' => 'municipios.id', 'escolas.SAME' => 'municipios.SAME'])->select('escolas.*', 'municipios.nome as nome_municipio')->orderBy('updated_at', 'desc')->paginate(7);
-        //$municipios = $this->objMunicipio->all();
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
 
         return view('cadastro/escola/list_escola', compact('escolas','anossame'));    

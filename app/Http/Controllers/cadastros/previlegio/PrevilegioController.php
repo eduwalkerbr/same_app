@@ -16,6 +16,12 @@ use Illuminate\Support\Facades\Cache;
 
 class PrevilegioController extends Controller
 {
+    private $objUser;
+    private $objMunicipio;
+    private $objFuncao;
+    private $objPrevilegio;
+    private $objAnoSame;
+
     /**
      * Display a listing of the resource.
      *
@@ -49,7 +55,6 @@ class PrevilegioController extends Controller
     {
         $usuarios = $this->objUser->all();
         $funcaos = $this->objFuncao->all();
-        //$municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
 
         if(Cache::has('Filtros_Consulta_Previlegio_'.strval(auth()->user()->id))){
             $query = Previlegio::query();
@@ -91,10 +96,13 @@ class PrevilegioController extends Controller
      */
     public function store(Request $request)
     {
+        //Verifica existência de Previlégio pelo usuário
         $previlegios = $this->objPrevilegio->where(['users_id' => $request->users_id])->get();
         if ($previlegios && sizeof($previlegios) > 0) {
+            //Exibe página de listagem de previlégios com mensagem ao usuário
             return redirect()->route('lista_previlegio')->with('status', 'Já existem previlégios atribuídos para este Usuário!');
         }
+
         $data = [
             'users_id' => $request->users_id,
             'autorizou_users_id' => $request->autorizou_users_id,
@@ -104,18 +112,22 @@ class PrevilegioController extends Controller
             'SAME' => $request->SAME
         ];
 
+        //Verifica existência previlégio pelo usuário, função e município
         $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $request->municipios_id]])->get();
-        
+        //Caso exista previlégio cadastrado
         if ($previlegio && sizeof($previlegio) > 0) {
+            //Carrega os dados do Usuário
             $usuario = $this->objUser->find($request->users_id);
+            //Carrega os dados da Função
             $funcao = $this->objFuncao->find($request->funcaos_id);
+            //Carrega os dados do Município pelo id e Ano SAME
             $municipios = $this->objMunicipio->where([['id','=',$request->municipios_id],['SAME','=',$request->SAME]])->get();
             $municipio = $municipios[0];
+            //Exibe listagem de previlégio com mensagem ao usuário
             return redirect()->route('lista_previlegio')->with('status', 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!');
         }
 
         $cad = $this->objPrevilegio->create($data);
-
 
         if ($cad) {
             return redirect()->route('lista_previlegio');
@@ -174,13 +186,19 @@ class PrevilegioController extends Controller
             'SAME' => $request->SAME
         ];
 
+        //Verifica existência previlégio pelo usuário, função e município
         $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $request->municipios_id],['id','<>',$id]])->get();
-        
+        //Caso exista um previlégio cadastrado
         if ($previlegio && sizeof($previlegio) > 0) {
+            //Carrega os dados do Usuário
             $usuario = $this->objUser->find($request->users_id);
+            //Carrega os dados da Função
             $funcao = $this->objFuncao->find($request->funcaos_id);
+            //Carrega os dados do Município pelo id e Ano SAME
             $municipios = $this->objMunicipio->where([['id','=',$request->municipios_id],['SAME','=',$request->SAME]])->get();
             $municipio = $municipios[0];
+
+            //Exibe página de listagem de previlégios com mensagem ao usuário
             return redirect()->route('lista_previlegio')->with('status', 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!');
         }
 

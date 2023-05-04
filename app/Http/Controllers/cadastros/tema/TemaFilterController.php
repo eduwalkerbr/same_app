@@ -10,6 +10,9 @@ use Illuminate\Support\Facades\Cache;
 
 class TemaFilterController extends Controller
 {
+    private $objTema;
+    private $objDisciplina;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
@@ -34,7 +37,6 @@ class TemaFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_Tema_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('desc','disciplinas_id');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where($nome,$valor);

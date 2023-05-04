@@ -1,9 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\registro;
 
-use App\Http\Requests\SolicitacaoRequest;
-use App\Models\AnoSame;
 use App\Models\DirecaoProfessor;
 use App\Models\Escola;
 use App\Models\Funcao;
@@ -15,9 +13,20 @@ use App\Models\Turma;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
 class RegistroController extends Controller
 {
+    private $objFuncao;
+    private $objMunicipio;
+    private $objEscola;
+    private $objTurma;
+    private $objSolicitacao;
+    private $objUser;
+    private $objTermo;
+    private $objDirecaoProfessor;
+    private $objPrevilegio;
+
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      *
@@ -32,7 +41,6 @@ class RegistroController extends Controller
         $this->objSolicitacao = new Solicitacao();
         $this->objUser = new User();
         $this->objTermo = new Termo();
-        $this->objAnoSame = new AnoSame();
         $this->objDirecaoProfessor = new DirecaoProfessor();
         $this->objPrevilegio = new Previlegio();
     }
@@ -44,29 +52,43 @@ class RegistroController extends Controller
      */
     public function index()
     {
+        //Se usuário logado
         if (Auth::check()) {
+
+            //Carrega os dados de Previlégio
             $previlegio = $this->objPrevilegio->where(['users_id' => auth()->user()->id])->get();
 
             //Caso seja administrados tem acesso a todas as solicitações em aberto
             if (auth()->user()->perfil == 'Administrador') {
+
+                //Lista todas as solicitações
                 $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
                 $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
                 $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
                 //Caso seja gestor, tem acesso a todas as solicitações do município que esta vinculado
             } else if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+
+                //Lista as solicitações do munícipio do usuário logado
                 $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1, 'id_municipio' => $previlegio[0]->municipios_id])->get();
                 $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2, 'id_municipio' => $previlegio[0]->municipios_id])->get();
                 $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3, 'id_municipio' => $previlegio[0]->municipios_id])->get();
             }
 
         } else {
+
+          //Zera as solicitações  
           $solRegistro = null;    
           $solAltCadastral = null; 
           $solAddTurma = null; 
         }
 
+        //Lista todas as funções
         $funcoes = $this->objFuncao->all();
+
+        //Carrega os dados do Termo mais recente
         $termo = $this->objTermo->orderBy('updated_at', 'desc')->limit(1)->get();
+
+        //Exibe página de Registro Base
         return view('cadastro/registro/registro_base', compact('funcoes', 'solRegistro', 'solAltCadastral', 'solAddTurma', 'termo'));
     }
 
@@ -79,33 +101,43 @@ class RegistroController extends Controller
      */
     public function store(Request $request)
     {
+        //Se usuário logado
         if (Auth::check()) {
+
+            //Carrega os dados de Previlégio
             $previlegio = $this->objPrevilegio->where(['users_id' => auth()->user()->id])->get();
 
             //Caso seja administrados tem acesso a todas as solicitações em aberto
             if (auth()->user()->perfil == 'Administrador') {
+
+                //Lista as Solicitações gerais
                 $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
                 $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2])->get();
                 $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3])->get();
                 //Caso seja gestor, tem acesso a todas as solicitações do município que esta vinculado
             } else if (isset($previlegio[0]->funcaos_id) && $previlegio[0]->funcaos_id == 6) {
+
+                //Lista as solicitações pelo município do Usuário logado
                 $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1, 'id_municipio' => $previlegio[0]->municipios_id])->get();
                 $solAltCadastral = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 2, 'id_municipio' => $previlegio[0]->municipios_id])->get();
                 $solAddTurma = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 3, 'id_municipio' => $previlegio[0]->municipios_id])->get();
             }
 
         } else {
+
+          //Zera as solicitações  
           $solRegistro = null;    
           $solAltCadastral = null; 
           $solAddTurma = null; 
         }
 
-        //Obtem o Ano Same Atual
-        //$anosame = $this->objAnoSame->where(['descricao' => strval(date("Y"))])->get();
+        //Carrega os dados de Previlégio
         $previlegio = $this->objPrevilegio->where(['users_id' => $request->id_user])->get();
 
         //Validação para Registro de Usuário
         if($request->id_tipo_solicitacao == 1){
+
+            //Busca usuário pelo E-mail e interrompe o processo caso já exista um usuário
             $usuarios = $this->objUser->where(['email' => $request->email])->get();
             if ($usuarios && sizeof($usuarios) > 0) {
                 return redirect()->route('registro_base.index')->with('status', 'Já existe um Usuário registrado no Sistema com este E-mail!');
@@ -114,6 +146,8 @@ class RegistroController extends Controller
         
         //Validação para Registro de Turma
         if($request->id_tipo_solicitacao == 3){
+
+            //Busca a direção professor pelo Previlegio, Escola, Turma e Ano SAME, interrompendo processo caso a turma já esteja registrada para o Usuário
             $anosame = explode('_',$request->id_escola)[1];
             $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $previlegio[0]->id],['id_escola', '=', $request->id_escola],['id_turma','=', $request->id_turma],['SAME','=',$anosame]])->get();    
             if ($direcao_professor && sizeof($direcao_professor) > 0) {
@@ -121,12 +155,17 @@ class RegistroController extends Controller
             }
         }
 
+        //Caso ainda não tenha registro de munícipio
         if ($request->id_municipio == null) {
+            //Lista dados de Município, Escolas, Turmas para seleção
             $municipios = $this->objMunicipio->all();
             $escolas = $this->objEscola->all();
             $turmas = $this->objTurma->all();
+
+            //Caorrega os dados da Função selecionada
             $funcao = $this->objFuncao->find($request->id_funcao);
 
+            //Monta objeto com informações iniciais de registro e exibe página de registro complementar, encaminha estas informações
             $name = $request->name;
             $email = $request->email;
             $password = $request->password;
@@ -137,6 +176,7 @@ class RegistroController extends Controller
             ];
 
             return view('cadastro/registro/registro_complementar', compact('funcao', 'data_base', 'municipios', 'escolas', 'turmas', 'solRegistro', 'solAltCadastral', 'solAddTurma'));
+
         } else {
 
             //Gera Parâmetros de id do Munícipio e SAME
@@ -163,7 +203,11 @@ class RegistroController extends Controller
                 'aberto' => true,
                 'SAME' => $params[1]
             ];
+
+            //Adiciona Solicitação no BD
             $cad = $this->objSolicitacao->create($data);
+
+            //Monta dados para registro de Usuário, caso o tipo de solicitação seja tal
             $cadUser = null;
             if ($request->id_tipo_solicitacao == 1) {
                 $dataUser = [
@@ -173,17 +217,19 @@ class RegistroController extends Controller
                     'password' => bcrypt($request->password),
                 ];
 
+                //Verifica se o usuário existe pelo E-mail, e caso não exista, registra o mesmo no BD
                 $usuarios = $this->objUser->where(['email' => $request->email])->get();
                 if (!$usuarios || sizeof($usuarios) <= 0) {
                     $cadUser = $this->objUser->create($dataUser);
-                    //return redirect()->route('registro_base.index')->with('status', 'Já existe um Usuário registrado no Sistema com este E-mail!');
                 }
-
-                //$cadUser = $this->objUser->create($dataUser);
             }
+
+            //Caso a Solicitação e Registro do Usuário tenha ocorrido com Sucesso, exibe página de registro de usuário
             if ($cad && $cadUser) {
                 return view('solicitacao/mensagem_registro_usuario', compact('solRegistro', 'solAltCadastral', 'solAddTurma'));
             }
+
+            //Caso apenas a solicitação tenha sido realizada, exibe página inicial com mensagem informativa ao usuário
             if ($cad) {
                 return redirect()->route('home.index')->with('status', 'Solicitação realizada com Sucesso!');
             }

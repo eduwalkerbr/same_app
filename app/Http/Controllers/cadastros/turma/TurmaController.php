@@ -17,6 +17,7 @@ class TurmaController extends Controller
     private $objEscola;
     private $objMunicipio;
     private $objTurma;
+    private $objAnoSame;
 
     /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
@@ -47,7 +48,6 @@ class TurmaController extends Controller
      */
     public function exibirLista()
     {
-        //$escolas = $this->objEscola->all();
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
 
         if(Cache::has('Filtros_Consulta_Turma_'.strval(auth()->user()->id))){

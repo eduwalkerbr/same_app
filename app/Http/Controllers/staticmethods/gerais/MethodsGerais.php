@@ -116,46 +116,6 @@ class MethodsGerais extends Controller
     }
 
     /**
-     * Método para buscar os munícipios do Comparativo utilizando Cache
-     */
-    public static function getMunicipiosComparativo()
-    {
-        //Caso for Administrador ou Pesquisador da Unijuí, busca todos os Munícipios
-        if (
-            auth()->user()->perfil == 'Administrador'
-            || ((MethodsGerais::getPrevilegio()[0]->funcaos_id == 13 || MethodsGerais::getPrevilegio()[0]->funcaos_id == 14)
-                && MethodsGerais::getPrevilegio()[0]->municipios_id == 5)
-        ) {
-            //Se existe Cache, busca o valor dela
-            if (Cache::has('total_municipios_comparativo')) {
-                $municipiosListados = Cache::get('total_municipios_comparativo');
-            } else {
-                //Busca todos os Múnicipios Ativos, agrupando por Nome
-                $municipiosListados = Municipio::where(['status' => 'Ativo'])->groupBy('nome')->get();
-
-                //Adiciona ao Cache continuamente
-                Cache::forever('total_municipios_comparativo', $municipiosListados);
-            }
-        } else {
-            //Se existe Cache, busca o valor dela
-            if (Cache::has('mun_list_comparativo' . strval(auth()->user()->id))) {
-                $municipiosListados = Cache::get('mun_list_comparativo' . strval(auth()->user()->id));
-            } else {
-                //Busca os munícipios de acordo com os previlégios dos Usuários
-                $municipiosListados = Municipio::where(['id' => MethodsGerais::getPrevilegio()[0]->municipios_id])->get();
-
-                //Adiciona ao Cache utilizando a constante de Horas da Cache
-                Cache::put(
-                    'mun_list_comparativo' . strval(auth()->user()->id),
-                    $municipiosListados,
-                    now()->addHours(config('constants.options.horas_cache'))
-                );
-            }
-        }
-        return $municipiosListados;
-    }
-
-    /**
      * Método para buscar os munícipios utilizando Cache
      */
     public static function getMunicipios($ano_same)

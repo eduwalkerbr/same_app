@@ -14,15 +14,17 @@ use Illuminate\Support\Facades\Cache;
 
 class PrevilegioFilterController extends Controller
 {
+    private $objUser;
+    private $objFuncao;
+    private $objAnoSame;
+
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
      */
     public function __construct()
     {
-        $this->objPrevilegio = new Previlegio();
         $this->objUser = new User();
         $this->objFuncao = new Funcao();
-        $this->objMunicipio = new Municipio();
         $this->objAnoSame = new AnoSame();
     }
     /**
@@ -41,7 +43,6 @@ class PrevilegioFilterController extends Controller
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_Previlegio_'.strval(auth()->user()->id));
 
-        //$parametros = $request->only('users_id','municipios_id','funcaos_id');
         foreach($parametros as $nome => $valor){
             if($valor){
                 $query->where('previlegios.'.$nome,$valor);
@@ -51,7 +52,6 @@ class PrevilegioFilterController extends Controller
         $previlegios = $query->orderBy('updated_at', 'desc')->paginate(7);
         $usuarios = $this->objUser->all();
         $funcaos = $this->objFuncao->all();
-        //$municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
         $anossame = $this->objAnoSame->orderBy('descricao', 'asc')->get();
         return view('cadastro/previlegio/list_previlegio', compact('previlegios','usuarios','funcaos','anossame'));    
     }
