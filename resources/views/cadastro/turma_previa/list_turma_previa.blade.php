@@ -87,7 +87,7 @@
         <td style="font-weight: normal;font-size:14px;">@if(isset($turmas)) {{$turmas->DESCR_TURMA}} @endif</td>
         <td style="font-weight: normal;font-size:14px;">@if(isset($escolas)) {{$escolas->nome}} @endif</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_turma_previa') }}">
+          <a href="{{ route('turma_previa.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('turma_previa.edit', $turmaprevia->id) }}">

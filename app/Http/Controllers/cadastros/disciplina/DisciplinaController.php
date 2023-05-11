@@ -4,7 +4,6 @@ namespace App\Http\Controllers\cadastros\disciplina;
 
 use App\Http\Requests\DisciplinaRequest;
 use App\Models\Disciplina;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class DisciplinaController extends Controller
@@ -16,6 +15,7 @@ class DisciplinaController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objDisciplina = new Disciplina();
     }
 

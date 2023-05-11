@@ -16,6 +16,7 @@ class DestaqueController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objDestaque = new DestaqueModel();
     }
     /**

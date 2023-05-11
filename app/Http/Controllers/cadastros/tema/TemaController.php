@@ -5,7 +5,6 @@ namespace App\Http\Controllers\cadastros\tema;
 use App\Http\Requests\TemaRequest;
 use App\Models\Disciplina;
 use App\Models\Tema;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
@@ -19,6 +18,7 @@ class TemaController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objTema = new Tema();
         $this->objDisciplina = new Disciplina();
     }

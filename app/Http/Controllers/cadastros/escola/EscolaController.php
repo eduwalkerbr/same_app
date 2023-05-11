@@ -5,7 +5,6 @@ namespace App\Http\Controllers\cadastros\escola;
 use App\Http\Requests\EscolaRequest;
 use App\Models\AnoSame;
 use App\Models\Escola;
-use App\Models\Municipio;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -13,7 +12,6 @@ use Illuminate\Support\Facades\Cache;
 class EscolaController extends Controller
 {
     private $objEscola;
-    private $objMunicipio;
     private $objAnoSame;
 
     /**
@@ -21,8 +19,8 @@ class EscolaController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objEscola = new Escola();
-        $this->objMunicipio = new Municipio();
         $this->objAnoSame = new AnoSame();
     }
     /**
@@ -68,9 +66,8 @@ class EscolaController extends Controller
      */
     public function create()
     {
-        $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao','asc')->get();
-        return view('cadastro/escola/create_escola', compact('municipios','anosativos'));
+        return view('cadastro/escola/create_escola', compact('anosativos'));
     }
 
     /**
@@ -81,14 +78,16 @@ class EscolaController extends Controller
      */
     public function store(EscolaRequest $request)
     {
+        $params = explode('_',$request->municipios_id);
+
         $data = [
             'nome' => $request->nome,
             'SAME' => $request->SAME,
             'status' => 'Ativo',
-            'municipios_id' => $request->municipios_id
+            'municipios_id' => $params[0]
         ];
 
-        $escola = $this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $request->municipios_id],['SAME','=',$request->SAME]])->get();
+        $escola = $this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $params[0]],['SAME','=',$request->SAME]])->get();
         
         if ($escola && sizeof($escola) > 0) {
             return redirect()->route('lista_escola')->with('status', 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
@@ -120,14 +119,13 @@ class EscolaController extends Controller
      */
     public function edit($id, $anosame)
     {
-        $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
         $escolas = $this->objEscola->join('municipios', ['escolas.municipios_id' => 'municipios.id', 'escolas.SAME' => 'municipios.SAME'])
                                 ->select('escolas.*', 'municipios.nome as nome_municipio','municipios.id as id_municipio','municipios.SAME as SAME_municipio')
                                 ->where(['escolas.id' => $id])->where(['escolas.SAME' => $anosame])->get();
         $escola = $escolas[0];
         $anosame = $this->objAnoSame->where(['descricao' => $escola->SAME])->get();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao','asc')->get();
-        return view('cadastro/escola/create_escola', compact('escola', 'municipios','anosame','anosativos'));
+        return view('cadastro/escola/create_escola', compact('escola', 'anosame','anosativos'));
     }
 
     /**
@@ -140,17 +138,19 @@ class EscolaController extends Controller
      */
     public function update(EscolaRequest $request, $id)
     {
+        $params = explode('_',$request->municipios_id);
+
         $data = [
             'nome' => $request->nome,
-            'municipios_id' => $request->municipios_id,
+            'municipios_id' => $params[0],
             'SAME' => $request->SAME,
             'status' => $request->status,
         ];
 
-        $escola = $this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $request->municipios_id],['SAME','=',$request->SAME],['id','<>',$id]])->get();
+        $escola = $this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $params[0]],['SAME','=',$request->SAME],['id','<>',$id]])->get();
         
         if ($escola && sizeof($escola) > 0) {
-            return redirect()->route('lista_municipio')->with('status', 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
+            return redirect()->route('lista_escola')->with('status', 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
         }
 
         $this->objEscola->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data);
@@ -208,17 +208,18 @@ class EscolaController extends Controller
     }
 
     /**
-     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
+     * Método ajax para listar as escolas pelo munícipio selecionada na página de solicitação de turma 
      */
-    public function get_by_same_municipio(Request $request)
+    public function get_by_municipio(Request $request)
     {
-        if (!$request->SAME) {
+        if (!$request->municipios_id) {
             $html = '<option value="">' . trans('') . '</option>';
         } else {
+            $params = explode('_',$request->municipios_id);
             $html = '<option value=""></option>';
-            $municipios = Municipio::where(['SAME' => $request->SAME])->get();
-            foreach ($municipios as $municipio) {
-                $html .= '<option value="' . $municipio->id . '">' . $municipio->nome . ' ('.$municipio->SAME.')'. '</option>';
+            $escolas = Escola::where([['municipios_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($escolas as $escola) {
+                $html .= '<option value="' . $escola->id.'_'.$escola->SAME . '">' . $escola->nome . ' ('.$escola->SAME.')'. '</option>';
             }
         }
 

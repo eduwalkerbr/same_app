@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class CadastroController extends Controller
 {
@@ -15,8 +16,8 @@ class CadastroController extends Controller
      */
     public function __construct()
     {
-        $this->objUser = new User();
         $this->middleware('auth');
+        $this->objUser = new User();
     }
 
     /**
@@ -27,12 +28,15 @@ class CadastroController extends Controller
      */
     public function index()
     {
-        $perfil = auth()->user()->perfil;
-        if ($perfil == 'Usuário') {
+
+        if (Auth::user()->perfil == 'Usuário') {
             return redirect('/');
+
         } else {
+
             $users = $this->objUser->orderBy('updated_at', 'desc')->limit(3)->get();
             return view('cadastro/exibir_cadastro', compact('users'));
+            
         }
     }
 }

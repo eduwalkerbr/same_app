@@ -103,7 +103,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$funcao->desc}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$previlegio->SAME}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_previlegio') }}">
+          <a href="{{ route('previlegio.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('previlegio.edit', $previlegio->id) }}">

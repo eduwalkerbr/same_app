@@ -4,7 +4,6 @@ namespace App\Http\Controllers\cadastros\direcaoprofessor;
 
 use App\Models\AnoSame;
 use App\Models\DirecaoProfessor;
-use App\Models\Escola;
 use App\Models\Turma;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,6 +20,7 @@ class DirecaoProfessorFilterController extends Controller
      */
     public function __construct()
     {   
+        $this->middleware('auth');
         $this->objUser = new User();
         $this->objAnoSame = new AnoSame();
     }
@@ -35,7 +35,7 @@ class DirecaoProfessorFilterController extends Controller
         Cache::forget('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id));
 
         //Adiciona os Filtros em Cache
-        Cache::put('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id), $request->only('id_previlegio','id_escolas','id_turma','SAME','users_id'), now()->addMinutes(5));
+        Cache::put('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id), $request->only('id_previlegio','escolas_id','turmas_id','SAME','users_id'), now()->addMinutes(5));
         
         //Óbtem os parâmetros de Filtro da Cache
         $parametros = Cache::get('Filtros_Consulta_DirecaoProfessor_'.strval(auth()->user()->id));
@@ -48,6 +48,10 @@ class DirecaoProfessorFilterController extends Controller
             if($nome == 'users_id' && $valor){
                 $query->join('previlegios', 'direcao_professors.id_previlegio', '=', 'previlegios.id');
                 $query->where('previlegios.users_id',$valor);
+            } else if($nome == 'escolas_id' && $valor){ 
+                $query->where('direcao_professors.'.'id_escola',$valor);
+            } else if($nome == 'turmas_id' && $valor){
+                $query->where('direcao_professors.'.'id_turma',$valor);
             } else if($valor){
                 $query->where('direcao_professors.'.$nome,$valor);
             }
@@ -57,24 +61,5 @@ class DirecaoProfessorFilterController extends Controller
         $anossame = $this->objAnoSame->orderBy('descricao','asc')->get();
         $usuarios = $this->objUser->orderBy('name','asc')->get();
         return view('cadastro/direcao_professores/list_direcao_professor', compact('direcao_professores','anossame','usuarios'));    
-    }
-
-        /**
-     * Método ajax que monta o select de turmas pela escola selecionada na página de cadastro de turma prévia
-     */
-    public function get_by_escola(Request $request)
-    {
-
-        if (!$request->id_escola) {
-            $html = '<option value="">' . '' . '</option>';
-        } else {
-            $html = '<option value=""></option>';
-            $turmas = Turma::where('escolas_id', $request->id_escola)->get();
-            foreach ($turmas as $turma) {
-                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
-            }
-        }
-
-        return response()->json(['html' => $html]);
     }
 }

@@ -70,9 +70,6 @@
                                     @else
                                     <option value=""></option>
                                     @endif
-                                    @foreach($municipios as $municipio)
-                                    <option value="{{ $municipio->id }}">{{ $municipio->nome.' ('.$municipio->SAME.')' ?? ''}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>

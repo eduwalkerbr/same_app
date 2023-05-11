@@ -26,7 +26,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$anosame->descricao}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$anosame->status}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_anosame') }}">
+          <a href="{{ route('anosame.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('anosame.edit', $anosame->id) }}">

@@ -58,15 +58,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="id_sala">Município</label>
-                                <select class="form-control" id="escolas_municipios_id" name="escolas_municipios_id" required>
+                                <select class="form-control" id="municipios_id" name="municipios_id" required>
                                     @if(isset($turma))
                                     <option value="{{ $turma->id_municipio ?? ''}}">{{ $turma->nome_municipio.' ('.$turma->SAME_municipio.')' ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
-                                    @foreach($municipios as $municipio)
-                                    <option value="{{ $municipio->id }}">{{ $municipio->nome.' ('.$municipio->SAME.')' ?? ''}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -81,9 +78,6 @@
                                     @else
                                     <option value=""></option>
                                     @endif
-                                    @foreach($escolas as $escola)
-                                    <option value="{{ $escola->id }}">{{ $escola->nome.' ('.$escola->SAME.')' ?? ''}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>

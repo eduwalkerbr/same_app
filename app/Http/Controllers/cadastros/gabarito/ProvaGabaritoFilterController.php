@@ -19,6 +19,7 @@ class ProvaGabaritoFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objAnoSame = new AnoSame();
         $this->objDisciplina = new Disciplina();
     }

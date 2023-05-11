@@ -7,6 +7,7 @@ use App\Models\AnoSame;
 use App\Models\Municipio;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Http\Request;
 
 class MunicipioController extends Controller
 {
@@ -18,6 +19,7 @@ class MunicipioController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objMunicipio = new Municipio();
         $this->objAnoSame = new AnoSame();
     }
@@ -199,5 +201,23 @@ class MunicipioController extends Controller
     {
         $del = $this->objMunicipio->destroy($id);
         return ($del) ? "sim" : "não";
+    }
+
+    /**
+     * Método ajax para listar os Municípios baseado no Ano SAME
+     */
+    public function get_by_same(Request $request)
+    {
+        if (!$request->SAME) {
+            $html = '<option value="">' . trans('') . '</option>';
+        } else {
+            $html = '<option value=""></option>';
+            $municipios = Municipio::where(['SAME' => $request->SAME])->get();
+            foreach ($municipios as $municipio) {
+                $html .= '<option value="' . $municipio->id.'_'.$municipio->SAME . '">' . $municipio->nome . ' ('.$municipio->SAME.')'. '</option>';
+            }
+        }
+
+        return response()->json(['html' => $html]);
     }
 }

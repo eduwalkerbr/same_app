@@ -20,6 +20,7 @@ class TurmaPreviaController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objEscola = new Escola();
         $this->objTurma = new Turma();
         $this->objTurmaPrevia = new TurmaPrevia();

@@ -6,7 +6,6 @@ use App\Http\Requests\CriterioQuestaoRequest;
 use App\Models\CriterioQuestao;
 use App\Models\Disciplina;
 use App\Models\TipoQuestao;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
@@ -21,6 +20,7 @@ class CriterioQuestaoController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objDisciplina = new Disciplina();
         $this->objCriterioQuestao = new CriterioQuestao();
         $this->objTipoQuestao = new TipoQuestao();

@@ -49,21 +49,21 @@
                                         Administração
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                            <a class="dropdown-item" href="{{ route('cadastro_user') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('user.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Usuário
                                             </a>
                                             <a class="dropdown-item" href="{{ route('user.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Usuário
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_tipo_solicitacao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('tipo_solicitacao.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Tipo Solicitação
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_tipo_solicitacao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Tipo Solicitação
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_funcao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('funcao.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Função
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_funcao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -74,21 +74,21 @@
                                                 Listagem - Sugestões
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_legenda') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('legenda.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Legenda
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_legenda') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Legenda
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_anosame') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('anosame.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Ano SAME
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_anosame') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Ano SAME
                                             </a>
                                             <!--<hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_termo') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('termo.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Termo
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_termo') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -106,21 +106,21 @@
                                             Localização
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                            <a class="dropdown-item" href="{{ route('cadastro_municipio') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('municipio.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Município
                                             </a>
                                             <a class="dropdown-item" href="{{ route('municipio.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Município
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_escola') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('escola.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Escola
                                             </a>
                                             <a class="dropdown-item" href="{{ route('escola.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Escola
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_turma') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('turma.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Turma
                                             </a>
                                             <a class="dropdown-item" href="{{ route('turma.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -133,7 +133,7 @@
                                             Alunos
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                            <a class="dropdown-item" href="{{ route('cadastro_aluno') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('aluno.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro
                                             </a>
                                             <a class="dropdown-item" href="{{ route('aluno.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -147,28 +147,28 @@
                                             Curriculares
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                            <a class="dropdown-item" href="{{ route('cadastro_disciplina') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('disciplina.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Disciplina
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_disciplina') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Disciplina
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_habilidade') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('habilidade.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Habilidade
                                             </a>
                                             <a class="dropdown-item" href="{{ route('habilidade.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Habilidade
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_tema') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('tema.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Tema
                                             </a>
                                             <a class="dropdown-item" href="{{ route('tema.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Tema
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_destaque') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('destaque.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Destaque
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_destaque') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -181,21 +181,21 @@
                                             Gestão Escolar
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                            <a class="dropdown-item" href="{{ route('cadastro_previlegio') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('previlegio.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Privilégio
                                             </a>
                                             <a class="dropdown-item" href="{{ route('previlegio.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Privilégio
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_direcao_professor') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('direcao_professor.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Direção Professor
                                             </a>
                                             <a class="dropdown-item" href="{{ route('direcao_professor.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Direção Professor
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_turma_previa') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('turma_previa.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Turma Prévia
                                             </a>
                                             <a class="dropdown-item" href="{{ route('turma_previa.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -208,28 +208,28 @@
                                             Prova
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: black;">
-                                            <a class="dropdown-item" href="{{ route('cadastro_prova_gabarito') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('prova_gabarito.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Gabarito
                                             </a>
                                             <a class="dropdown-item" href="{{ route('prova_gabarito.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Gabarito
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_questao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('questao.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Questão
                                             </a>
                                             <a class="dropdown-item" href="{{ route('questao.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Questão
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_tipoquestao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('tipoquestao.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Tipo de Questão
                                             </a>
                                             <a class="dropdown-item" href="{{ route('lista_tipoquestao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Tipo de Questão
                                             </a>
                                             <hr>
-                                            <a class="dropdown-item" href="{{ route('cadastro_criterios_questao') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                            <a class="dropdown-item" href="{{ route('criterios_questao.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Cadastro - Critérios da Questão
                                             </a>
                                             <a class="dropdown-item" href="{{ route('criterios_questao.filtrar') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -276,6 +276,19 @@
     });
 </script>
 
+<!---------------------------------------------- Aluno -------------------------------------------------->    
+<script type="text/javascript">
+    $("#SAME").change(function() {
+        $.ajax({
+            url: "{{ route('aluno.get_by_same') }}?SAME=" + $(this).val(),
+            method: 'GET',
+            success: function(data) {
+                $('#turmas_escolas_municipios_id').html(data.html);
+            }
+        });
+    });
+</script>
+
 <script type="text/javascript">
     $("#turmas_escolas_municipios_id").change(function() {
         $.ajax({
@@ -299,11 +312,13 @@
         });
     });
 </script>
+<!-------------------------------------------------------------------------------------------------------->
 
+<!-------------------------------------------- Município -------------------------------------------------> 
 <script type="text/javascript">
     $("#SAME").change(function() {
         $.ajax({
-            url: "{{ route('escola.get_by_same_municipio') }}?SAME=" + $(this).val(),
+            url: "{{ route('municipio.get_by_same') }}?SAME=" + $(this).val(),
             method: 'GET',
             success: function(data) {
                 $('#municipios_id').html(data.html);
@@ -311,11 +326,13 @@
         });
     });
 </script>
+<!-------------------------------------------------------------------------------------------------------->
 
+<!-------------------------------------------- Escolas ---------------------------------------------------> 
 <script type="text/javascript">
-    $("#SAME").change(function() {
+    $("#municipios_id").change(function() {
         $.ajax({
-            url: "{{ route('escola.get_by_same_escola') }}?SAME=" + $(this).val(),
+            url: "{{ route('escola.get_by_municipio') }}?municipios_id=" + $(this).val(),
             method: 'GET',
             success: function(data) {
                 $('#escolas_id').html(data.html);
@@ -323,27 +340,18 @@
         });
     });
 </script>
+<!-------------------------------------------------------------------------------------------------------->
 
+<!-------------------------------------------- Turmas ----------------------------------------------------> 
 <script type="text/javascript">
-    $("#SAME").change(function() {
+    $("#escolas_id").change(function() {
         $.ajax({
-            url: "{{ route('aluno.get_by_same_escolav2') }}?SAME=" + $(this).val(),
+            url: "{{ route('turma.get_by_same_escola') }}?escolas_id=" + $(this).val(),
             method: 'GET',
             success: function(data) {
-                $('#turmas_escolas_id').html(data.html);
+                $('#turmas_id').html(data.html);
             }
         });
     });
 </script>
-
-<script type="text/javascript">
-    $("#SAME").change(function() {
-        $.ajax({
-            url: "{{ route('direcao_professor.get_by_same_escolav3') }}?SAME=" + $(this).val(),
-            method: 'GET',
-            success: function(data) {
-                $('#id_escola').html(data.html);
-            }
-        });
-    });
-</script>
+<!-------------------------------------------------------------------------------------------------------->

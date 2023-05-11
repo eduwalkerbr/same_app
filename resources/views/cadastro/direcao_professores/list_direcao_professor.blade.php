@@ -22,7 +22,7 @@
           <form id="form_filter" name="form_filter" action="{{ route('direcao_professor.filtrar') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="row justify-content-center" style="color:black;font-size:15px;">
-              <div class=" col-md-10">
+              <div class=" col-md-5">
                 <div class="form-group">
                   <label for="users_id">Usuário</label>
                   <select class="form-control" id="users_id" name="users_id">
@@ -44,20 +44,28 @@
                   </select>
                 </div>
               </div>
+              <div class=" col-md-5">
+                <div class="form-group">
+                  <label for="municipios_id">Município</label>
+                  <select class="form-control" id="municipios_id" name="municipios_id">
+                    <option value=""></option>
+                  </select>
+                </div>
+              </div>
             </div>
             <div class="row justify-content-center" style="color:black;font-size:15px;">
               <div class=" col-md-6">
                 <div class="form-group">
-                  <label for="id_escola">Escola</label>
-                  <select class="form-control" id="id_escola" name="id_escola">
+                  <label for="escolas_id">Escola</label>
+                  <select class="form-control" id="escolas_id" name="escolas_id">
                     <option value=""></option>
                   </select>
                 </div>
               </div>
               <div class=" col-md-6">
                 <div class="form-group">
-                  <label for="id_turma">Turma</label>
-                  <select class="form-control" id="id_turma" name="id_turma">
+                  <label for="turmas_id">Turma</label>
+                  <select class="form-control" id="turmas_id" name="turmas_id">
                     <option value=""></option>
                   </select>
                 </div>
@@ -103,13 +111,13 @@
         <td style="font-weight: normal;font-size:14px;">{{$direcao_professor->nome_turma ?? ''}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$direcao_professor->SAME ?? ''}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_direcao_professor') }}">
+          <a href="{{ route('direcao_professor.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('direcao_professor.edit', $direcao_professor->id) }}">
             <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Editar</button>
           </a>
-          <a href="{{ route('direcao_professor.delete', $direcao_professor->id) }}" class="js-del">
+          <a href="{{ route('direcao_professor.destroy', $direcao_professor->id) }}" class="js-del">
             <button style="font-weight: normal;" class="btn-danger">Deletar</button>
           </a>
         </td>

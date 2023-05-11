@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\cadastros\aluno;
 
 use App\Models\Aluno;
-use App\Models\Escola;
-use App\Models\Turma;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -19,6 +17,7 @@ class AlunoFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objAnoSame = new AnoSame();
     }
     /**

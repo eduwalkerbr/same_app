@@ -5,7 +5,6 @@ namespace App\Http\Controllers\cadastros\habilidade;
 use App\Http\Requests\HabilidadeRequest;
 use App\Models\Disciplina;
 use App\Models\Habilidade;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
@@ -19,6 +18,7 @@ class HabilidadeController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objHabilidade = new Habilidade();
         $this->objDisciplina = new Disciplina();
     }

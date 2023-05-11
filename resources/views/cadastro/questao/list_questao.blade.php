@@ -156,10 +156,10 @@
         <td style="font-weight: normal;font-size:14px;">{{$questao->nome_tema}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$questao->nome_habilidade}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_questao') }}">
+          <a href="{{ route('questao.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
-          <a href="{{ route('questao.edit', ['id' => $questao->id, 'SAME' => $questao->SAME]) }}">
+          <a href="{{ route('questao.edit', ['id' => $questao->id, 'anosame' => $questao->SAME]) }}">
             <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Editar</button>
           </a>
         </td>

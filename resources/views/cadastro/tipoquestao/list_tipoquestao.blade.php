@@ -28,7 +28,7 @@
         <td style="font-weight: normal;font-size:14px;width:550px;">{{$tipoquestao->titulo}}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$tipoquestao->updated_at->format('d/m/Y H:i:s')}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_tipoquestao') }}">
+          <a href="{{ route('tipoquestao.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('tipoquestao.edit', $tipoquestao->id) }}">

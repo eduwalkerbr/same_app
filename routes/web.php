@@ -73,146 +73,216 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
-
 Auth::routes(['verify' => true]);
-
-/*
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
-    ->name('home')
-    ->middleware('verified');
-*/
-
-
-/*Route::resource('tarefa', 'App\Http\Controllers\TarefaController')
-    ->middleware('verified');
-
-
-Route::get('/mensagem-teste', function () {
-    return new MensagemTesteMail();
-    //Mail::to('atendimento@jorgesantana.net.br')->send(new MensagemTesteMail());
-    //return 'E-mail enviado com sucesso!';
-});*/
 
 //Deslogar
 Route::any('/deslogar', [DeslogarController::class, 'index'])->name('deslogar');
 
 //Home
-//Route::get('/', [HomeController::class, 'index'])->name('home.index');
-
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 //Home Cadastro
 Route::get('/cadastro', [CadastroController::class, 'index'])->name('cadastro.index');
 
 //Sobre
-Route::get('/sobre', [SobreController::class, 'index'])->name('sobre.index');
+Route::get('/sobre', [SobreController::class, 'index'])->name('sobre.index')->withoutMiddleware('auth');
 
 //Alterar Registro
-Route::get('/registro/alterar', [AlterarRegistroController::class, 'index'])->name('alterar_registro.index');
-Route::get('/registro/create', [AlterarRegistroController::class, 'create'])->name('cadastro_registro');
-Route::post('/registro/store', [AlterarRegistroController::class, 'store'])->name('registro.store');
-Route::get('/registro/{id}/edit', [AlterarRegistroController::class, 'edit'])->name('registro.edit');
-Route::put('/registro/{id}', [AlterarRegistroController::class, 'update'])->name('registro.update');
+Route::resource('registro', AlterarRegistroController::class)->only('index','update');
 
+//------------------------------------------------------ CRUDS -------------------------------------------------------------------
 
 //CRUD Usuário
-Route::get('/user/create', [UserController::class, 'create'])->name('cadastro_user');
-Route::get('/user/list', [UserController::class, 'exibirLista'])->name('lista_user');
-Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
-Route::get('/user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
-Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.delete');
-Route::any('/user/filtrar', [UserFilter::class, 'filtrar'])->name('user.filtrar');
+Route::prefix('user')->group(function () {
+    Route::name('user.')->group(function () {
+        Route::get('/list', [UserController::class, 'exibirLista'])->name('list');
+        Route::any('/filtrar', [UserFilter::class, 'filtrar'])->name('filtrar');
+    });    
+});
+Route::resource('user', UserController::class)->except('index','show');
 
 //CRUD Tipo Solicitação
-Route::get('/tipo_solicitacao/create', [TipoSolicitacaoController::class, 'create'])->name('cadastro_tipo_solicitacao');
 Route::get('/tipo_solicitacao/list', [TipoSolicitacaoController::class, 'exibirLista'])->name('lista_tipo_solicitacao');
-Route::post('/tipo_solicitacao/store', [TipoSolicitacaoController::class, 'store'])->name('tipo_solicitacao.store');
-Route::get('/tipo_solicitacao/{id}/edit', [TipoSolicitacaoController::class, 'edit'])->name('tipo_solicitacao.edit');
-Route::put('/tipo_solicitacao/{id}', [TipoSolicitacaoController::class, 'update'])->name('tipo_solicitacao.update');
+Route::resource('tipo_solicitacao', TipoSolicitacaoController::class)->only('create','store','edit','update');
 
 //CRUD Município
-Route::get('/municipio/create', [MunicipioController::class, 'create'])->name('cadastro_municipio');
-Route::get('/municipio/list', [MunicipioController::class, 'exibirLista'])->name('lista_municipio');
-Route::post('/municipio/store', [MunicipioController::class, 'store'])->name('municipio.store');
-Route::get('/municipio/{id}/{anosame}/edit', [MunicipioController::class, 'edit'])->name('municipio.edit');
-Route::put('/municipio/{id}', [MunicipioController::class, 'update'])->name('municipio.update');
-Route::get('/municipio/{id}/{anosame}/inativar', [MunicipioController::class, 'inativar'])->name('municipio.inativar');
-Route::get('/municipio/{id}/{anosame}/ativar', [MunicipioController::class, 'ativar'])->name('municipio.ativar');
-Route::any('/municipio/filtrar', [MunicipioFilterController::class, 'filtrar'])->name('municipio.filtrar');
+Route::prefix('municipio')->group(function () {
+    Route::get('/list', [MunicipioController::class, 'exibirLista'])->name('lista_municipio');
+    Route::name('municipio.')->group(function () {
+        Route::get('/create', [MunicipioController::class, 'create'])->name('create');
+        Route::post('/store', [MunicipioController::class, 'store'])->name('store');
+        Route::get('/{id}/{anosame}/edit', [MunicipioController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [MunicipioController::class, 'update'])->name('update');
+        Route::get('/{id}/{anosame}/inativar', [MunicipioController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/{anosame}/ativar', [MunicipioController::class, 'ativar'])->name('ativar');
+        Route::any('/filtrar', [MunicipioFilterController::class, 'filtrar'])->name('filtrar');
+        Route::get('/get_by_same', [MunicipioController::class, 'get_by_same'])->name('get_by_same');
+    });    
+});
 
 //CRUD Escola
-Route::get('/escola/create', [EscolaController::class, 'create'])->name('cadastro_escola');
-Route::get('/escola/list', [EscolaController::class, 'exibirLista'])->name('lista_escola');
-Route::post('/escola/store', [EscolaController::class, 'store'])->name('escola.store');
-Route::get('/escola/{id}/{anosame}/edit', [EscolaController::class, 'edit'])->name('escola.edit');
-Route::put('/escola/{id}', [EscolaController::class, 'update'])->name('escola.update');
-Route::get('/escola/{id}/{anosame}/inativar', [EscolaController::class, 'inativar'])->name('escola.inativar');
-Route::get('/escola/{id}/{anosame}/ativar', [EscolaController::class, 'ativar'])->name('escola.ativar');
-Route::any('/escola/filtrar', [EscolaFilterController::class, 'filtrar'])->name('escola.filtrar');
-Route::get('/escola/get_by_same_municipio', [EscolaController::class, 'get_by_same_municipio'])->name('escola.get_by_same_municipio');
+Route::prefix('escola')->group(function () {
+    Route::get('/list', [EscolaController::class, 'exibirLista'])->name('lista_escola');
+    Route::name('escola.')->group(function () {
+        Route::get('/create', [EscolaController::class, 'create'])->name('create');
+        Route::post('/store', [EscolaController::class, 'store'])->name('store');
+        Route::get('/{id}/{anosame}/edit', [EscolaController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [EscolaController::class, 'update'])->name('update');
+        Route::get('/{id}/{anosame}/inativar', [EscolaController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/{anosame}/ativar', [EscolaController::class, 'ativar'])->name('ativar');
+        Route::any('/filtrar', [EscolaFilterController::class, 'filtrar'])->name('filtrar');
+        Route::get('/get_by_municipio', [EscolaController::class, 'get_by_municipio'])->name('get_by_municipio');
+    });    
+});
 
 //CRUD Turma
-Route::get('/turma/create', [TurmaController::class, 'create'])->name('cadastro_turma');
-Route::get('/turma/list', [TurmaController::class, 'exibirLista'])->name('lista_turma');
-Route::post('/turma/store', [TurmaController::class, 'store'])->name('turma.store');
-Route::get('/turma/{id}/edit', [TurmaController::class, 'edit'])->name('turma.edit');
-Route::put('/turma/{id}', [TurmaController::class, 'update'])->name('turma.update');
-Route::get('/turma/{id}/inativar', [TurmaController::class, 'inativar'])->name('turma.inativar');
-Route::get('/turma/{id}/ativar', [TurmaController::class, 'ativar'])->name('turma.ativar');
-Route::any('/turma/filtrar', [TurmaFilterController::class, 'filtrar'])->name('turma.filtrar');
-Route::get('/turma/get_by_same_escola', [TurmaController::class, 'get_by_same_escola'])->name('escola.get_by_same_escola');
+Route::prefix('turma')->group(function () {
+    Route::get('/list', [TurmaController::class, 'exibirLista'])->name('lista_turma');
+    Route::name('turma.')->group(function () {
+        Route::get('/create', [TurmaController::class, 'create'])->name('create');
+        Route::post('/store', [TurmaController::class, 'store'])->name('store');
+        Route::get('/{id}/{anosame}/edit', [TurmaController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [TurmaController::class, 'update'])->name('update');
+        Route::get('/{id}/{anosame}/inativar', [TurmaController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/{anosame}/ativar', [TurmaController::class, 'ativar'])->name('ativar');
+        Route::any('/filtrar', [TurmaFilterController::class, 'filtrar'])->name('filtrar');
+        Route::get('/get_by_same_escola', [TurmaController::class, 'get_by_same_escola'])->name('get_by_same_escola');
+    });    
+});
 
 //CRUD Funcao
-Route::get('/funcao/create', [FuncaoController::class, 'create'])->name('cadastro_funcao');
 Route::get('/funcao/list', [FuncaoController::class, 'exibirLista'])->name('lista_funcao');
-Route::post('/funcao/store', [FuncaoController::class, 'store'])->name('funcao.store');
-Route::get('/funcao/{id}/edit', [FuncaoController::class, 'edit'])->name('funcao.edit');
-Route::put('/funcao/{id}', [FuncaoController::class, 'update'])->name('funcao.update');
+Route::resource('funcao', FuncaoController::class)->except('show','index');
 
 //CRUD Disciplina
-Route::get('/disciplina/create', [DisciplinaController::class, 'create'])->name('cadastro_disciplina');
 Route::get('/disciplina/list', [DisciplinaController::class, 'exibirLista'])->name('lista_disciplina');
-Route::post('/disciplina/store', [DisciplinaController::class, 'store'])->name('disciplina.store');
-Route::get('/disciplina/{id}/edit', [DisciplinaController::class, 'edit'])->name('disciplina.edit');
-Route::put('/disciplina/{id}', [DisciplinaController::class, 'update'])->name('disciplina.update');
+Route::resource('disciplina', DisciplinaController::class)->except('show','index');
 
 
 //CRUD Habilidade
-Route::get('/habilidade/create', [HabilidadeController::class, 'create'])->name('cadastro_habilidade');
-Route::get('/habilidade/list', [HabilidadeController::class, 'exibirLista'])->name('lista_habilidade');
-Route::post('/habilidade/store', [HabilidadeController::class, 'store'])->name('habilidade.store');
-Route::get('/habilidade/{id}/edit', [HabilidadeController::class, 'edit'])->name('habilidade.edit');
-Route::put('/habilidade/{id}', [HabilidadeController::class, 'update'])->name('habilidade.update');
-Route::any('/habilidade/filtrar', [HabilidadeFilterController::class, 'filtrar'])->name('habilidade.filtrar');
+Route::prefix('habilidade')->group(function () {
+    Route::get('/list', [HabilidadeController::class, 'exibirLista'])->name('lista_habilidade');
+    Route::any('/filtrar', [HabilidadeFilterController::class, 'filtrar'])->name('habilidade.filtrar');    
+});
+Route::resource('habilidade', HabilidadeController::class)->except('show','index');
 
 //CRUD Tema
-Route::get('/tema/create', [TemaController::class, 'create'])->name('cadastro_tema');
-Route::get('/tema/list', [TemaController::class, 'exibirLista'])->name('lista_tema');
-Route::post('/tema/store', [TemaController::class, 'store'])->name('tema.store');
-Route::get('/tema/{id}/edit', [TemaController::class, 'edit'])->name('tema.edit');
-Route::put('/tema/{id}', [TemaController::class, 'update'])->name('tema.update');
-Route::any('/tema/filtrar', [TemaFilterController::class, 'filtrar'])->name('tema.filtrar');
+Route::prefix('tema')->group(function () {
+    Route::get('/list', [TemaController::class, 'exibirLista'])->name('lista_tema');
+    Route::any('/filtrar', [TemaFilterController::class, 'filtrar'])->name('tema.filtrar');
+});
+Route::resource('tema', TemaController::class)->except('show','index');
 
 //CRUD Aluno
-Route::get('/aluno/create', [AlunoController::class, 'create'])->name('cadastro_aluno');
-Route::get('/aluno/list', [AlunoController::class, 'exibirLista'])->name('lista_aluno');
-Route::post('/aluno/store', [AlunoController::class, 'store'])->name('aluno.store');
-Route::get('/aluno/{id}/{anosame}/edit', [AlunoController::class, 'edit'])->name('aluno.edit');
-Route::put('/aluno/{id}', [AlunoController::class, 'update'])->name('aluno.update');
-Route::any('/aluno/filtrar', [AlunoFilterController::class, 'filtrar'])->name('aluno.filtrar');
-Route::get('/aluno/get_by_escola', [AlunoController::class, 'get_by_escola'])->name('aluno.get_by_escola');
-Route::get('/aluno/get_by_municipio', [AlunoController::class, 'get_by_municipio'])->name('aluno.get_by_municipio');
-Route::get('/aluno/get_by_same_escolav2', [AlunoController::class, 'get_by_same_escolav2'])->name('aluno.get_by_same_escolav2');
+Route::prefix('aluno')->group(function () {
+    Route::get('/list', [AlunoController::class, 'exibirLista'])->name('lista_aluno');
+    Route::name('aluno.')->group(function () {
+        Route::get('/create', [AlunoController::class, 'create'])->name('create');
+        Route::post('/store', [AlunoController::class, 'store'])->name('store');
+        Route::get('/{id}/{anosame}/edit', [AlunoController::class, 'edit'])->name('edit');
+        Route::put('/{id}', [AlunoController::class, 'update'])->name('update');
+        Route::any('/filtrar', [AlunoFilterController::class, 'filtrar'])->name('filtrar');
+        Route::get('/get_by_same', [AlunoController::class, 'get_by_same'])->name('get_by_same');
+        Route::get('/get_by_escola', [AlunoController::class, 'get_by_escola'])->name('get_by_escola');
+        Route::get('/get_by_municipio', [AlunoController::class, 'get_by_municipio'])->name('get_by_municipio');
+    });    
+});
 
 //CRUD Ano SAME
-Route::get('/anosame/create', [AnoSAMEController::class, 'create'])->name('cadastro_anosame');
-Route::get('/anosame/list', [AnoSAMEController::class, 'exibirLista'])->name('lista_anosame');
-Route::post('/anosame/store', [AnoSAMEController::class, 'store'])->name('anosame.store');
-Route::get('/anosame/{id}/edit', [AnoSAMEController::class, 'edit'])->name('anosame.edit');
-Route::put('/anosame/{id}', [AnoSAMEController::class, 'update'])->name('anosame.update');
-Route::get('/anosame/{id}/inativar', [AnoSAMEController::class, 'inativar'])->name('anosame.inativar');
-Route::get('/anosame/{id}/ativar', [AnoSAMEController::class, 'ativar'])->name('anosame.ativar');
+Route::prefix('anosame')->group(function () {
+    Route::get('/list', [AnoSAMEController::class, 'exibirLista'])->name('lista_anosame');
+    Route::name('anosame.')->group(function () {
+        Route::get('/{id}/inativar', [AnoSAMEController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/ativar', [AnoSAMEController::class, 'ativar'])->name('ativar');
+    });    
+});
+Route::resource('anosame', AnoSAMEController::class)->except('index','show');
+
+//CRUD Previlégios
+Route::prefix('previlegio')->group(function () {
+    Route::get('/list', [PrevilegioController::class, 'exibirLista'])->name('lista_previlegio');
+    Route::name('previlegio.')->group(function () {
+        Route::get('/{id}/inativar', [PrevilegioController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/ativar', [PrevilegioController::class, 'ativar'])->name('ativar');
+        Route::any('/filtrar', [PrevilegioFilterController::class, 'filtrar'])->name('filtrar');
+    });    
+});
+Route::resource('previlegio', PrevilegioController::class)->except('index','show');
+
+//CRUD Direção Professores
+Route::prefix('direcao_professor')->group(function () {
+    Route::get('/list', [DirecaoProfessorController::class, 'exibirLista'])->name('lista_direcao_professor');
+    Route::name('direcao_professor.')->group(function () {
+        Route::any('/filtrar', [DirecaoProfessorFilterController::class, 'filtrar'])->name('filtrar');
+    });    
+});
+Route::resource('direcao_professor', DirecaoProfessorController::class)->except('index','show');
+
+//CRUD Prova Gabaritos
+Route::prefix('prova_gabarito')->group(function () {
+    Route::get('/list', [ProvaGabaritoController::class, 'exibirLista'])->name('lista_prova_gabarito');
+    Route::name('prova_gabarito.')->group(function () {
+        Route::get('/{id}/inativar', [ProvaGabaritoController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/ativar', [ProvaGabaritoController::class, 'ativar'])->name('ativar');
+        Route::any('/filtrar', [ProvaGabaritoFilterController::class, 'filtrar'])->name('filtrar');
+    });    
+});
+Route::resource('prova_gabarito', ProvaGabaritoController::class)->except('index','show','destroy');
+
+//CRUD Questões
+Route::prefix('questao')->group(function () {
+    Route::get('/list', [QuestaoController::class, 'exibirLista'])->name('lista_questao');
+    Route::name('questao.')->group(function () {
+        Route::get('/questao/create', [QuestaoController::class, 'create'])->name('create');
+        Route::post('/questao/store', [QuestaoController::class, 'store'])->name('store');
+        Route::get('/questao/{id}/{anosame}/edit', [QuestaoController::class, 'edit'])->name('edit');
+        Route::put('/questao/{id}', [QuestaoController::class, 'update'])->name('update');
+        Route::any('/filtrar', [QuestaoFilterController::class, 'filtrar'])->name('filtrar');
+    });    
+});
+
+//CRUD Sugestão
+Route::get('/sugestao/list', [SugestaoController::class, 'exibirLista'])->name('lista_sugestoes');
+Route::resource('sugestao', SugestaoController::class)->only('store','update','destroy');
+
+//CRUD Prova Destaques
+Route::get('/destaque/list', [DestaqueController::class, 'exibirLista'])->name('lista_destaque');
+Route::resource('destaque', DestaqueController::class)->except('index','show','destroy');
+
+//CRUD Legenda
+Route::get('/legenda/list', [LegendaController::class, 'exibirLista'])->name('lista_legenda');
+Route::resource('legenda', LegendaController::class)->except('index','show','destroy');
+
+//CRUD Tipo Questão
+Route::get('/tipoquestao/list', [TipoQuestaoController::class, 'exibirLista'])->name('lista_tipoquestao');
+Route::resource('tipoquestao', TipoQuestaoController::class)->except('index','show','destroy');
+
+//CRUD Critério Questão
+Route::prefix('criterios_questao')->group(function () {
+    Route::get('/list', [CriterioQuestaoController::class, 'exibirLista'])->name('lista_criterios_questao');
+    Route::name('criterios_questao.')->group(function () {
+        Route::any('/filtrar', [CriterioQuestaoFilterController::class, 'filtrar'])->name('filtrar');
+    });    
+});
+Route::resource('criterios_questao', CriterioQuestaoController::class)->except('index','show','destroy');
+
+//CRUD Termo
+Route::get('/termo/list', [TermoController::class, 'exibirLista'])->name('lista_termo');
+Route::resource('termo', TermoController::class)->except('index','show','destroy');
+
+//CRUD Turma Prévia
+Route::prefix('turma_previa')->group(function () {
+    Route::get('/list', [TurmaPreviaController::class, 'exibirLista'])->name('lista_turma_previa');
+    Route::name('turma_previa.')->group(function () {
+        Route::get('/{id}/inativar', [TurmaPreviaController::class, 'inativar'])->name('inativar');
+        Route::get('/{id}/ativar', [TurmaPreviaController::class, 'ativar'])->name('ativar');
+        Route::get('/get_by_escola', [TurmaPreviaController::class, 'get_by_escola'])->name('get_by_escola');
+        Route::any('/filtrar', [TurmaPreviaFilterController::class, 'filtrar'])->name('filtrar');
+    });    
+});
+Route::resource('turma_previa', TurmaPreviaController::class)->except('index','show');
+
+//------------------------------------------------------ CRUDS -------------------------------------------------------------------
 
 //Home Registro
 Route::get('/registro_base', [RegistroController::class, 'index'])->name('registro_base.index');
@@ -224,70 +294,15 @@ Route::get('/solicitacao/{id}/negar', [SolicitacaoController::class, 'negar'])->
 Route::get('/solicitacao/lista_registro_usuario', [SolicitacaoController::class, 'listar_registros_usuario'])->name('lista_registros_usuario');
 Route::get('/solicitacao/lista_solicitacao_turma', [SolicitacaoController::class, 'listar_solicitacao_turma'])->name('lista_solicitacao_turma');
 Route::post('/solicitacao/aprovar', [SolicitacaoController::class, 'store'])->name('solicitacao.store');
-Route::get('/solicitacao_aut/get_by_escola', [SolicitacaoController::class, 'get_by_escola'])->name('solicitacao_aut.get_by_escola');
-Route::get('/solicitacao_aut/get_by_municipio', [SolicitacaoController::class, 'get_by_municipio'])->name('solicitacao_aut.get_by_municipio');
 
 //SolicitacaoRegistro
 Route::post('/solicitacao/aprovar', [SolicitacaoRegistroController::class, 'store'])->name('solicitacao_registro.store');
-Route::get('/solicitacao_registro/get_by_escola', [SolicitacaoRegistroController::class, 'get_by_escola'])->name('solicitacao_registro.get_by_escola');
-Route::get('/solicitacao_registro/get_by_municipio', [SolicitacaoRegistroController::class, 'get_by_municipio'])->name('solicitacao_registro.get_by_municipio');
 
 //Solicitacao Turma
 Route::get('/solicitacao/turma', [SolicitacaoTurmaController::class, 'index'])->name('solicitacao_turma.index');
 Route::get('/solicitacao/get_by_escola', [SolicitacaoTurmaController::class, 'get_by_escola'])->name('solicitacao_turma.get_by_escola');
 Route::get('/solicitacao/get_by_municipio', [SolicitacaoTurmaController::class, 'get_by_municipio'])->name('solicitacao_turma.get_by_municipio');
 Route::post('/solicitacao/turma/aprovar', [SolicitacaoTurmaController::class, 'store'])->name('solicitacao_turma.store');
-
-//CRUD Previlégios
-Route::get('/previlegio/create', [PrevilegioController::class, 'create'])->name('cadastro_previlegio');
-Route::get('/previlegio/list', [PrevilegioController::class, 'exibirLista'])->name('lista_previlegio');
-Route::post('/previlegio/store', [PrevilegioController::class, 'store'])->name('previlegio.store');
-Route::get('/previlegio/{id}/edit', [PrevilegioController::class, 'edit'])->name('previlegio.edit');
-Route::put('/previlegio/{id}', [PrevilegioController::class, 'update'])->name('previlegio.update');
-Route::get('/previlegio/{id}/inativar', [PrevilegioController::class, 'inativar'])->name('previlegio.inativar');
-Route::get('/previlegio/{id}/ativar', [PrevilegioController::class, 'ativar'])->name('previlegio.ativar');
-Route::any('/previlegio/filtrar', [PrevilegioFilterController::class, 'filtrar'])->name('previlegio.filtrar');
-
-//CRUD Direção Professores
-Route::get('/direcao_professor/create', [DirecaoProfessorController::class, 'create'])->name('cadastro_direcao_professor');
-Route::get('/direcao_professor/list', [DirecaoProfessorController::class, 'exibirLista'])->name('lista_direcao_professor');
-Route::post('/direcao_professor/store', [DirecaoProfessorController::class, 'store'])->name('direcao_professor.store');
-Route::get('/direcao_professor/{id}/edit', [DirecaoProfessorController::class, 'edit'])->name('direcao_professor.edit');
-Route::delete('/direcao_professor/{id}', [DirecaoProfessorController::class, 'destroy'])->name('direcao_professor.delete');
-Route::put('/direcao_professor/{id}', [DirecaoProfessorController::class, 'update'])->name('direcao_professor.update');
-Route::any('/direcao_professor/filtrar', [DirecaoProfessorFilterController::class, 'filtrar'])->name('direcao_professor.filtrar');
-Route::get('/direcao_professor/get_by_escola', [DirecaoProfessorFilterController::class, 'get_by_escola'])->name('direcao_professor.get_by_escola');
-Route::get('/direcao_professor/get_by_same_escolav3', [DirecaoProfessorController::class, 'get_by_same_escolav3'])->name('direcao_professor.get_by_same_escolav3');
-
-//CRUD Prova Gabaritos
-Route::get('/prova_gabarito/create', [ProvaGabaritoController::class, 'create'])->name('cadastro_prova_gabarito');
-Route::get('/prova_gabarito/list', [ProvaGabaritoController::class, 'exibirLista'])->name('lista_prova_gabarito');
-Route::post('/prova_gabarito/store', [ProvaGabaritoController::class, 'store'])->name('prova_gabarito.store');
-Route::get('/prova_gabarito/{id}/edit', [ProvaGabaritoController::class, 'edit'])->name('prova_gabarito.edit');
-Route::put('/prova_gabarito/{id}', [ProvaGabaritoController::class, 'update'])->name('prova_gabarito.update');
-Route::get('/prova_gabarito/{id}/inativar', [ProvaGabaritoController::class, 'inativar'])->name('prova_gabarito.inativar');
-Route::get('/prova_gabarito/{id}/ativar', [ProvaGabaritoController::class, 'ativar'])->name('prova_gabarito.ativar');
-Route::any('/prova_gabarito/filtrar', [ProvaGabaritoFilterController::class, 'filtrar'])->name('prova_gabarito.filtrar');
-
-//CRUD Questões
-Route::get('/questao/create', [QuestaoController::class, 'create'])->name('cadastro_questao');
-Route::get('/questao/list', [QuestaoController::class, 'exibirLista'])->name('lista_questao');
-Route::post('/questao/store', [QuestaoController::class, 'store'])->name('questao.store');
-Route::get('/questao/{id}/{SAME}/edit', [QuestaoController::class, 'edit'])->name('questao.edit');
-Route::put('/questao/{id}', [QuestaoController::class, 'update'])->name('questao.update');
-Route::any('/questao/filtrar', [QuestaoFilterController::class, 'filtrar'])->name('questao.filtrar');
-
-//CRUD Sugestão
-Route::post('/sugestao/store', [SugestaoController::class, 'store'])->name('sugestao.store');
-Route::delete('/sugestao/{id}', [SugestaoController::class, 'destroy'])->name('sugestao.delete');
-Route::get('/sugestao/list', [SugestaoController::class, 'exibirLista'])->name('lista_sugestoes');
-
-//CRUD Prova Destaques
-Route::get('/destaque/create', [DestaqueController::class, 'create'])->name('cadastro_destaque');
-Route::get('/destaque/list', [DestaqueController::class, 'exibirLista'])->name('lista_destaque');
-Route::post('/destaque/store', [DestaqueController::class, 'store'])->name('destaque.store');
-Route::get('/destaque/{id}/edit', [DestaqueController::class, 'edit'])->name('destaque.edit');
-Route::put('/destaque/{id}', [DestaqueController::class, 'update'])->name('destaque.update');
 
 //Professor
 Route::get('/turma_principal', [ProfessorController::class, 'index'])->name('professor.index');
@@ -318,51 +333,33 @@ Route::get('/municipio_principal/comparativo', [SecretarioComparativoController:
 Route::get('/municipio_comparativo/comparativo/{id}/{id_disciplina}/{sessao}', [SecretarioComparativoController::class, 'exibirMunicipioComparativo'])->name('secretario_comparativo.exibirMunicipioComparativo');
 Route::get('/municipio_comparativo/comparativo/{id}/{id_disciplina}/{ano}/{sessao}', [SecretarioComparativoController::class, 'exibirMunicipioComparativoAno'])->name('secretario_comparativo.exibirMunicipioComparativoAno');
 
-//CRUD Legenda
-Route::get('/legenda/create', [LegendaController::class, 'create'])->name('cadastro_legenda');
-Route::get('/legenda/list', [LegendaController::class, 'exibirLista'])->name('lista_legenda');
-Route::post('/legenda/store', [LegendaController::class, 'store'])->name('legenda.store');
-Route::get('/legenda/{id}/edit', [LegendaController::class, 'edit'])->name('legenda.edit');
-Route::put('/legenda/{id}', [LegendaController::class, 'update'])->name('legenda.update');
-
-//CRUD Tipo Questão
-Route::get('/tipoquestao/create', [TipoQuestaoController::class, 'create'])->name('cadastro_tipoquestao');
-Route::get('/tipoquestao/list', [TipoQuestaoController::class, 'exibirLista'])->name('lista_tipoquestao');
-Route::post('/tipoquestao/store', [TipoQuestaoController::class, 'store'])->name('tipoquestao.store');
-Route::get('/tipoquestao/{id}/edit', [TipoQuestaoController::class, 'edit'])->name('tipoquestao.edit');
-Route::put('/tipoquestao/{id}', [TipoQuestaoController::class, 'update'])->name('tipoquestao.update');
-
-//CRUD Critério Questão
-Route::get('/criterios_questao/create', [CriterioQuestaoController::class, 'create'])->name('cadastro_criterios_questao');
-Route::get('/criterios_questao/list', [CriterioQuestaoController::class, 'exibirLista'])->name('lista_criterios_questao');
-Route::post('/criterios_questao/store', [CriterioQuestaoController::class, 'store'])->name('criterios_questao.store');
-Route::get('/criterios_questao/{id}/edit', [CriterioQuestaoController::class, 'edit'])->name('criterios_questao.edit');
-Route::put('/criterios_questao/{id}', [CriterioQuestaoController::class, 'update'])->name('criterios_questao.update');
-Route::any('/criterios_questao/filtrar', [CriterioQuestaoFilterController::class, 'filtrar'])->name('criterios_questao.filtrar');
-
-//CRUD Termo
-Route::get('/termo/create', [TermoController::class, 'create'])->name('cadastro_termo');
-Route::get('/termo/list', [TermoController::class, 'exibirLista'])->name('lista_termo');
-Route::post('/termo/store', [TermoController::class, 'store'])->name('termo.store');
-Route::get('/termo/{id}/edit', [TermoController::class, 'edit'])->name('termo.edit');
-Route::put('/termo/{id}', [TermoController::class, 'update'])->name('termo.update');
-
-//CRUD Turma Prévia
-Route::get('/turma_previa/create', [TurmaPreviaController::class, 'create'])->name('cadastro_turma_previa');
-Route::get('/turma_previa/list', [TurmaPreviaController::class, 'exibirLista'])->name('lista_turma_previa');
-Route::post('/turma_previa/store', [TurmaPreviaController::class, 'store'])->name('turma_previa.store');
-Route::get('/turma_previa/{id}/edit', [TurmaPreviaController::class, 'edit'])->name('turma_previa.edit');
-Route::put('/turma_previa/{id}', [TurmaPreviaController::class, 'update'])->name('turma_previa.update');
-Route::get('/turma_previa/{id}/inativar', [TurmaPreviaController::class, 'inativar'])->name('turma_previa.inativar');
-Route::get('/turma_previa/{id}/ativar', [TurmaPreviaController::class, 'ativar'])->name('turma_previa.ativar');
-Route::get('/turma_previa/get_by_escola', [TurmaPreviaController::class, 'get_by_escola'])->name('turma_previa.get_by_escola');
-Route::any('/turma_previa/filtrar', [TurmaPreviaFilterController::class, 'filtrar'])->name('turma_previa.filtrar');
-
 //CRUD Manutenção
 Route::get('/manutencao/list', [ManutencaoController::class, 'exibirLista'])->name('lista_manutencao');
 Route::get('/manutencao/cache', [ManutencaoController::class, 'limparCache'])->name('cache.limpar');
 Route::get('/manutencao/dados_unificados/limpar', [ManutencaoController::class, 'limparDadosUnificados'])->name('dados_unificados.limpar');
 Route::get('/manutencao/dados_unificados/carregar', [ManutencaoController::class, 'carregarDadosUnificados'])->name('dados_unificados.carregar');
+
+//Gestão Escolar Previlégios
+Route::get('/gestao_previlegio/create', [GestaoEscPrevilegioController::class, 'create'])->name('gest_cadastro_previlegio');
+Route::post('/gestao_previlegio/store', [GestaoEscPrevilegioController::class, 'store'])->name('gest_previlegio.store');
+Route::get('/gestao_previlegio/{id}/edit', [GestaoEscPrevilegioController::class, 'edit'])->name('gest_previlegio.edit');
+Route::put('/gestao_previlegio/{id}', [GestaoEscPrevilegioController::class, 'update'])->name('gest_previlegio.update');
+Route::get('/gestao_previlegio/{id}/inativar', [GestaoEscPrevilegioController::class, 'inativar'])->name('gest_previlegio.inativar');
+Route::get('/gestao_previlegio/{id}/ativar', [GestaoEscPrevilegioController::class, 'ativar'])->name('gest_previlegio.ativar');
+Route::any('/gestao_previlegio/filtrar', [GestaoEscPrevilegioController::class, 'filtrar'])->name('gest_previlegio.filtrar');
+Route::get('/gestao_previlegio/listar', [GestaoEscPrevilegioController::class, 'exibirLista'])->name('gest_previlegio.listar');
+
+//Gestão Escolar Direção Professor
+Route::get('/gestao_direcao_professor/create', [GestaoEscDirProfessorController::class, 'create'])->name('gest_cadastro_direcao_professor');
+Route::post('/gestao_direcao_professor/store', [GestaoEscDirProfessorController::class, 'store'])->name('gest_direcao_professor.store');
+Route::get('/gestao_direcao_professor/{id}/edit', [GestaoEscDirProfessorController::class, 'edit'])->name('gest_direcao_professor.edit');
+Route::put('/gestao_direcao_professor/{id}', [GestaoEscDirProfessorController::class, 'update'])->name('gest_direcao_professor.update');
+Route::any('/gestao_direcao_professor/filtrar', [GestaoEscDirProfessorController::class, 'filtrar'])->name('gest_direcao_professor.filtrar');
+Route::delete('/gestao_direcao_professor/{id}', [GestaoEscDirProfessorController::class, 'destroy'])->name('gest_direcao_professor.delete');
+Route::get('/gestao_direcao_professor/list', [GestaoEscDirProfessorController::class, 'exibirLista'])->name('gest_direcao_professor.listar');
+
+
+//------------------------------------------------------ CACHES -------------------------------------------------------------------
 
 //Cache Município
 Route::get('/manutencao/cache/municipio_dados_base', [CacheMunicipioController::class, 'carregarCacheMunDadosBase'])->name('cache.municipio_dados_base');
@@ -394,25 +391,6 @@ Route::get('/manutencao/cache/turma_quest_mat', [CacheTurmaController::class, 'c
 Route::get('/manutencao/cache/turma_quest_port', [CacheTurmaController::class, 'cacheQuestaoPortTurma'])->name('cache.turma_quest_port');
 Route::get('/manutencao/cache/turma_alunos', [CacheTurmaController::class, 'cacheAlunosTurma'])->name('cache.turma_alunos');
 
-//Gestão Escolar Previlégios
-Route::get('/gestao_previlegio/create', [GestaoEscPrevilegioController::class, 'create'])->name('gest_cadastro_previlegio');
-Route::post('/gestao_previlegio/store', [GestaoEscPrevilegioController::class, 'store'])->name('gest_previlegio.store');
-Route::get('/gestao_previlegio/{id}/edit', [GestaoEscPrevilegioController::class, 'edit'])->name('gest_previlegio.edit');
-Route::put('/gestao_previlegio/{id}', [GestaoEscPrevilegioController::class, 'update'])->name('gest_previlegio.update');
-Route::get('/gestao_previlegio/{id}/inativar', [GestaoEscPrevilegioController::class, 'inativar'])->name('gest_previlegio.inativar');
-Route::get('/gestao_previlegio/{id}/ativar', [GestaoEscPrevilegioController::class, 'ativar'])->name('gest_previlegio.ativar');
-Route::any('/gestao_previlegio/filtrar', [GestaoEscPrevilegioController::class, 'filtrar'])->name('gest_previlegio.filtrar');
-Route::get('/gestao_previlegio/listar', [GestaoEscPrevilegioController::class, 'exibirLista'])->name('gest_previlegio.listar');
-
-//Gestão Escolar Direção Professor
-Route::get('/gestao_direcao_professor/create', [GestaoEscDirProfessorController::class, 'create'])->name('gest_cadastro_direcao_professor');
-Route::post('/gestao_direcao_professor/store', [GestaoEscDirProfessorController::class, 'store'])->name('gest_direcao_professor.store');
-Route::get('/gestao_direcao_professor/{id}/edit', [GestaoEscDirProfessorController::class, 'edit'])->name('gest_direcao_professor.edit');
-Route::put('/gestao_direcao_professor/{id}', [GestaoEscDirProfessorController::class, 'update'])->name('gest_direcao_professor.update');
-Route::any('/gestao_direcao_professor/filtrar', [GestaoEscDirProfessorController::class, 'filtrar'])->name('gest_direcao_professor.filtrar');
-Route::delete('/gestao_direcao_professor/{id}', [GestaoEscDirProfessorController::class, 'destroy'])->name('gest_direcao_professor.delete');
-Route::get('/gestao_direcao_professor/list', [GestaoEscDirProfessorController::class, 'exibirLista'])->name('gest_direcao_professor.listar');
-
 //Cache Município Comparativo
 Route::get('/manutencao/cache/municipio_comp_disc', [CacheCompMunicipioController::class, 'carregarDisciplinaMunicipio'])->name('cache.disc_municipio');
 Route::get('/manutencao/cache/municipio_comp_tema', [CacheCompMunicipioController::class, 'carregarTemaMunicipio'])->name('cache.tema_municipio');
@@ -427,3 +405,4 @@ Route::get('/manutencao/cache/comp_tema_escola', [CacheCompEscolaController::cla
 Route::get('/manutencao/cache/comp_curricular_escola', [CacheCompEscolaController::class, 'carregarAnoCurricularDisciplinaEscola'])->name('cache.curricular_escola');
 Route::get('/manutencao/cache/comp_hab_anos_disc_escola', [CacheCompEscolaController::class, 'carregarHabAnosDisciplinaEscola'])->name('cache.hab_anos_disc_escola');
 
+//------------------------------------------------------ CACHES -------------------------------------------------------------------

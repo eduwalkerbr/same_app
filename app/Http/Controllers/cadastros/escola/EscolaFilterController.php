@@ -4,7 +4,6 @@ namespace App\Http\Controllers\cadastros\escola;
 
 use App\Models\AnoSame;
 use App\Models\Escola;
-use App\Models\Municipio;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
@@ -18,6 +17,7 @@ class EscolaFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objAnoSame = new AnoSame();
     }
     /**

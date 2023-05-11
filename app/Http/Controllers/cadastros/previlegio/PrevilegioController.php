@@ -103,17 +103,19 @@ class PrevilegioController extends Controller
             return redirect()->route('lista_previlegio')->with('status', 'Já existem previlégios atribuídos para este Usuário!');
         }
 
+        $id_municipio = explode('_',$request->municipios_id)[0];
+
         $data = [
             'users_id' => $request->users_id,
             'autorizou_users_id' => $request->autorizou_users_id,
             'status' => 1,
             'funcaos_id' => $request->funcaos_id,
-            'municipios_id' => $request->municipios_id,
+            'municipios_id' => $id_municipio,
             'SAME' => $request->SAME
         ];
 
         //Verifica existência previlégio pelo usuário, função e município
-        $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $request->municipios_id]])->get();
+        $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $id_municipio]])->get();
         //Caso exista previlégio cadastrado
         if ($previlegio && sizeof($previlegio) > 0) {
             //Carrega os dados do Usuário
@@ -121,7 +123,7 @@ class PrevilegioController extends Controller
             //Carrega os dados da Função
             $funcao = $this->objFuncao->find($request->funcaos_id);
             //Carrega os dados do Município pelo id e Ano SAME
-            $municipios = $this->objMunicipio->where([['id','=',$request->municipios_id],['SAME','=',$request->SAME]])->get();
+            $municipios = $this->objMunicipio->where([['id','=',$id_municipio],['SAME','=',$request->SAME]])->get();
             $municipio = $municipios[0];
             //Exibe listagem de previlégio com mensagem ao usuário
             return redirect()->route('lista_previlegio')->with('status', 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!');
@@ -176,18 +178,19 @@ class PrevilegioController extends Controller
      */
     public function update(PrevilegioRequest $request, $id)
     {
-
+        $id_municipio = explode('_',$request->municipios_id)[0];
+        
         $data = [
             'users_id' => $request->users_id,
             'autorizou_users_id' => $request->autorizou_users_id,
             'status' => 1,
             'funcaos_id' => $request->funcaos_id,
-            'municipios_id' => $request->municipios_id,
+            'municipios_id' => $id_municipio,
             'SAME' => $request->SAME
         ];
 
         //Verifica existência previlégio pelo usuário, função e município
-        $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $request->municipios_id],['id','<>',$id]])->get();
+        $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $id_municipio],['id','<>',$id]])->get();
         //Caso exista um previlégio cadastrado
         if ($previlegio && sizeof($previlegio) > 0) {
             //Carrega os dados do Usuário
@@ -195,7 +198,7 @@ class PrevilegioController extends Controller
             //Carrega os dados da Função
             $funcao = $this->objFuncao->find($request->funcaos_id);
             //Carrega os dados do Município pelo id e Ano SAME
-            $municipios = $this->objMunicipio->where([['id','=',$request->municipios_id],['SAME','=',$request->SAME]])->get();
+            $municipios = $this->objMunicipio->where([['id','=',$id_municipio],['SAME','=',$request->SAME]])->get();
             $municipio = $municipios[0];
 
             //Exibe página de listagem de previlégios com mensagem ao usuário
@@ -252,21 +255,4 @@ class PrevilegioController extends Controller
     {
     }
 
-    /**
-     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
-     */
-    public function get_by_same_municipio(Request $request)
-    {
-        if (!$request->SAME) {
-            $html = '<option value="">' . trans('') . '</option>';
-        } else {
-            $html = '<option value=""></option>';
-            $municipios = Municipio::where(['SAME' => $request->SAME])->get();
-            foreach ($municipios as $municipio) {
-                $html .= '<option value="' . $municipio->id . '">' . $municipio->nome . ' ('.$municipio->SAME.')'. '</option>';
-            }
-        }
-
-        return response()->json(['html' => $html]);
-    }
 }

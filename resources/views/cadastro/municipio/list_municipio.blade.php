@@ -72,7 +72,7 @@
         <td style="font-weight: normal;font-size:14px;text-align:center;">{{$municipio->SAME}}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$municipio->updated_at->format('d/m/Y H:i:s')}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_municipio') }}">
+          <a href="{{ route('municipio.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('municipio.edit', ['id' => $municipio->id, 'anosame' => $municipio->SAME]) }}">

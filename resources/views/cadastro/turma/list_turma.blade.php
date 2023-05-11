@@ -41,6 +41,16 @@
               </div>
               <div class=" col-md-4">
                 <div class="form-group">
+                  <label for="municipios_id">Município</label>
+                  <select class="form-control" id="municipios_id" name="municipios_id">
+                    <option value=""></option>                    
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-begin" style="color:black;font-size:15px;">
+              <div class=" col-md-6">
+                <div class="form-group">
                   <label for="escolas_id">Escola</label>
                   <select class="form-control" id="escolas_id" name="escolas_id">
                     <option value=""></option>                    
@@ -80,18 +90,18 @@
         <td style="font-weight: normal;font-size:14px;">{{$turma->nome_municipio}}</td>
         <td style="font-weight: normal;font-size:14px;text-align:center;">{{$turma->SAME}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_turma') }}">
+          <a href="{{ route('turma.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
-          <a href="{{ route('turma.edit', $turma->id) }}">
+          <a href="{{ route('turma.edit', ['id' => $turma->id, 'anosame' => $turma->SAME]) }}">
             <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Editar</button>
           </a>
           @if(isset($turma) && $turma->status == 'Ativo')
-          <a href="{{ route('turma.inativar',$turma->id) }}">
+          <a href="{{ route('turma.inativar',['id' => $turma->id, 'anosame' => $turma->SAME]) }}">
             <button style="font-weight: normal;" class="btn-danger">Inativar</button>
           </a>
           @else
-          <a href="{{ route('turma.ativar',$turma->id) }}">
+          <a href="{{ route('turma.ativar',['id' => $turma->id, 'anosame' => $turma->SAME]) }}">
             <button style="font-weight: normal;" class="btn-danger">Ativar</button>
           </a>
           @endif

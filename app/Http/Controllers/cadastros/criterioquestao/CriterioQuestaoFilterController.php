@@ -19,6 +19,7 @@ class CriterioQuestaoFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objDisciplina = new Disciplina();
         $this->objTipoQuestao = new TipoQuestao();
     }

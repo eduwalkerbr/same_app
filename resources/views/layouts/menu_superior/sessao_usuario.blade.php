@@ -20,7 +20,7 @@
             {{ Auth::user()->name }}
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" style="color: #f9821E;">
-            <a class="dropdown-item" href="{{ route('alterar_registro.index')}}" style="color: #f9821E;" onmouseover='this.style.backgroundColor="#f9821E";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="#f9821E"'>
+            <a class="dropdown-item" href="{{ route('registro.index')}}" style="color: #f9821E;" onmouseover='this.style.backgroundColor="#f9821E";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="#f9821E"'>
                 Alterar Registro
             </a>
             <hr>
