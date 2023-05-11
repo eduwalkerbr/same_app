@@ -52,21 +52,6 @@
                         </div>
                     </div>
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
-                        <div class="col-md-8">
-                            <div class="form-group">
-                                <label for="id_sala">Escola</label>
-                                <select class="form-control" id="id_escola" name="id_escola" required>
-                                    @if(isset($direcao_professor) && isset($direcao_professor->id_escola))
-                                    <option value="{{ $direcao_professor->id_escola.'_'.$direcao_professor->SAME ?? ''}}">{{ $direcao_professor->nome_escola.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
-                                    @else
-                                    <option value=""></option>
-                                    @endif
-                                    @foreach($escolas as $escola)
-                                    <option value="{{ $escola->id.'_'.$escola->SAME }}">{{ $escola->nome.' ('.$escola->SAME.')' ?? ''}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
@@ -74,18 +59,42 @@
                                     <option value="{{ $direcao_professor->SAME ?? ''}}">{{ $direcao_professor->SAME ?? ''}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
-                                        <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
+                                    <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
                                     @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="municipios_id">Município</label>
+                                <select class="form-control" id="municipios_id" name="municipios_id">
+                                    @if(isset($direcao_professor) && isset($direcao_professor->id_municipio))
+                                    <option value="{{ $direcao_professor->id_municipio.'_'.$direcao_professor->SAME ?? ''}}">{{ $direcao_professor->nome_municipio.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
+                                    @else
+                                    <option value=""></option>
                                     @endif
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="form-group">
-                                <label for="id_sala">Turma</label>
-                                <select class="form-control" id="id_turma" name="id_turma">
+                                <label for="escolas_id">Escola</label>
+                                <select class="form-control" id="escolas_id" name="escolas_id" required>
+                                    @if(isset($direcao_professor) && isset($direcao_professor->id_escola))
+                                    <option value="{{ $direcao_professor->id_escola.'_'.$direcao_professor->SAME ?? ''}}">{{ $direcao_professor->nome_escola.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
+                                    @else
+                                    <option value=""></option>
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="turmas_id">Turma</label>
+                                <select class="form-control" id="turmas_id" name="turmas_id">
                                     @if(isset($direcao_professor) && isset($direcao_professor->id_turma))
                                     <option value="{{ $direcao_professor->id_turma ?? ''}}">{{ $direcao_professor->nome_turma.' ('.$direcao_professor->SAME_turma.')'  ?? ''}}</option>
                                     @else

@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Cache;
 class MunicipioFilterController extends Controller
 {
     private $objAnoSame;
-    private $objMunicipio;
 
      /**
      * Método construtor que inicializa as classes a serem utilizadas para ações de comunicação com o banco de dados
@@ -19,7 +18,6 @@ class MunicipioFilterController extends Controller
     public function __construct()
     {
         $this->objAnoSame = new AnoSame();
-        $this->objMunicipio = new Municipio();
     }
     /**
      * Método que monta a listagem de Município pelo filtro

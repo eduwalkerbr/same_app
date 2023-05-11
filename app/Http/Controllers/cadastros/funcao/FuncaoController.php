@@ -15,6 +15,7 @@ class FuncaoController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objFuncao = new Funcao();
     }
 

@@ -47,6 +47,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
         });
+
+        //Define que o parâmetro id e ano same devem ser números
+        Route::pattern('id', '[0-9]+');
+        Route::pattern('anosame', '[0-9]+');
+        
     }
 
     /**

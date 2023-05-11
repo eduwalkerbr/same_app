@@ -25,7 +25,7 @@ class DirecaoProfessorRequest extends FormRequest
     {
         return [
             'id_previlegio' => 'required',
-            'id_escola' => 'required',
+            'escolas_id' => 'required',
             'SAME' => 'required'
         ];
     }

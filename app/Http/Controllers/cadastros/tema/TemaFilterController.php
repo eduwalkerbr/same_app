@@ -18,6 +18,7 @@ class TemaFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objTema = new Tema();
         $this->objDisciplina = new Disciplina();
     }

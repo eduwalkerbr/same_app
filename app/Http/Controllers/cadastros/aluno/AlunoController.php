@@ -23,6 +23,7 @@ class AlunoController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objAluno = new Aluno();
         $this->objMunicipio = new Municipio();
         $this->objAnoSame = new AnoSame();
@@ -93,6 +94,7 @@ class AlunoController extends Controller
      */
     public function store(AlunoRequest $request)
     {
+        
         $id_escola = explode('_',$request->turmas_escolas_id)[0];
         $id_municipio = explode('_',$request->turmas_escolas_municipios_id)[0];
         $data = [
@@ -195,24 +197,23 @@ class AlunoController extends Controller
     }
 
     /**
-     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
+     * Método ajax para listar os Municípios baseado no Ano SAME
      */
-    public function get_by_escola(Request $request)
+    public function get_by_same(Request $request)
     {
-        if (!$request->turmas_escolas_id) {
+        if (!$request->SAME) {
             $html = '<option value="">' . trans('') . '</option>';
         } else {
-            $params = explode('_',$request->turmas_escolas_id);
             $html = '<option value=""></option>';
-            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
-            foreach ($turmas as $turma) {
-                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
+            $municipios = Municipio::where(['SAME' => $request->SAME])->get();
+            foreach ($municipios as $municipio) {
+                $html .= '<option value="' . $municipio->id.'_'.$municipio->SAME . '">' . $municipio->nome . ' ('.$municipio->SAME.')'. '</option>';
             }
         }
 
         return response()->json(['html' => $html]);
     }
-
+    
     /**
      * Método ajax para listar as escolas pelo munícipio selecionada na página de solicitação de turma 
      */
@@ -235,15 +236,16 @@ class AlunoController extends Controller
     /**
      * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
      */
-    public function get_by_same_escolav2(Request $request)
+    public function get_by_escola(Request $request)
     {
-        if (!$request->SAME) {
+        if (!$request->turmas_escolas_id) {
             $html = '<option value="">' . trans('') . '</option>';
         } else {
+            $params = explode('_',$request->turmas_escolas_id);
             $html = '<option value=""></option>';
-            $escolas = Escola::where(['SAME' => $request->SAME])->get();
-            foreach ($escolas as $escola) {
-                $html .= '<option value="' . $escola->id.'_'.$escola->SAME . '">' . $escola->nome . ' ('.$escola->SAME.')'. '</option>';
+            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($turmas as $turma) {
+                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
             }
         }
 

@@ -28,6 +28,7 @@ class QuestaoFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objAnoSame = new AnoSame();
         $this->objDisciplina = new Disciplina();
         $this->objTema = new Tema();

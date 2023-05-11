@@ -17,6 +17,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objUser = new User();
     }
 
@@ -27,7 +28,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -83,13 +83,13 @@ class UserController extends Controller
         //Obtém o usuário pelo E-mail, interrompendo o processo caso já exista
         $usuario = $this->objUser->where(['email' => $request->email])->get();
         if ($usuario && sizeof($usuario) > 0) {
-            return redirect()->route('lista_user')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
+            return redirect()->route('user.list')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
         }
 
         $cad = $this->objUser->create($data);
 
         if ($cad) {
-            return redirect()->route('lista_user');
+            return redirect()->route('user.list');
         }
     }
 
@@ -101,7 +101,6 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
     }
 
     /**
@@ -136,11 +135,11 @@ class UserController extends Controller
         //Obtém o usuário pelo E-mail, sendo diferente do usuário que está sendo alterado, e interrompe o processo caso exista
         $usuario = $this->objUser->where(['email' => $request->email])->where('id','<>',$id)->get();
         if ($usuario && sizeof($usuario) > 0) {
-            return redirect()->route('lista_user')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
+            return redirect()->route('user.list')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
         }
 
         $this->objUser->where(['id' => $id])->update($data);
-        return redirect()->route('lista_user');
+        return redirect()->route('user.list');
     }
 
     /**
@@ -153,22 +152,5 @@ class UserController extends Controller
     {
         $del = $this->objUser->destroy($id);
         return ($del) ? "sim" : "não";
-    }
-
-    /**
-     * Método que monta a listagem de Usuários pelo filtro
-     */
-    public function filtrar(Request $request)
-    {
-        if($request->name && $request->email){
-            $users = $this->objUser->where([['name', '=', $request->name],['email', '=', $request->email]])->orderBy('updated_at', 'desc')->paginate(8);
-        } else if($request->email){
-            $users = $this->objUser->where([['email', '=', $request->email]])->orderBy('updated_at', 'desc')->paginate(8);
-        } if($request->name){
-            $users = $this->objUser->where([['name', '=', $request->name]])->orderBy('updated_at', 'desc')->paginate(8);
-        } else{
-            $users = $this->objUser->orderBy('updated_at', 'desc')->paginate(8); 
-        }
-        return redirect()->route('lista_user');
     }
 }

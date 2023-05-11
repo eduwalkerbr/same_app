@@ -26,7 +26,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$termo->descricao }}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$termo->updated_at->format('d/m/Y H:i:s')}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_termo') }}">
+          <a href="{{ route('termo.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('termo.edit', $termo->id) }}">

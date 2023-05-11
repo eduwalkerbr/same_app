@@ -10,7 +10,6 @@ use App\Models\Turma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\AnoSame;
 
 class SolicitacaoTurmaController extends Controller
 {
@@ -123,7 +122,7 @@ class SolicitacaoTurmaController extends Controller
         $previlegio = $this->objPrevilegio->where(['users_id' => $request->id_user])->get();
 
         //Caso na requisição tenha escola
-        if ($request->id_escola != null) {
+        if ($request->filled('id_escola')) {
             $dataDirecaoProfessor = [
                 'id_previlegio' => $previlegio[0]->id,
                 'id_turma' => $request->id_turma,

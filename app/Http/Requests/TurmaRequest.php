@@ -27,7 +27,7 @@ class TurmaRequest extends FormRequest
             'TURMA' => 'required',
             'DESCR_TURMA' => 'required',
             'status' => 'required',
-            'escolas_municipios_id' => 'required',
+            'municipios_id' => 'required',
             'escolas_id' => 'required',
             'SAME' => 'required',
         ];

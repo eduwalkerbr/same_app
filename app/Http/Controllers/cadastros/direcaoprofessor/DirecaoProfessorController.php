@@ -5,9 +5,7 @@ namespace App\Http\Controllers\cadastros\direcaoprofessor;
 use App\Http\Requests\DirecaoProfessorRequest;
 use App\Models\AnoSame;
 use App\Models\DirecaoProfessor;
-use App\Models\Escola;
 use App\Models\Previlegio;
-use App\Models\Turma;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -17,8 +15,6 @@ class DirecaoProfessorController extends Controller
 {
     private $objUser;
     private $objPrevilegio;
-    private $objEscola;
-    private $objTurma;
     private $objDirecaoProfessor;
     private $objAnoSame;
 
@@ -30,8 +26,6 @@ class DirecaoProfessorController extends Controller
         $this->middleware('auth');
         $this->objUser = new User();
         $this->objPrevilegio = new Previlegio();
-        $this->objEscola = new Escola();
-        $this->objTurma = new Turma();
         $this->objDirecaoProfessor = new DirecaoProfessor();
         $this->objAnoSame = new AnoSame();
     }
@@ -65,6 +59,10 @@ class DirecaoProfessorController extends Controller
                 if($nome == 'users_id' && $valor){
                     $query->join('previlegios', 'direcao_professors.id_previlegio', '=', 'previlegios.id');
                     $query->where('previlegios.users_id',$valor);
+                }  else if($nome == 'escolas_id' && $valor){ 
+                    $query->where('direcao_professors.'.'id_escola',$valor);
+                } else if($nome == 'turmas_id' && $valor){
+                    $query->where('direcao_professors.'.'id_turma',$valor);
                 } else if($valor){
                     $query->where('direcao_professors.'.$nome,$valor);
                 }
@@ -87,11 +85,9 @@ class DirecaoProfessorController extends Controller
      */
     public function create(Request $request)
     {
-        $escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
-        $turmas = $this->objTurma->where(['status' => 'Ativo'])->get();
         $previlegios = $this->objPrevilegio->where(['status' => 1])->get();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao','asc')->get();
-        return view('cadastro/direcao_professores/create_direcao_professor', compact('escolas', 'turmas', 'previlegios','anosativos'));
+        return view('cadastro/direcao_professores/create_direcao_professor', compact('previlegios','anosativos'));
     }
 
     /**
@@ -103,18 +99,18 @@ class DirecaoProfessorController extends Controller
     public function store(DirecaoProfessorRequest $request)
     { 
         $id_escola = null;
-        if($request->id_escola){
-            $id_escola = explode('_',$request->id_escola)[0];
+        if($request->filled('escolas_id')){
+            $id_escola = explode('_',$request->escolas_id)[0];
         }
 
         $data = [
             'id_previlegio' => $request->id_previlegio,
             'id_escola' => $id_escola,
-            'id_turma' => $request->id_turma,
+            'id_turma' => $request->turmas_id,
             'SAME' => $request->SAME
         ];
 
-        $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $request->id_escola],['id_turma','=', $request->id_turma],['SAME','=',$request->SAME]])->get();
+        $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $id_escola],['id_turma','=', $request->turmas_id],['SAME','=',$request->SAME]])->get();
         
         if ($direcao_professor && sizeof($direcao_professor) > 0) {
             return redirect()->route('lista_direcao_professor')->with('status', 'A turma selecionada já foi adicionada ao respectivo Usuário no SAME '.$request->SAME.'!');
@@ -146,20 +142,22 @@ class DirecaoProfessorController extends Controller
      */
     public function edit($id)
     {
-        $escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
+
         $turmas = null;
         $previlegios = $this->objPrevilegio->where(['status' => 1])->get();
 
         $direcao_professors = $this->objDirecaoProfessor
                 ->leftjoin('escolas', ['direcao_professors.id_escola' => 'escolas.id','direcao_professors.SAME' => 'escolas.SAME'])
                 ->leftjoin('turmas', ['direcao_professors.id_turma' => 'turmas.id','direcao_professors.SAME' => 'turmas.SAME'])
+                ->leftjoin('municipios', ['turmas.escolas_municipios_id' => 'municipios.id','direcao_professors.SAME' => 'municipios.SAME'])
                 ->select('direcao_professors.*','turmas.id as id_turma','turmas.DESCR_TURMA as nome_turma','turmas.SAME as SAME_turma','escolas.id as id_escola', 
-                'escolas.nome as nome_escola','escolas.SAME as SAME_escola')->where(['direcao_professors.id' => $id])->get();
+                'escolas.nome as nome_escola','escolas.SAME as SAME_escola','municipios.nome as nome_municipio','municipios.id as id_municipio')
+                ->where(['direcao_professors.id' => $id])->get();
         $direcao_professor = $direcao_professors[0];
         $anosame = $this->objAnoSame->where(['descricao' => $direcao_professor->SAME])->orderBy('descricao','asc')->get();
 
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao','asc')->get();
-        return view('cadastro/direcao_professores/create_direcao_professor', compact('escolas', 'turmas', 'previlegios', 'direcao_professor','anosativos','anosame'));
+        return view('cadastro/direcao_professores/create_direcao_professor', compact('turmas', 'previlegios', 'direcao_professor','anosativos','anosame'));
     }
 
     /**
@@ -173,18 +171,18 @@ class DirecaoProfessorController extends Controller
     public function update(DirecaoProfessorRequest $request, $id)
     {
         $id_escola = null;
-        if($request->id_escola){
-            $id_escola = explode('_',$request->id_escola)[0];
+        if($request->filled('escolas_id')){
+            $id_escola = explode('_',$request->escolas_id)[0];
         }
 
         $data = [
             'id_previlegio' => $request->id_previlegio,
             'id_escola' => $id_escola,
-            'id_turma' => $request->id_turma,
+            'id_turma' => $request->turmas_id,
             'SAME' => $request->SAME
         ];
 
-        $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $request->id_escola],['id_turma','=', $request->id_turma],['SAME','=',$request->SAME],['id','<>',$id]])->get();
+        $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $id_escola],['id_turma','=', $request->turmas_id],['SAME','=',$request->SAME],['id','<>',$id]])->get();
         
         if ($direcao_professor && sizeof($direcao_professor) > 0) {
             return redirect()->route('lista_direcao_professor')->with('status', 'A turma selecionada já foi adicionada ao respectivo Usuário no SAME '.$request->SAME.'!');
@@ -206,40 +204,4 @@ class DirecaoProfessorController extends Controller
         return ($del) ? "sim" : "não";
     }
 
-    /**
-     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
-     */
-    public function get_by_same_escolav3(Request $request)
-    {
-        if (!$request->SAME) {
-            $html = '<option value="">' . trans('') . '</option>';
-        } else {
-            $html = '<option value=""></option>';
-            $escolas = Escola::where(['SAME' => $request->SAME])->get();
-            foreach ($escolas as $escola) {
-                $html .= '<option value="' . $escola->id.'_'.$escola->SAME . '">' . $escola->nome . ' ('.$escola->SAME.')'. '</option>';
-            }
-        }
-
-        return response()->json(['html' => $html]);
-    }
-
-    /**
-     * Método ajax para listar as turmas baseado na escola selecionada na página de solicitação de turma
-     */
-    public function get_by_escola(Request $request)
-    {
-        if (!$request->id_escola) {
-            $html = '<option value="">' . trans('') . '</option>';
-        } else {
-            $params = explode('_',$request->id_escola);
-            $html = '<option value=""></option>';
-            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
-            foreach ($turmas as $turma) {
-                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
-            }
-        }
-
-        return response()->json(['html' => $html]);
-    }
 }

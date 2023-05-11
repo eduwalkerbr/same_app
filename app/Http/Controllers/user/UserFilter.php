@@ -15,6 +15,7 @@ class UserFilter extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
     }
     /**
      * Método que monta a listagem de Usuários pelo filtro

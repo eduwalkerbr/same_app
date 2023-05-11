@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 class DeslogarController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -22,7 +23,14 @@ class DeslogarController extends Controller
      */
     public function index()
     {
+
         Auth::logout();
+
+        session()->invalidate();
+ 
+        session()->regenerateToken();
+
         return redirect('/');
+        
     }
 }

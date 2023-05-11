@@ -93,7 +93,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$tiposquestao->titulo}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$disciplina->desc}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_criterios_questao') }}">
+          <a href="{{ route('criterios_questao.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('criterios_questao.edit', $criterio->id) }}">

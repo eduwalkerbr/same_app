@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\cadastros\previlegio;
 
-use App\Http\Requests\PrevilegioRequest;
 use App\Models\AnoSame;
 use App\Models\Funcao;
-use App\Models\Municipio;
 use App\Models\Previlegio;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -23,6 +21,7 @@ class PrevilegioFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objUser = new User();
         $this->objFuncao = new Funcao();
         $this->objAnoSame = new AnoSame();

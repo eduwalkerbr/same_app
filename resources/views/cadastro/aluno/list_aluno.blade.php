@@ -41,15 +41,22 @@
               </div>
               <div class=" col-md-5">
                 <div class="form-group">
+                  <label for="turmas_escolas_municipios_id">Município</label>
+                  <select class="form-control" id="turmas_escolas_municipios_id" name="turmas_escolas_municipios_id">
+                    <option value=""></option>                    
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row justify-content-begin" style="color:black;font-size:15px;">
+              <div class=" col-md-5">
+                <div class="form-group">
                   <label for="turmas_escolas_id">Escola</label>
                   <select class="form-control" id="turmas_escolas_id" name="turmas_escolas_id">
                     <option value=""></option>
                   </select>
                 </div>
               </div>
-            </div>
-            <div class="row justify-content-begin" style="color:black;font-size:15px;">
-
               <div class=" col-md-5">
                 <div class="form-group">
                   <label for="turmas_id">Turma</label>
@@ -91,7 +98,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$aluno->nome_escola}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$aluno->SAME}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_aluno') }}">
+          <a href="{{ route('aluno.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('aluno.edit', ['id' => $aluno->id, 'anosame' => $aluno->SAME]) }}">

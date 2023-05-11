@@ -6,6 +6,7 @@ use App\Models\Legenda;
 use App\Models\Previlegio;
 use App\Models\Solicitacao;
 use App\Models\Sugestao;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -41,7 +42,7 @@ class HomeController extends Controller
         $sugestoes = $this->objSugestao->orderBy('updated_at', 'desc')->paginate(2);
 
         //Caso seja administrados tem acesso a todas as solicitações em aberto
-        if (auth()->user()->perfil == 'Administrador') {
+        if (Auth::user()->perfil == 'Administrador') {
 
             //Busca listagem de Solicitações gerais
             $solRegistro = $this->objSolicitacao->where(['aberto' => '1'])->where(['id_tipo_solicitacao' => 1])->get();
@@ -81,5 +82,6 @@ class HomeController extends Controller
         } else if ($previlegio[0]->funcaos_id == 7) {
             return redirect()->route('professor.index');
         }
+        
     }
 }

@@ -30,7 +30,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$legenda->exibicao}}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$legenda->updated_at->format('d/m/Y H:i:s')}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_legenda') }}">
+          <a href="{{ route('legenda.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('legenda.edit', $legenda->id) }}">

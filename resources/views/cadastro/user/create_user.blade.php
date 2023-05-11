@@ -71,7 +71,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <button type="submit" style="background-color: #f9821E;border-color:#f9821E;" class="btn btn-primary">@if(isset($user)) Editar @else Cadastrar @endif</button>
-                                <a href="{{ route('lista_user') }}"><button type="button" style="background-color: black;border-color:black;" class="btn btn-primary">Cancelar</button></a>
+                                <a href="{{ route('user.filtrar') }}"><button type="button" style="background-color: black;border-color:black;" class="btn btn-primary">Cancelar</button></a>
                             </div>
                         </div>
                     </div>

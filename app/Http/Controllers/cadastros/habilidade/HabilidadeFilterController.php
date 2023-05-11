@@ -17,6 +17,7 @@ class HabilidadeFilterController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objDisciplina = new Disciplina();
     }
     /**

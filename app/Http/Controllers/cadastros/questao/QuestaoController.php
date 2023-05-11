@@ -28,6 +28,7 @@ class QuestaoController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objDisciplina = new Disciplina();
         $this->objTema = new Tema();
         $this->objHabilidade = new Habilidade();
@@ -137,8 +138,8 @@ class QuestaoController extends Controller
         }
 
         //Realiza a inserção da imagem
-        if ($request->hasFile('image') && $request->image->isValid()) {
-            $imagePath = $request->image->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imagePath = $request->file('image')->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
             $data['imagem'] = $imagePath;
         }
 
@@ -225,8 +226,8 @@ class QuestaoController extends Controller
         }
 
         //Alteração da imagem da questão
-        if ($request->hasFile('image') && $request->image->isValid()) {
-            $imagePath = $request->image->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $imagePath = $request->file('image')->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
             $data['imagem'] = $imagePath;
         }
 

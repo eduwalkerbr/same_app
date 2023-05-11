@@ -26,7 +26,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$tipo_solicitacao->nome}}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$tipo_solicitacao->updated_at->format('d/m/Y H:i:s')}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_tipo_solicitacao') }}">
+          <a href="{{ route('tipo_solicitacao.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('tipo_solicitacao.edit', $tipo_solicitacao->id) }}">

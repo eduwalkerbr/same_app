@@ -80,7 +80,7 @@
         <td style="font-weight: normal;font-size:14px;text-align:center;">{{$escola->SAME}}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$escola->updated_at->format('d/m/Y H:i:s')}}</td>
         <td style="text-align:center;">
-          <a href="{{ route('cadastro_escola') }}">
+          <a href="{{ route('escola.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>
           <a href="{{ route('escola.edit', ['id' => $escola->id, 'anosame' => $escola->SAME]) }}">

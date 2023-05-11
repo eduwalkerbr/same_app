@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Cache;
 
 class TurmaController extends Controller
 {
-
     private $objEscola;
-    private $objMunicipio;
     private $objTurma;
     private $objAnoSame;
 
@@ -24,8 +22,8 @@ class TurmaController extends Controller
      */
     public function __construct()
     {
+        $this->middleware('auth');
         $this->objEscola = new Escola();
-        $this->objMunicipio = new Municipio();
         $this->objTurma = new Turma();
         $this->objAnoSame = new AnoSame();
     }
@@ -80,10 +78,9 @@ class TurmaController extends Controller
      */
     public function create()
     {
-        $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
         $escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao', 'asc')->get();
-        return view('cadastro/turma/create_turma', compact('escolas', 'municipios','anosativos'));
+        return view('cadastro/turma/create_turma', compact('escolas','anosativos'));
     }
 
     /**
@@ -94,16 +91,18 @@ class TurmaController extends Controller
      */
     public function store(TurmaRequest $request)
     {
+        $params = explode('_',$request->municipios_id);
+
         $data = [
             'TURMA' => $request->TURMA,
             'DESCR_TURMA' => $request->DESCR_TURMA,
             'status' => 'Ativo',
-            'escolas_municipios_id' => $request->escolas_municipios_id,
+            'escolas_municipios_id' => $params[0],
             'escolas_id' => $request->escolas_id,
             'SAME' => $request->SAME
         ];
 
-        $turma = $this->objTurma->where([['SAME', '=', $request->SAME],['DESCR_TURMA', '=', $request->DESCR_TURMA],['escolas_municipios_id','=',$request->escolas_municipios_id]])->get();
+        $turma = $this->objTurma->where([['SAME', '=', $request->SAME],['DESCR_TURMA', '=', $request->DESCR_TURMA],['escolas_municipios_id','=',$params[0]]])->get();
         
         if ($turma && sizeof($turma) > 0) {
             return redirect()->route('lista_turma')->with('status', 'A Turma '.$request->DESCR_TURMA.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
@@ -136,7 +135,6 @@ class TurmaController extends Controller
      */
     public function edit($id)
     {
-        $municipios = $this->objMunicipio->where(['status' => 'Ativo'])->get();
         $escolas = $this->objEscola->where(['status' => 'Ativo'])->get();
         $turmas = $this->objTurma->join('municipios', ['turmas.escolas_municipios_id' => 'municipios.id', 'turmas.SAME' => 'municipios.SAME'])
                                 ->join('escolas', ['turmas.escolas_id' => 'escolas.id', 'turmas.SAME' => 'escolas.SAME']) 
@@ -145,7 +143,7 @@ class TurmaController extends Controller
         $turma = $turmas[0];                        
         $anosame = $this->objAnoSame->where(['descricao' => $turma->SAME])->get();
         $anosativos = $this->objAnoSame->where(['status' => 'Ativo'])->orderBy('descricao', 'asc')->get();
-        return view('cadastro/turma/create_turma', compact('turma', 'escolas', 'municipios','anosame','anosativos'));
+        return view('cadastro/turma/create_turma', compact('turma', 'escolas','anosame','anosativos'));
     }
 
     /**
@@ -158,11 +156,13 @@ class TurmaController extends Controller
      */
     public function update(TurmaRequest $request, $id)
     {
+        $params = explode('_',$request->municipios_id);
+
         $data = [
             'TURMA' => $request->TURMA,
             'DESCR_TURMA' => $request->DESCR_TURMA,
             'status' => $request->status,
-            'escolas_municipios_id' => $request->escolas_municipios_id,
+            'escolas_municipios_id' => $params[0],
             'escolas_id' => $request->escolas_id,
             'SAME' => $request->SAME
         ];
@@ -230,13 +230,14 @@ class TurmaController extends Controller
      */
     public function get_by_same_escola(Request $request)
     {
-        if (!$request->SAME) {
+        if (!$request->escolas_id) {
             $html = '<option value="">' . trans('') . '</option>';
         } else {
+            $params = explode('_',$request->escolas_id);
             $html = '<option value=""></option>';
-            $escolas = Escola::where(['SAME' => $request->SAME])->get();
-            foreach ($escolas as $escola) {
-                $html .= '<option value="' . $escola->id . '">' . $escola->nome . ' ('.$escola->SAME.')'. '</option>';
+            $turmas = Turma::where([['escolas_id','=', $params[0]],['SAME','=',$params[1]]])->get();
+            foreach ($turmas as $turma) {
+                $html .= '<option value="' . $turma->id . '">' . $turma->DESCR_TURMA . ' ('.$turma->SAME.')'. '</option>';
             }
         }
 
