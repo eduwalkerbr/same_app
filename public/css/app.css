@@ -10517,4 +10517,9 @@ a.text-dark:focus {
         opacity: 1;
     }
 }
+
+.swal2-actions {
+    margin: 1.25em 0 0;
+    justify-content: space-evenly;
+}
 /* end: Preloader */

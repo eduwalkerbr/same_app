@@ -117,9 +117,10 @@
           <a href="{{ route('direcao_professor.edit', $direcao_professor->id) }}">
             <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Editar</button>
           </a>
-          <a href="{{ route('direcao_professor.destroy', $direcao_professor->id) }}" class="js-del">
+          <!--<a href="{{ route('direcao_professor.destroy', $direcao_professor->id) }}" class="js-del">
             <button style="font-weight: normal;" class="btn-danger">Deletar</button>
-          </a>
+          </a>-->
+          <button style="font-weight: normal;" class="btn-danger" onclick="deletarRegistro('direcao_professor', '{{$direcao_professor->id}}')">Deletar</button>
         </td>
       </tr>
       @endforeach

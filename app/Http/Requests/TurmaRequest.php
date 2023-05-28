@@ -27,9 +27,26 @@ class TurmaRequest extends FormRequest
             'TURMA' => 'required',
             'DESCR_TURMA' => 'required',
             'status' => 'required',
-            'municipios_id' => 'required',
-            'escolas_id' => 'required',
+            'municipios_id' => 'required|integer|min:0|exists:municipios,id',
+            'escolas_id' => 'required|integer|min:0|exists:escolas,id',
             'SAME' => 'required',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'TURMA' => 'Nome da Turma',
+            'DESCR_TURMA' => 'Descrição da Turma',
+            'status' => 'Status',
+            'municipios_id' => 'Município',
+            'escolas_id' => 'Escola',
+            'SAME' => 'Ano SAME',
         ];
     }
 }

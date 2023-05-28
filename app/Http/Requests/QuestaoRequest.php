@@ -24,15 +24,39 @@ class QuestaoRequest extends FormRequest
     public function rules()
     {
         return [
-            "num_questao" => "required",
+            "num_questao" => "required|integer|min:0",
             "desc" => "required",
-            "modelo" => "required",
-            "ano" => "required",
-            "disciplinas_id" => "required",
-            "habilidades_id" => "required",
-            "temas_id" => "required",
-            "prova_gabaritos_id" => "required",
-            "SAME" => "required"
+            "modelo" => "required|size:1",
+            "ano" => "required|integer|min:0",
+            "disciplinas_id" => "required|integer|min:0|exists:disciplinas,id",
+            "habilidades_id" => "required|integer|min:0|exists:habilidades,id",
+            "temas_id" => "required|integer|min:0|exists:temas,id",
+            "prova_gabaritos_id" => "required|integer|min:0|exists:prova_gabaritos,id",
+            "SAME" => "required",
+            "tipo" => "required",
+            "correta" => "size:1",
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'num_questao' => 'Número da Questão',
+            'desc' => 'Descrição da Questão',
+            'modelo' => 'Modelo da Questão',
+            'ano' => 'Ano da Questão',
+            'disciplinas_id' => 'Disciplina',
+            'habilidades_id' => 'Habilidade',
+            'temas_id' => 'Tema',
+            'prova_gabaritos_id' => 'Prova Gabarito',
+            'SAME' => 'Ano SAME',
+            'tipo' => 'Tipo da Questão',
+            'correta' => 'Resposta Correta',
         ];
     }
 }

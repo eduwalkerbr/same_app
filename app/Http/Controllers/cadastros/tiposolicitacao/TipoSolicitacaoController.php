@@ -5,6 +5,7 @@ namespace App\Http\Controllers\cadastros\tiposolicitacao;
 use App\Http\Requests\TipoSolicitacaoRequest;
 use App\Http\Controllers\Controller;
 use App\Models\TipoSolicitacao;
+use Throwable;
 
 class TipoSolicitacaoController extends Controller
 {
@@ -58,20 +59,29 @@ class TipoSolicitacaoController extends Controller
      */
     public function store(TipoSolicitacaoRequest $request)
     {
-        $data = [
-            'nome' => $request->nome
-        ];
+        try {
 
-        $tipo_solicitacao = $this->objTipoSolicitacao->where(['nome' => $request->nome])->get();
-        if ($tipo_solicitacao && sizeof($tipo_solicitacao) > 0) {
-            return redirect()->route('lista_tipo_solicitacao')->with('status', 'O Tipo de Solicitação '.$request->nome.' já foi cadastrado!');
+            $data = [
+                'nome' => trim($request->nome)
+            ];
+
+            //Valida existência do Registro
+            if($this->objTipoSolicitacao->where(['nome' => $request->nome])->get()->isNotEmpty()){
+                $mensagem = 'O Tipo de Solicitação '.$request->nome.' já foi cadastrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objTipoSolicitacao->create($data)){
+                    $mensagem = 'O Tipo de Solicitação '.$request->nome.' foi cadastrado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objTipoSolicitacao->create($data);
-
-        if ($cad) {
-            return redirect()->route('lista_tipo_solicitacao');
-        }
+        return redirect()->route('lista_tipo_solicitacao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -107,17 +117,29 @@ class TipoSolicitacaoController extends Controller
      */
     public function update(TipoSolicitacaoRequest $request, $id)
     {
-        $data = [
-            'nome' => $request->nome,
-        ];
+        try {
 
-        $tipo_solicitacao = $this->objTipoSolicitacao->where(['nome' => $request->nome])->where('id','<>',$id)->get();
-        if ($tipo_solicitacao && sizeof($tipo_solicitacao) > 0) {
-            return redirect()->route('lista_tipo_solicitacao')->with('status', 'O Tipo de Solicitação '.$request->nome.' já foi cadastrado!');
+            $data = [
+                'nome' => trim($request->nome),
+            ];
+
+            //Valida existência do Registro
+            if($this->objTipoSolicitacao->where(['nome' => $request->nome])->where('id','<>',$id)->get()->isNotEmpty()){
+                $mensagem = 'O Tipo de Solicitação '.$request->nome.' já foi cadastrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objTipoSolicitacao->where(['id' => $id])->update($data)){
+                    $mensagem = 'O Tipo de Solicitação '.$request->nome.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objTipoSolicitacao->where(['id' => $id])->update($data);
-        return redirect()->route('lista_tipo_solicitacao');
+        return redirect()->route('lista_tipo_solicitacao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

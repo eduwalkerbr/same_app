@@ -34,6 +34,7 @@
           <a href="{{ route('destaque.edit', $destaque->id) }}">
             <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Editar</button>
           </a>
+            <button style="font-weight: normal;" class="btn-danger" onclick="deletarRegistro('destaque', '{{$destaque->id}}')">Deletar</button>
         </td>
       </tr>
       @endforeach

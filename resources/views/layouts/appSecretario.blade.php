@@ -29,17 +29,7 @@
     <link href="{{ asset('fontawesome-free-6.0.0-web/css/brands.css') }}" rel="stylesheet">
     <link href="{{ asset('fontawesome-free-6.0.0-web/css/solid.css') }}" rel="stylesheet">
 
-
-    <!-- This following line is optional. Only necessary if you use the option css3:false and you want to use other easing effects rather than "easeInOutCubic". -->
-
-    
-
-
     <!-- JavaScript Bundle with Popper -->
-
-
-
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -542,7 +532,6 @@
     ctxEscolaDisciplina.onclick = clickHandler;
 </script>
 
-
 <script>
     function triggerHover(chart) {
         if (chart.getActiveElements().length > 0) {
@@ -697,8 +686,6 @@
 </script>
 
 <script>
-    // setup 
-
     const dataHabilidadeDisciplinaAno = {
         datasets: [{
             label: "",
@@ -708,15 +695,9 @@
             borderWidth: 1,
             hoverBorderWidth: 2,
             hoverBorderColor: 'green',
-
-
-            //   barPercentage: .9,
-            //   categoryPercentage: 1
         }]
     };
 
-    // config 
-    //let delayed;
     const configHabilidadeDisciplinaAno = {
         type: 'bar',
         data: dataHabilidadeDisciplinaAno,
@@ -815,15 +796,12 @@
         if (points.length) {
             const firstPoint = points[0];
             $('#HAB' + (firstPoint.index + 1)).modal('show')
-            //document.querySelectorAll(".modal")[0].style.display = 'block'
         }
     }
     ctxHabilidadeDisciplinaAno.onclick = clickHandler;
 </script>
 
 <script>
-    // setup 
-
     const dataHabilidadeDisciplinaHabilidade = {
         datasets: [{
             label: "",
@@ -833,15 +811,8 @@
             borderWidth: 1,
             hoverBorderWidth: 2,
             hoverBorderColor: 'green',
-
-
-            //   barPercentage: .9,
-            //   categoryPercentage: 1
         }]
     };
-
-    // config 
-    //let delayed;
     const configHabilidadeDisciplinaHabilidade = {
         type: 'bar',
         data: dataHabilidadeDisciplinaHabilidade,
@@ -940,7 +911,6 @@
         if (points.length) {
             const firstPoint = points[0];
             $('#HABILIDADE' + (firstPoint.index + 1)).modal('show')
-            //document.querySelectorAll(".modal")[0].style.display = 'block'
         }
     }
     ctxHabilidadeDisciplinaHabilidade.onclick = clickHandler;

@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($tipoquestao))
             <form id="form_edit_tipoquestao" name="form_edit_tipoquestao" action="{{ route('tipoquestao.update',$tipoquestao->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_tipoquestao" name="form_tipoquestao" action="{{ route('tipoquestao.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_tipoquestao" name="form_tipoquestao" action="{{ route('tipoquestao.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="titulo">Título</label>
-                                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título do Típo Questão" value="{{ $tipoquestao->titulo ?? ''}}" required>
+                                <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Título do Típo Questão" value="{{ $tipoquestao->titulo ?? old('titulo')}}" required>
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="descricao">Descrição</label>
-                                <textarea class="form-control" id="descricao" name="descricao" rows="2">{{ $tipoquestao->descricao ?? ''}}</textarea>
+                                <textarea class="form-control" id="descricao" name="descricao" rows="2">{{ $tipoquestao->descricao ?? old('descricao')}}</textarea>
                             </div>
                         </div>
                     </div>

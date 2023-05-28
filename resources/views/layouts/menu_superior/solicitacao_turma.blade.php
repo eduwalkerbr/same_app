@@ -1,6 +1,3 @@
-@php
-$previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-@endphp
 @if ((isset($previlegio) && $previlegio->funcaos_id == 7) || Auth::user()->perfil == 'Administrador')
 <ul class="navbar-nav mr-auto">
     <li class="nav-item dropdown">

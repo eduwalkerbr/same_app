@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,22 +23,22 @@
             @if(isset($anosame))
             <form id="form_edit_anosame" name="form_edit_anosame" action="{{ route('anosame.update',$anosame->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_anosame" name="form_anosame" action="{{ route('anosame.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_anosame" name="form_anosame" action="{{ route('anosame.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-6">
                             <div class="form-group">
                                 <label for="descricao">Descrição</label>
-                                <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ano SAME" value="{{ $anosame->descricao ?? ''}}" required>
+                                <input type="text" class="form-control" id="descricao" name="descricao" placeholder="Ano SAME" value="{{ $anosame->descricao ?? old('descricao')}}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="status">Status</label>
                                 <select class="form-control" id="status" name="status" required>
-                                    <option value="{{ $anosame->status ?? ''}}">{{ $anosame->status ?? ''}}</option>
+                                    <option value="{{ $anosame->status ?? old('status')}}">{{ $anosame->status ?? old('status')}}</option>
                                     <option>Ativo</option>
                                     <option>Inativo</option>
                                 </select>

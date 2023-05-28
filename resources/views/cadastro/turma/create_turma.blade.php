@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($turma))
             <form id="form_edit_turma" name="form_edit_turma" action="{{ route('turma.update',$turma->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_turma" name="form_turma" action="{{ route('turma.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_turma" name="form_turma" action="{{ route('turma.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-9">
                             <div class="form-group">
                                 <label for="name">Descrição</label>
-                                <input type="text" class="form-control" id="DESCR_TURMA" name="DESCR_TURMA" placeholder="Descrição da Turma" value="{{ $turma->DESCR_TURMA ?? ''}}" required>
+                                <input type="text" class="form-control" id="DESCR_TURMA" name="DESCR_TURMA" placeholder="Descrição da Turma" value="{{ $turma->DESCR_TURMA ?? old('DESCR_TURMA')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-3">
@@ -52,7 +52,7 @@
                         <div class=" col-md-6">
                             <div class="form-group">
                                 <label for="name">Nome</label>
-                                <input type="text" class="form-control" id="TURMA" name="TURMA" placeholder="Nome da Turma" value="{{ $turma->TURMA ?? ''}}" required>
+                                <input type="text" class="form-control" id="TURMA" name="TURMA" placeholder="Nome da Turma" value="{{ $turma->TURMA ?? old('TURMA')}}" required>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -60,7 +60,7 @@
                                 <label for="id_sala">Município</label>
                                 <select class="form-control" id="municipios_id" name="municipios_id" required>
                                     @if(isset($turma))
-                                    <option value="{{ $turma->id_municipio ?? ''}}">{{ $turma->nome_municipio.' ('.$turma->SAME_municipio.')' ?? ''}}</option>
+                                    <option value="{{ $turma->id_municipio ?? old('municipios_id')}}">{{ $turma->nome_municipio.' ('.$turma->SAME_municipio.')' ?? old('municipios_id')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -74,7 +74,7 @@
                                 <label for="id_sala">Escola</label>
                                 <select class="form-control" id="escolas_id" name="escolas_id" required>
                                     @if(isset($turma))
-                                    <option value="{{ $turma->id_escola ?? ''}}">{{ $turma->nome_escola.' ('.$turma->SAME_escola.')' ?? ''}}</option>
+                                    <option value="{{ $turma->id_escola ?? old('escolas_id')}}">{{ $turma->nome_escola.' ('.$turma->SAME_escola.')' ?? old('escolas_id')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -85,7 +85,7 @@
                             <div class="form-group">
                                 <label for="perfil">Status</label>
                                 <select class="form-control" id="status" name="status" required>
-                                    <option value="{{ $turma->status ?? ''}}">{{ $turma->status ?? ''}}</option>
+                                    <option value="{{ $turma->status ?? old('status')}}">{{ $turma->status ?? old('status')}}</option>
                                     <option>Ativo</option>
                                     <option>Inativo</option>
                                 </select>

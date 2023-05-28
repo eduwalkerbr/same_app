@@ -8,6 +8,7 @@ use App\Models\Municipio;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
+use Throwable;
 
 class MunicipioController extends Controller
 {
@@ -79,25 +80,32 @@ class MunicipioController extends Controller
      */
     public function store(MunicipioRequest $request)
     {
-        $data = [
-            'nome' => $request->nome,
-            'uf' => $request->uf,
-            'SAME' => $request->SAME,
-            'status' => 'Ativo',
-        ];
+        try {
 
-        $municipio = $this->objMunicipio->where([['nome', '=', $request->nome],['uf', '=', $request->uf],['SAME','=',$request->SAME]])->get();
-        
-        if ($municipio && sizeof($municipio) > 0) {
-            return redirect()->route('lista_municipio')->with('status', 'O Munícipio '.$request->nome.'/'.$request->uf.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+            $data = [
+                'nome' => trim($request->nome),
+                'uf' => trim($request->uf),
+                'SAME' => trim($request->SAME),
+                'status' => 'Ativo',
+            ];
+
+            //Valida existência do Registro
+            if($this->objMunicipio->where([['nome', '=', $request->nome],['uf', '=', $request->uf],['SAME','=',$request->SAME]])->get()->isNotEmpty()){
+                $mensagem = 'O Munícipio '.$request->nome.'/'.$request->uf.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objMunicipio->create($data)){
+                    $mensagem = 'O Município '.$request->nome.'/'.$request->uf.' do Ano SAME '.$request->SAME.' foi cadastrado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objMunicipio->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_municipio');
-        }
+        return redirect()->route('lista_municipio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -136,21 +144,32 @@ class MunicipioController extends Controller
      */
     public function update(MunicipioRequest $request, $id)
     {
-        $data = [
-            'nome' => $request->nome,
-            'uf' => $request->uf,
-            'SAME' => $request->SAME,
-            'status' => $request->status,
-        ];
+        try {
 
-        $municipio = $this->objMunicipio->where([['nome', '=', $request->nome],['uf', '=', $request->uf],['SAME','=',$request->SAME],['id','<>',$id]])->get();
-        
-        if ($municipio && sizeof($municipio) > 0) {
-            return redirect()->route('lista_municipio')->with('status', 'O Munícipio '.$request->nome.'/'.$request->uf.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+            $data = [
+                'nome' => trim($request->nome),
+                'uf' => trim($request->uf),
+                'SAME' => trim($request->SAME),
+                'status' => trim($request->status),
+            ];
+
+            //Valida existência do Registro
+            if($this->objMunicipio->where([['nome', '=', $request->nome],['uf', '=', $request->uf],['SAME','=',$request->SAME],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'O Munícipio '.$request->nome.'/'.$request->uf.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objMunicipio->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data)){
+                    $mensagem = 'O Município '.$request->nome.'/'.$request->uf.' do Ano SAME '.$request->SAME.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objMunicipio->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data);
-        return redirect()->route('lista_municipio');
+        return redirect()->route('lista_municipio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -162,14 +181,22 @@ class MunicipioController extends Controller
      */
     public function inativar($id, $anosame)
     {
-        $municipios = $this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->get();
-        $municipio = $municipios[0];
-        $municipio = [
-            'status' => 'Inativo',
-        ];
-
-        $this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->update($municipio);
-        return redirect()->route('lista_municipio');
+        try {
+            $municipios = $this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->get();
+            $municipio = $municipios[0];
+            $municipio = [
+                'status' => 'Inativo',
+            ];
+            if($this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->update($municipio)){
+                $mensagem = 'Inativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_municipio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -181,14 +208,22 @@ class MunicipioController extends Controller
      */
     public function ativar($id, $anosame)
     {
-        $municipios = $this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->get();
-        $municipio = $municipios[0];
-        $municipio = [
-            'status' => 'Ativo',
-        ];
-
-        $this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->update($municipio);
-        return redirect()->route('lista_municipio');
+        try {
+            $municipios = $this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->get();
+            $municipio = $municipios[0];
+            $municipio = [
+                'status' => 'Ativo',
+            ];
+            if($this->objMunicipio->where(['id' => $id])->where(['SAME' => $anosame])->update($municipio)){
+                $mensagem = 'Ativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_municipio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -199,8 +234,17 @@ class MunicipioController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objMunicipio->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objMunicipio->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_municipio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

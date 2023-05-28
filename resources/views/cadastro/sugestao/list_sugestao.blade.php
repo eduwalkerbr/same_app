@@ -16,16 +16,27 @@
         <th scope="col" style="color: black;">id</th>
         <th scope="col" style="color: black;width:550px;">Nome</th>
         <th scope="col" style="color: black;">E-mail</th>
+        <th scope="col" style="color: black;">Status</th>
         <th style="text-align:center; color: black;" scope="col">Data</th>
+        <th style="text-align:center; color: black;" scope="col">Ações</th>
       </tr>
     </thead>
     <tbody>
       @foreach($sugestoes as $sugestao)
       <tr>
         <th style="font-weight: normal;font-size:14px;" scope="row">{{$sugestao->id}}</th>
-        <td style="font-weight: normal;font-size:14px;width:550px;">{{$sugestao->nome}}</td>
+        <td style="font-weight: normal;font-size:14px;width:450px;">{{$sugestao->nome}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$sugestao->email}}</td>
+        <td style="font-weight: normal;font-size:14px;">{{$sugestao->status ? 'Ativo' : 'Inativo'}}</td>
         <td style="font-weight: normal; text-align:center;font-size:14px;">{{$sugestao->updated_at->format('d/m/Y H:i:s')}}</td>
+        <td style="text-align:center;width:200px;">
+          <a href="{{ route('sugestao.create') }}">
+            <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
+          </a>
+          <a href="{{ route('sugestao.edit', $sugestao->id) }}">
+            <button style="font-weight: normal;background-color:black;border-color:black;" class="btn-primary">Visualizar</button>
+          </a>
+        </td>
       </tr>
       @endforeach
     </tbody>

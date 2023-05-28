@@ -25,7 +25,20 @@ class FuncaoRequest extends FormRequest
     {
         return [
             'desc' => 'required',
-            'previlegio' => 'required',
+            'previlegio' => 'required|integer|min:0',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'desc' => 'Descrição',
+            'previlegio' => 'Previlégio'
         ];
     }
 }

@@ -29,8 +29,26 @@ class LegendaRequest extends FormRequest
             'cor_fundo' => 'required',
             'cor_letra' => 'required',
             'exibicao' => 'required',
-            'valor_inicial' => 'required',
-            'valor_final' => 'required',
+            'valor_inicial' => 'required|integer|min:0',
+            'valor_final' => 'required|integer|min:0',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'titulo' => 'Título',
+            'descricao' => 'Descrição',
+            'cor_fundo' => 'Cor de Fundo',
+            'cor_letra' => 'Cor de Letra',
+            'exibicao' => 'Exibição',
+            'valor_inicial' => 'Valor Inicial',
+            'valor_final' => 'Ano',
         ];
     }
 }

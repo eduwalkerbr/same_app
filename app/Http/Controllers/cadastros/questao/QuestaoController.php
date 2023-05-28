@@ -12,6 +12,7 @@ use App\Models\Tema;
 use App\Models\TipoQuestao;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class QuestaoController extends Controller
 {
@@ -108,46 +109,51 @@ class QuestaoController extends Controller
      */
     public function store(QuestaoRequest $request)
     {
-        $data = [
-            'num_questao' => $request->num_questao,
-            'desc' => $request->desc,
-            'correta' => $request->correta,
-            'obs' => $request->obs,
-            'modelo' => $request->modelo,
-            'ano' => $request->ano,
-            'tipo' => $request->tipo,
-            'disciplinas_id' => $request->disciplinas_id,
-            'temas_id' => $request->temas_id,
-            'habilidades_id' => $request->habilidades_id,
-            'prova_gabaritos_id' => $request->prova_gabaritos_id,
-            'SAME' => $request->SAME
-        ];
+        try {
+            $data = [
+                'num_questao' => intval($request->num_questao),
+                'desc' => trim($request->desc),
+                'correta' => trim($request->correta),
+                'obs' => trim($request->obs),
+                'modelo' => trim($request->modelo),
+                'ano' => intval($request->ano),
+                'tipo' => trim($request->tipo),
+                'disciplinas_id' => intval($request->disciplinas_id),
+                'temas_id' => intval($request->temas_id),
+                'habilidades_id' => intval($request->habilidades_id),
+                'prova_gabaritos_id' => intval($request->prova_gabaritos_id),
+                'SAME' => trim($request->SAME)
+            ];
+    
+            //Carrega os dados da Disciplina
+            $disciplina = $this->objDisciplina->find($request->disciplinas_id);
 
-        //Carrega os dados da Disciplina
-        $disciplina = $this->objDisciplina->find($request->disciplinas_id);
+            //Verifica se já existe Questão registrada pelo Número, Modelo, Ano, Disciplina, Prova Gabarito e Same
+            if($this->objQuestao->where([['num_questao', '=', $request->num_questao],['modelo', '=', $request->modelo],['ano', '=', $request->ano],['disciplinas_id', '=', $request->disciplinas_id],['prova_gabaritos_id', '=', $request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get()->isNotEmpty()){
+                //Carrega os dados da Prova Gabarito pelo id e Ano SAME
+                $prova_gabaritos = $this->objProvaGabarito->where([['id','=',$request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
+                $prova_gabarito = $prova_gabaritos[0];
+                $mensagem = 'A Questão Número '.$request->num_questao.' da Prova '.$prova_gabarito->DESCR_PROVA.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                //Realiza a inserção da imagem
+                if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                    $imagePath = $request->file('image')->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
+                    $data['imagem'] = $imagePath;
+                }
+                 //Realiza a inclusão do Registro
+                if($this->objQuestao->create($data)){
+                    $mensagem = 'A Questão Número '.$request->num_questao.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' e Ano SAME '.$request->SAME.' foi cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
 
-        //Verifica se já existe Questão registrada pelo Número, Modelo, Ano, Disciplina, Prova Gabarito e Same
-        $questao = $this->objQuestao->where([['num_questao', '=', $request->num_questao],['modelo', '=', $request->modelo],['ano', '=', $request->ano],['disciplinas_id', '=', $request->disciplinas_id],['prova_gabaritos_id', '=', $request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
-        //Caso exista já questão
-        if ($questao && sizeof($questao) > 0) {
-            //Carrega os dados da Prova Gabarito pelo id e Ano SAME
-            $prova_gabaritos = $this->objProvaGabarito->where([['id','=',$request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
-            $prova_gabarito = $prova_gabaritos[0];
-            //Exibe a página de listagem de Questões, com mensagem informativa ao usuário
-            return redirect()->route('lista_questao')->with('status', 'A Questão Número '.$request->num_questao.' da Prova '.$prova_gabarito->DESCR_PROVA.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        //Realiza a inserção da imagem
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
-            $data['imagem'] = $imagePath;
-        }
-
-        $cad = $this->objQuestao->create($data);
-
-        if ($cad) {
-            return redirect()->route('lista_questao');
-        }
+        return redirect()->route('lista_questao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -197,45 +203,51 @@ class QuestaoController extends Controller
      */
     public function update(QuestaoRequest $request, $id)
     {
-        $data = [
-            'num_questao' => $request->num_questao,
-            'desc' => $request->desc,
-            'correta' => $request->correta,
-            'obs' => $request->obs,
-            'modelo' => $request->modelo,
-            'tipo' => $request->tipo,
-            'ano' => $request->ano,
-            'disciplinas_id' => $request->disciplinas_id,
-            'temas_id' => $request->temas_id,
-            'habilidades_id' => $request->habilidades_id,
-            'prova_gabaritos_id' => $request->prova_gabaritos_id,
-            'SAME' => $request->SAME
-        ];
+        try {
+            $data = [
+                'num_questao' => intval($request->num_questao),
+                'desc' => trim($request->desc),
+                'correta' => trim($request->correta),
+                'obs' => trim($request->obs),
+                'modelo' => trim($request->modelo),
+                'tipo' => trim($request->tipo),
+                'ano' => intval($request->ano),
+                'disciplinas_id' => intval($request->disciplinas_id),
+                'temas_id' => intval($request->temas_id),
+                'habilidades_id' => intval($request->habilidades_id),
+                'prova_gabaritos_id' => intval($request->prova_gabaritos_id),
+                'SAME' => trim($request->SAME)
+            ];
+    
+            //Carrega dados da Disciplina
+            $disciplina = $this->objDisciplina->find($request->disciplinas_id);
 
-        //Carrega dados da Disciplina
-        $disciplina = $this->objDisciplina->find($request->disciplinas_id);
+            //Verifica se já existe Questão registrada pelo Número, Modelo, Ano, Disciplina, Prova Gabarito e Same, que tenha id deiferente do que se está alterando
+            if($this->objQuestao->where([['num_questao', '=', $request->num_questao],['modelo', '=', $request->modelo],['ano', '=', $request->ano],['disciplinas_id', '=', $request->disciplinas_id],['prova_gabaritos_id', '=', $request->prova_gabaritos_id],['SAME','=',$request->SAME],['id','<>',$id]])->get()->isNotEmpty()){
+                //Carrega os dados da Prova Gabarito
+                $prova_gabaritos = $this->objProvaGabarito->where([['id','=',$request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
+                $prova_gabarito = $prova_gabaritos[0];
+                $mensagem = 'A Questão Número '.$request->num_questao.' da Prova '.$prova_gabarito->DESCR_PROVA.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                //Realiza a alteração do Registro
+                //Alteração da imagem da questão
+                if ($request->hasFile('image') && $request->file('image')->isValid()) {
+                    $imagePath = $request->file('image')->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
+                    $data['imagem'] = $imagePath;
+                }
+                if($this->objQuestao->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data)){
+                    $mensagem = 'A Questão Número '.$request->num_questao.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' e Ano SAME '.$request->SAME.' foi alterada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
 
-        //Verifica se já existe Questão registrada pelo Número, Modelo, Ano, Disciplina, Prova Gabarito e Same, que tenha id deiferente do que se está alterando
-        $questao = $this->objQuestao->where([['num_questao', '=', $request->num_questao],['modelo', '=', $request->modelo],['ano', '=', $request->ano],['disciplinas_id', '=', $request->disciplinas_id],['prova_gabaritos_id', '=', $request->prova_gabaritos_id],['SAME','=',$request->SAME],['id','<>',$id]])->get();
-        if ($questao && sizeof($questao) > 0) {
-            //Carrega os dados da Prova Gabarito
-            $prova_gabaritos = $this->objProvaGabarito->where([['id','=',$request->prova_gabaritos_id],['SAME','=',$request->SAME]])->get();
-            $prova_gabarito = $prova_gabaritos[0];
-            //Exibe página de listagem de Questões, com mensagem adicional de aviso ao usuário
-            return redirect()->route('lista_questao')->with('status', 'A Questão Número '.$request->num_questao.' da Prova '.$prova_gabarito->DESCR_PROVA.' do Ano '.$request->ano.' na Disciplina de '.$disciplina->desc.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        //Alteração da imagem da questão
-        if ($request->hasFile('image') && $request->file('image')->isValid()) {
-            $imagePath = $request->file('image')->store('questao/'.$request->SAME.'/Prova_'.$request->modelo.'_'.$request->ano.'_Ano/'.$disciplina->desc);
-            $data['imagem'] = $imagePath;
-        }
-
-        //Atualiza a Questão em BD pelo id e Ano SAME
-        $this->objQuestao->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data);
-
-        //Exibe página de Listagem das Questões
-        return redirect()->route('lista_questao');
+        return redirect()->route('lista_questao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

@@ -26,8 +26,23 @@ class EscolaRequest extends FormRequest
         return [
             'nome' => 'required',
             'status' => 'required',
-            'municipios_id' => 'required',
+            'municipios_id' => 'required|integer|min:0|exists:municipios,id',
             'SAME' => 'required',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'nome' => 'Nome',
+            'status' => 'Status',
+            'municipios_id' => 'Município',
+            'SAME' => 'Ano SAME',
         ];
     }
 }

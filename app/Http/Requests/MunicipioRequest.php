@@ -30,4 +30,19 @@ class MunicipioRequest extends FormRequest
             'SAME' => 'required',
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'nome' => 'Nome',
+            'uf' => 'UF',
+            'status' => 'Status',
+            'SAME' => 'Ano SAME',
+        ];
+    }
 }

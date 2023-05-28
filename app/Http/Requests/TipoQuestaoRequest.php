@@ -28,4 +28,17 @@ class TipoQuestaoRequest extends FormRequest
             'descricao' => 'required',
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'titulo' => 'Título',
+            'descricao' => 'Descrição',
+        ];
+    }
 }

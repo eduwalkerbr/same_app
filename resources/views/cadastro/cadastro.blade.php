@@ -13,6 +13,9 @@
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/delete.js') }}" defer></script>
+    <!--<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -70,6 +73,9 @@
                                                 Listagem - Funcao
                                             </a>
                                             <hr>
+                                            <a class="dropdown-item" href="{{ route('sugestao.create') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
+                                                Cadastro - Sugestões
+                                            </a>
                                             <a class="dropdown-item" href="{{ route('lista_sugestoes') }}" style="font-size: 14px;color: black;" onmouseover='this.style.backgroundColor=" black";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                                                 Listagem - Sugestões
                                             </a>
@@ -250,11 +256,7 @@
 
         <main class="py-4">
             @yield('content')
-            @if (session('status'))
-            <script>
-                alert("{{ session('status') }}");
-            </script>
-            @endif
+            
         </main>
     </div>
 </body>
@@ -355,3 +357,65 @@
     });
 </script>
 <!-------------------------------------------------------------------------------------------------------->
+<script>
+$(window).on("load", function(){
+    if("{{session('mensagem')}}"){
+        swal.fire('Atenção!',"{{ session('mensagem') }}","{{ session('status') }}")
+    }
+});
+
+
+const swalWithBootstrapButtons = Swal.mixin({
+  customClass: {
+    confirmButton: 'btn btn-success',
+    cancelButton: 'btn btn-danger'
+  },
+  buttonsStyling: false
+})
+
+function deletarRegistro($base, $id_exclusao){
+    swalWithBootstrapButtons.fire({
+    title: 'Confirma a Exclusão?',
+    text: "Uma vez excluído o registro, não poderá mais ser recuperado!",
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Sim',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true
+    }).then((result) => {
+    if (result.isConfirmed) {
+        if($base == "destaque"){
+            $route = "{{route('destaque.destroy')}}?id=" + $id_exclusao + "&_token=" + "{{session()->get('_token')}}";
+        } else if($base == "direcao_professor"){
+            $route = "{{route('direcao_professor.destroy')}}?id=" + $id_exclusao + "&_token=" + "{{session()->get('_token')}}";
+        }
+        $.ajax({
+            url: $route,
+            method: 'DELETE',
+            success: function(data) {
+                Swal.fire({
+                    title: 'Atenção!',
+                    text: "Exclusão realizada com Sucesso!",
+                    icon: 'success',
+                    confirmButtonText: 'OK!'
+                }).then((resultInt) => {
+                    if (resultInt.isConfirmed) {
+                        window.location.reload();
+                    }
+                })
+            } 
+        });
+    } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+    ) {
+        swalWithBootstrapButtons.fire(
+        'Atenção',
+        'A exclusão do registro foi Cancelada!',
+        'error'
+        )
+    }
+    })
+}
+
+</script>

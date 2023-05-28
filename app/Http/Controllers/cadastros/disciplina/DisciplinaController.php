@@ -5,6 +5,7 @@ namespace App\Http\Controllers\cadastros\disciplina;
 use App\Http\Requests\DisciplinaRequest;
 use App\Models\Disciplina;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class DisciplinaController extends Controller
 {
@@ -59,23 +60,30 @@ class DisciplinaController extends Controller
      */
     public function store(DisciplinaRequest $request)
     {
-        $data = [
-            'desc' => $request->desc,
-            'obs' => $request->obs,
-        ];
+        try {
 
-        $disciplina = $this->objDisciplina->where([['desc', '=', $request->desc]])->get();
-        
-        if ($disciplina && sizeof($disciplina) > 0) {
-            return redirect()->route('lista_disciplina')->with('status', 'A Disciplina '.$request->desc.' já encontra-se Cadastrada!');
+            $data = [
+                'desc' => trim($request->desc),
+                'obs' => trim($request->obs),
+            ];
+
+            //Valida existência do Registro
+            if($this->objDisciplina->where([['desc', '=', $request->desc]])->get()->isNotEmpty()){
+                $mensagem = 'A Disciplina '.$request->desc.' já encontra-se Cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objDisciplina->create($data)){
+                    $mensagem = 'A Disciplina '.$request->desc.' foi cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objDisciplina->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_disciplina');
-        }
+        return redirect()->route('lista_disciplina')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -111,19 +119,30 @@ class DisciplinaController extends Controller
      */
     public function update(DisciplinaRequest $request, $id)
     {
-        $data = [
-            'desc' => $request->desc,
-            'obs' => $request->obs,
-        ];
+        try {
 
-        $disciplina = $this->objDisciplina->where([['desc', '=', $request->desc],['id','<>',$id]])->get();
-        
-        if ($disciplina && sizeof($disciplina) > 0) {
-            return redirect()->route('lista_disciplina')->with('status', 'A Disciplina '.$request->desc.' já encontra-se Cadastrada!');
+            $data = [
+                'desc' => trim($request->desc),
+                'obs' => trim($request->obs),
+            ];
+
+            //Valida existência do Registro
+            if($this->objDisciplina->where([['desc', '=', $request->desc],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'A Disciplina '.$request->desc.' já encontra-se Cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objDisciplina->where(['id' => $id])->update($data)){
+                    $mensagem = 'A Disciplina '.$request->desc.' foi alterada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objDisciplina->where(['id' => $id])->update($data);
-        return redirect()->route('lista_disciplina');
+        return redirect()->route('lista_disciplina')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -134,7 +153,16 @@ class DisciplinaController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objDisciplina->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objDisciplina->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_disciplina')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 }

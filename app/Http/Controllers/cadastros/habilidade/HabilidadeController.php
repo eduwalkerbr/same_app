@@ -7,6 +7,7 @@ use App\Models\Disciplina;
 use App\Models\Habilidade;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class HabilidadeController extends Controller
 {
@@ -77,24 +78,31 @@ class HabilidadeController extends Controller
      */
     public function store(HabilidadeRequest $request)
     {
-        $data = [
-            'desc' => $request->desc,
-            'obs' => $request->obs,
-            'disciplinas_id' => $request->disciplinas_id
-        ];
+        try {
 
-        $habilidade = $this->objHabilidade->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id]])->get();
-        
-        if ($habilidade && sizeof($habilidade) > 0) {
-            return redirect()->route('lista_habilidade')->with('status', 'A Habilidade '.$request->desc.' já encontra-se Cadastrada!');
+            $data = [
+                'desc' => trim($request->desc),
+                'obs' => trim($request->obs),
+                'disciplinas_id' => intval($request->disciplinas_id)
+            ];
+
+            //Valida existência do Registro
+            if($this->objHabilidade->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id]])->get()->isNotEmpty()){
+                $mensagem = 'A Habilidade '.$request->desc.' já encontra-se Cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objHabilidade->create($data)){
+                    $mensagem = 'A Habilidade '.$request->desc.' foi cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objHabilidade->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_habilidade');
-        }
+        return redirect()->route('lista_habilidade')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -132,20 +140,31 @@ class HabilidadeController extends Controller
      */
     public function update(HabilidadeRequest $request, $id)
     {
-        $data = [
-            'desc' => $request->desc,
-            'disciplinas_id' => $request->disciplinas_id,
-            'obs' => $request->obs,
-        ];
+        try {
 
-        $habilidade = $this->objHabilidade->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id],['id','<>',$id]])->get();
-        
-        if ($habilidade && sizeof($habilidade) > 0) {
-            return redirect()->route('lista_habilidade')->with('status', 'A Habilidade '.$request->desc.' já encontra-se Cadastrada!');
+            $data = [
+                'desc' => trim($request->desc),
+                'disciplinas_id' => intval($request->disciplinas_id),
+                'obs' => trim($request->obs),
+            ];
+
+            //Valida existência do Registro
+            if($this->objHabilidade->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'A Habilidade '.$request->desc.' já encontra-se Cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objHabilidade->where(['id' => $id])->update($data)){
+                    $mensagem = 'A Habilidade '.$request->desc.' foi alterada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objHabilidade->where(['id' => $id])->update($data);
-        return redirect()->route('lista_habilidade');
+        return redirect()->route('lista_habilidade')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

@@ -210,13 +210,14 @@ Route::prefix('previlegio')->group(function () {
 Route::resource('previlegio', PrevilegioController::class)->except('index','show');
 
 //CRUD Direção Professores
+Route::delete('/direcao_professor/exclusao', [DirecaoProfessorController::class, 'destroy'])->name('direcao_professor.destroy');
 Route::prefix('direcao_professor')->group(function () {
     Route::get('/list', [DirecaoProfessorController::class, 'exibirLista'])->name('lista_direcao_professor');
     Route::name('direcao_professor.')->group(function () {
         Route::any('/filtrar', [DirecaoProfessorFilterController::class, 'filtrar'])->name('filtrar');
     });    
 });
-Route::resource('direcao_professor', DirecaoProfessorController::class)->except('index','show');
+Route::resource('direcao_professor', DirecaoProfessorController::class)->except('index','show','destroy');
 
 //CRUD Prova Gabaritos
 Route::prefix('prova_gabarito')->group(function () {
@@ -243,10 +244,11 @@ Route::prefix('questao')->group(function () {
 
 //CRUD Sugestão
 Route::get('/sugestao/list', [SugestaoController::class, 'exibirLista'])->name('lista_sugestoes');
-Route::resource('sugestao', SugestaoController::class)->only('store','update','destroy');
+Route::resource('sugestao', SugestaoController::class);
 
 //CRUD Prova Destaques
 Route::get('/destaque/list', [DestaqueController::class, 'exibirLista'])->name('lista_destaque');
+Route::delete('/destaque/exclusao', [DestaqueController::class, 'destroy'])->name('destaque.destroy');
 Route::resource('destaque', DestaqueController::class)->except('index','show','destroy');
 
 //CRUD Legenda

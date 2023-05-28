@@ -33,10 +33,7 @@
                 </ul>
             </div>
             <div class="dropend">
-                @php
-                $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                @endphp
-                @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+                @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                 <a id="link_questoesobjetivas" onclick="manipularLink('questoesobjetivas')" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" href="#" style="font-size:90%;font-weight:bold;color:#0046AD;border: 0.1em solid #0046AD;border-radius:0;border-bottom:none;padding-top:5%;padding-bottom:5%;white-space:normal;">Questões por Disciplina</a>
                 @else
                 <a id="link_questoesobjetivas" onclick="manipularLink('questoesobjetivas')" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" href="#" style="font-size:90%;font-weight:bold;color:#0046AD;border: 0.1em solid #0046AD;border-radius:0;padding-top:5%;padding-bottom:5%;white-space:normal;">Questões por Disciplina</a>
@@ -52,10 +49,7 @@
                     <li class="nav-item dropdown"><a id="link_questoesgrafico" class="nav-link" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="#0046AD"' onclick="manipularLink('questoesobjetivas')" href="#questoesgrafico" style="font-size:90%;font-weight:bold;color:#0046AD;border:none;padding-top:5%;padding-bottom:5%;">Gráfico</a></li>
                 </ul>
             </div>
-            @php
-            $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-            @endphp
-            @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+            @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
             <div class="dropend">
                 <a id="link_alunos" onclick="manipularLink('alunos')" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" href="#" style="font-size:90%;font-weight:bold;color:#0046AD;border: 0.1em solid #0046AD;border-radius:0;padding-top:5%;padding-bottom:5%;white-space:normal;">Alunos</a>
                 <ul class="dropdown-menu">

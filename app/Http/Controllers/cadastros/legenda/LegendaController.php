@@ -5,6 +5,7 @@ namespace App\Http\Controllers\cadastros\legenda;
 use App\Http\Requests\LegendaRequest;
 use App\Models\Legenda;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class LegendaController extends Controller
 {
@@ -58,27 +59,36 @@ class LegendaController extends Controller
      */
     public function store(LegendaRequest $request)
     {
-        $data = [
-            'titulo' => $request->titulo,
-            'descricao' => $request->descricao,
-            'exibicao' => $request->exibicao,
-            'cor_fundo' => $request->cor_fundo,
-            'cor_letra' => $request->cor_letra,
-            'valor_inicial' => $request->valor_inicial,
-            'valor_final' => $request->valor_final,
-        ];
+        try {
 
-        $legenda = $this->objLegenda->where(['titulo' => $request->titulo])->get();
-        if ($legenda && sizeof($legenda) > 0) {
-            return redirect()->route('lista_legenda')->with('status', 'A Legenda '.$request->titulo.' já foi cadastrada!');
+            //Monta o objeto de inserção no Banco pelos dados da Request
+            $data = [
+                'titulo' => trim($request->titulo),
+                'descricao' => trim($request->descricao),
+                'exibicao' => trim($request->exibicao),
+                'cor_fundo' => trim($request->cor_fundo),
+                'cor_letra' => trim($request->cor_letra),
+                'valor_inicial' => intval($request->valor_inicial),
+                'valor_final' => intval($request->valor_final),
+            ];
+
+            //Valida existência do Registro
+            if($this->objLegenda->where(['titulo' => $request->titulo])->get()->isNotEmpty()){
+                $mensagem = 'A Legenda '.$request->titulo.' já foi cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objLegenda->create($data)){
+                    $mensagem = 'A Legenda '.$request->titulo.' foi Cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objLegenda->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_legenda');
-        }
+        return redirect()->route('lista_legenda')->with(['mensagem' => $mensagem,'status' => $status]); 
     }
     /**
      * Display the specified resource.
@@ -113,23 +123,36 @@ class LegendaController extends Controller
      */
     public function update(LegendaRequest $request, $id)
     {
-        $data = [
-            'titulo' => $request->titulo,
-            'descricao' => $request->descricao,
-            'exibicao' => $request->exibicao,
-            'cor_fundo' => $request->cor_fundo,
-            'cor_letra' => $request->cor_letra,
-            'valor_inicial' => $request->valor_inicial,
-            'valor_final' => $request->valor_final,
-        ];
+        try {
 
-        $legenda = $this->objLegenda->where(['titulo' => $request->titulo])->where('id','<>',$id)->get();
-        if ($legenda && sizeof($legenda) > 0) {
-            return redirect()->route('lista_legenda')->with('status', 'A Legenda '.$request->titulo.' já foi cadastrada!');
+            //Monta os dados do banco pelos dados da Request
+            $data = [
+                'titulo' => trim($request->titulo),
+                'descricao' => trim($request->descricao),
+                'exibicao' => trim($request->exibicao),
+                'cor_fundo' => trim($request->cor_fundo),
+                'cor_letra' => trim($request->cor_letra),
+                'valor_inicial' => intval($request->valor_inicial),
+                'valor_final' => intval($request->valor_final),
+            ];
+
+            //Valida existência do Registro
+            if($this->objLegenda->where(['titulo' => $request->titulo])->where('id','<>',$id)->get()->isNotEmpty()){
+                $mensagem = 'A Legenda '.$request->titulo.' já foi cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objLegenda->where(['id' => $id])->update($data)){
+                    $mensagem = 'A Legenda '.$request->titulo.' foi atualizada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objLegenda->where(['id' => $id])->update($data);
-        return redirect()->route('lista_legenda');
+        return redirect()->route('lista_legenda')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

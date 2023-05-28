@@ -27,4 +27,16 @@ class TipoSolicitacaoRequest extends FormRequest
             'nome' => 'required',
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'nome' => 'Nome',
+        ];
+    }
 }

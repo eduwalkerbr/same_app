@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,22 +23,22 @@
             @if(isset($prova_gabarito))
             <form id="form_edit_prova_gabarito" name="form_edit_prova_gabarito" action="{{ route('prova_gabarito.update',$prova_gabarito->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_prova_gabarito" name="form_prova_gabarito" action="{{ route('prova_gabarito.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_prova_gabarito" name="form_prova_gabarito" action="{{ route('prova_gabarito.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-8">
                             <div class="form-group">
                                 <label for="DESCR_PROVA">Descrição</label>
-                                <input type="text" class="form-control" id="DESCR_PROVA" name="DESCR_PROVA" placeholder="Descrição da Prova" value="{{ $prova_gabarito->DESCR_PROVA ?? ''}}">
+                                <input type="text" class="form-control" id="DESCR_PROVA" name="DESCR_PROVA" placeholder="Descrição da Prova" value="{{ $prova_gabarito->DESCR_PROVA ?? old('DESCR_PROVA')}}">
                             </div>
                         </div>
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
                                 <select class="form-control" id="SAME" name="SAME" required>
-                                    <option value="{{ $prova_gabarito->SAME ?? ''}}">{{ $prova_gabarito->SAME ?? ''}}</option>
+                                    <option value="{{ $prova_gabarito->SAME ?? old('SAME')}}">{{ $prova_gabarito->SAME ?? old('SAME')}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
                                         <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
@@ -52,7 +52,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="gabarito">Gabarito</label>
-                                <input type="text" class="form-control" id="gabarito" name="gabarito" placeholder="Gabarito" value="{{ $prova_gabarito->gabarito ?? ''}}" required>
+                                <input type="text" class="form-control" id="gabarito" name="gabarito" placeholder="Gabarito" value="{{ $prova_gabarito->gabarito ?? old('gabarito')}}" required>
                             </div>
                         </div>
                     </div>
@@ -60,13 +60,13 @@
                         <div class=" col-md-6">
                             <div class="form-group">
                                 <label for="ano">Ano</label>
-                                <input type="number" class="form-control" id="ano" name="ano" placeholder="Ano" value="{{ $prova_gabarito->ano ?? ''}}" required>
+                                <input type="number" class="form-control" id="ano" name="ano" placeholder="Ano" value="{{ $prova_gabarito->ano ?? old('ano')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-6">
                             <div class="form-group">
                                 <label for="qtd">Quantidade</label>
-                                <input type="number" class="form-control" id="qtd" name="qtd" placeholder="Quantidade" value="{{ $prova_gabarito->qtd ?? ''}}" required>
+                                <input type="number" class="form-control" id="qtd" name="qtd" placeholder="Quantidade" value="{{ $prova_gabarito->qtd ?? old('qtd')}}" required>
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                                     @php
                                     $disc_selecionado = $prova_gabarito->find($prova_gabarito->id)->relDisciplinas;
                                     @endphp
-                                    <option value="{{ $disc_selecionado->id ?? ''}}">{{ $disc_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $disc_selecionado->id ?? old('disciplinas_id')}}">{{ $disc_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif

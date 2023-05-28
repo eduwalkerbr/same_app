@@ -25,9 +25,24 @@ class UserRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required',
+            'email' => 'required|email:rfc,dns',
             'password' => 'required',
             'perfil' => 'required',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => 'Nome',
+            'email' => 'E-mail',
+            'password' => 'Senha',
+            'perfil' => 'Perfil',
         ];
     }
 }

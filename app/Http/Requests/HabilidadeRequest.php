@@ -25,7 +25,20 @@ class HabilidadeRequest extends FormRequest
     {
         return [
             'desc' => 'required',
-            'disciplinas_id' => 'required',
+            'disciplinas_id' => 'required|integer|min:0|exists:disciplinas,id',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'desc' => 'Descrição da Habilidade',
+            'disciplinas_id' => 'Disciplina',
         ];
     }
 }

@@ -155,7 +155,7 @@
         <td style="font-weight: normal;font-size:14px;">{{$questao->modelo }}</td>
         <td style="font-weight: normal;font-size:14px;">{{$questao->nome_tema}}</td>
         <td style="font-weight: normal;font-size:14px;">{{$questao->nome_habilidade}}</td>
-        <td style="text-align:center;">
+        <td style="text-align:center;width:200px;">
           <a href="{{ route('questao.create') }}">
             <button style="font-weight: normal;background-color:#f9821E;border-color:#f9821E;" class="btn-primary">Novo</button>
           </a>

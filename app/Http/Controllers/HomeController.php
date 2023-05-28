@@ -41,6 +41,9 @@ class HomeController extends Controller
         $legendas = $this->objLegenda->all();
         $sugestoes = $this->objSugestao->orderBy('updated_at', 'desc')->paginate(2);
 
+        //Adiciona Previlégio do Usuário logado como variável de Sessão
+        session()->put('previlegio',$previlegio[0]);
+
         //Caso seja administrados tem acesso a todas as solicitações em aberto
         if (Auth::user()->perfil == 'Administrador') {
 

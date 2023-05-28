@@ -17,7 +17,6 @@
                 @endforeach
             </div>
             @endif
-            @if(isset($previlegio))
             <form id="form_edit_previlegio" name="form_edit_previlegio" action="{{ route('gest_previlegio.update',$previlegio->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
                 @else

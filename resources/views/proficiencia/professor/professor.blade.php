@@ -231,19 +231,13 @@
                     <!------------------------------------ Gráfico Questões Disciplina ------------------->
 
                     <!-- Início Sessão de Alunos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                    @php
-                    $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                    @endphp
-                    @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+                    @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                     @include('proficiencia/professor/sessoes.aluno');
                     @endif
                     <!-- Fim Sessão de Alunos ---------------------------------------------------------------------------------------------------------------------------------------------------------------->
 
                     <!------------------------------------ Gráfico Aluno Disciplina ------------------->
-                    @php
-                    $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                    @endphp
-                    @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+                    @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                     <div class="row justify-content-center">
                         <div class="card-deck" style="background-color: white;padding-bottom:16px;border: 1px solid white;">
                             <div class="card text-center" style="box-shadow: 5px 5px 5px rgba(156,163,175);">

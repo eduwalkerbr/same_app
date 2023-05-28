@@ -8,6 +8,7 @@ use App\Models\Escola;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class EscolaController extends Controller
 {
@@ -77,27 +78,35 @@ class EscolaController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(EscolaRequest $request)
-    {
-        $params = explode('_',$request->municipios_id);
+    {      
+        try {
 
-        $data = [
-            'nome' => $request->nome,
-            'SAME' => $request->SAME,
-            'status' => 'Ativo',
-            'municipios_id' => $params[0]
-        ];
+            $params = explode('_',$request->municipios_id);
 
-        $escola = $this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $params[0]],['SAME','=',$request->SAME]])->get();
-        
-        if ($escola && sizeof($escola) > 0) {
-            return redirect()->route('lista_escola')->with('status', 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
+            $data = [
+                'nome' => trim($request->nome),
+                'SAME' => trim($request->SAME),
+                'status' => 'Ativo',
+                'municipios_id' => intval($params[0])
+            ];
+
+            //Valida existência do Registro
+            if($this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $params[0]],['SAME','=',$request->SAME]])->get()->isNotEmpty()){
+                $mensagem = 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objEscola->create($data)){
+                    $mensagem = 'A Escola '.$request->nome.' foi cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objEscola->create($data);
-
-        if ($cad) {
-            return redirect()->route('lista_escola');
-        }
+        return redirect()->route('lista_escola')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -138,23 +147,34 @@ class EscolaController extends Controller
      */
     public function update(EscolaRequest $request, $id)
     {
-        $params = explode('_',$request->municipios_id);
+        try {
 
-        $data = [
-            'nome' => $request->nome,
-            'municipios_id' => $params[0],
-            'SAME' => $request->SAME,
-            'status' => $request->status,
-        ];
+            $params = explode('_',$request->municipios_id);
 
-        $escola = $this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $params[0]],['SAME','=',$request->SAME],['id','<>',$id]])->get();
-        
-        if ($escola && sizeof($escola) > 0) {
-            return redirect()->route('lista_escola')->with('status', 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
+            $data = [
+                'nome' => trim($request->nome),
+                'municipios_id' => intval($params[0]),
+                'SAME' => trim($request->SAME),
+                'status' => trim($request->status),
+            ];
+
+            //Valida existência do Registro
+            if($this->objEscola->where([['nome', '=', $request->nome],['municipios_id', '=', $params[0]],['SAME','=',$request->SAME],['id','<>',$id]])->get()->isNotEmpty()){
+                $status = 'error';
+                $mensagem = 'A Escola '.$request->nome.' já encontra-se Cadastrada no SAME '.$request->SAME.'!';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objEscola->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data)){
+                    $mensagem = 'A Escola '.$request->nome.' foi alterada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objEscola->where(['id' => $id])->where(['SAME' => $request->SAME])->update($data);
-        return redirect()->route('lista_escola');
+        return redirect()->route('lista_escola')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -166,14 +186,24 @@ class EscolaController extends Controller
      */
     public function inativar($id, $anosame)
     {
-        $escolas = $this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->get();
-        $escola = $escolas[0];
-        $escola = [
-            'status' => 'Inativo',
-        ];
+        try {
+            $escolas = $this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->get();
+            $escola = $escolas[0];
+            $escola = [
+                'status' => 'Inativo',
+            ];
 
-        $this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->update($escola);
-        return redirect()->route('lista_escola');
+            if($this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->update($escola)){
+                $mensagem = 'Inativação realizada com sucesso.'; 
+                $status = 'success';
+            }
+
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_escola')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -185,14 +215,24 @@ class EscolaController extends Controller
      */
     public function ativar($id, $anosame)
     {
-        $escolas = $this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->get();
-        $escola = $escolas[0];
-        $escola = [
-            'status' => 'Ativo',
-        ];
+        try {
+            $escolas = $this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->get();
+            $escola = $escolas[0];
+            $escola = [
+                'status' => 'Ativo',
+            ];
 
-        $this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->update($escola);
-        return redirect()->route('lista_escola');
+            if($this->objEscola->where(['id' => $id])->where(['SAME' => $anosame])->update($escola)){
+                $mensagem = 'Ativação realizada com sucesso.'; 
+                $status = 'success';
+            }
+
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_escola')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -203,8 +243,17 @@ class EscolaController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objEscola->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objEscola->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_escola')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

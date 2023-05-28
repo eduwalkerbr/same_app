@@ -26,11 +26,28 @@ class ProvaGabaritoRequest extends FormRequest
         return [
             'DESCR_PROVA' => 'required',
             'gabarito' => 'required',
-            'ano' => 'required',
-            'qtd' => 'required',
-            'disciplinas_id' => 'required',
-            'status' => 'required',
+            'ano' => 'required|integer|min:0',
+            'qtd' => 'required|integer|min:0',
+            'disciplinas_id' => 'required|integer|min:0|exists:disciplinas,id',
+            'status' => 'required|integer|min:0',
             'SAME' => 'required'
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'DESCR_PROVA' => 'Descrição da Prova',
+            'gabarito' => 'Gabarito',
+            'ano' => 'Ano',
+            'qtd' => 'Quantidade',
+            'SAME' => 'Ano SAME',
+            'disciplinas_id' => 'Disciplina',
         ];
     }
 }

@@ -359,8 +359,6 @@
     ctxTema.onclick = clickHandler;
 </script>
 
-
-
 <script>
     // setup 
 

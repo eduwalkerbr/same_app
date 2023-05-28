@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($disciplina))
             <form id="form_edit_disciplina" name="form_edit_disciplina" action="{{ route('disciplina.update',$disciplina->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_disciplina" name="form_disciplina" action="{{ route('disciplina.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_disciplina" name="form_disciplina" action="{{ route('disciplina.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="name">Descrição</label>
-                                <input type="text" class="form-control" id="desc" name="desc" placeholder="Descrição da Disciplina" value="{{ $disciplina->desc ?? ''}}" required>
+                                <input type="text" class="form-control" id="desc" name="desc" placeholder="Descrição da Disciplina" value="{{ $disciplina->desc ?? old('desc')}}" required>
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="name">Observação</label>
-                                <textarea class="form-control" id="obs" name="obs" rows="2">{{ $disciplina->obs ?? ''}}</textarea>
+                                <textarea class="form-control" id="obs" name="obs" rows="2">{{ $disciplina->obs ?? old('obs')}}</textarea>
                             </div>
                         </div>
                     </div>

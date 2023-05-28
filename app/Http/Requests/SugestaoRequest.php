@@ -26,7 +26,21 @@ class SugestaoRequest extends FormRequest
         return [
             'nome' => 'required',
             'mensagem' => 'required',
-            'email' => 'required',
+            'email' => 'required|email:rfc,dns',
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'nome' => 'Nome',
+            'mensagem' => 'Mensagem',
+            'email' => 'E-mail',
         ];
     }
 }
