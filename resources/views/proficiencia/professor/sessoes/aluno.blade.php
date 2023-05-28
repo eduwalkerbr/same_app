@@ -35,10 +35,7 @@
                                 </div>
                                 <div class="card-footer text-muted" style="background-color: {{$corFundo}};padding-top: 0rem;padding-bottom: 0rem;border-top:none;text-align:center;line-heigth: 0em;">
                                     <p style="color:{{$corLetra}};font-size:8px;margin-bottom: 0.5em;padding-right:0;padding-left:0;">
-                                        @php
-                                        $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                                        @endphp
-                                        @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+                                        @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                                         {{$dados_base->nome_aluno_abreviado}}
                                         @endif
                                     </p>
@@ -55,10 +52,7 @@
                                     <!-- Modal Header -->
                                     <div class="modal-header" style="background-color:#0046AD;">
                                         <h4 class="modal-title" style="background-color:#0046AD; color:white;font-size:13px;font-weight:bold;">
-                                            @php
-                                            $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                                            @endphp
-                                            @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+                                            @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                                             {{$dados_base->nome_aluno}}
                                             @else
                                             {{$dados_base->sigla_aluno}}

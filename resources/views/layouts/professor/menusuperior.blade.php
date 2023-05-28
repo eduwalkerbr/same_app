@@ -16,12 +16,8 @@
                     <!-- Sessão de Solicitações -->
                     @include('layouts/menu_superior.sessao_base')
 
-                    
                     <ul class="navbar-nav mr-auto">
-                    @php
-                    $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                    @endphp
-                    @if ($previlegio->funcaos_id != 7)
+                    @if (session('previlegio')->funcaos_id != 7)
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{ route('secretario.index') }}" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
                             Proficiências
@@ -64,10 +60,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-4">
                         <!------------------------------------ Município ------------------->
-                        @php
-                        $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                        @endphp
-                        @if($previlegio->funcaos_id == 6 || $previlegio->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || (($previlegio->funcaos_id == 13 || $previlegio->funcaos_id == 14) && $previlegio->municipios_id == 5))
+                        @if(session('previlegio')->funcaos_id == 6 || session('previlegio')->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || ((session('previlegio')->funcaos_id == 13 || session('previlegio')->funcaos_id == 14) && session('previlegio')->municipios_id == 5))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$municipio_selecionado[0]->nome ?? 'Município'}}</a>
                             <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
@@ -80,10 +73,7 @@
                     </ul>
                     <ul class="navbar-nav mr-4">
                         <!------------------------------------ Escola ------------------->
-                        @php
-                        $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                        @endphp
-                        @if($previlegio->funcaos_id == 5 || $previlegio->funcaos_id == 6 || $previlegio->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || (($previlegio->funcaos_id == 13 || $previlegio->funcaos_id == 14) && $previlegio->municipios_id == 5))
+                        @if(session('previlegio')->funcaos_id == 5 || session('previlegio')->funcaos_id == 6 || session('previlegio')->funcaos_id == 8 || Auth::user()->perfil == 'Administrador' || ((session('previlegio')->funcaos_id == 13 || session('previlegio')->funcaos_id == 14) && session('previlegio')->municipios_id == 5))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
                             <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
@@ -93,7 +83,7 @@
                             </ul>
                         </li>
                         @endif
-                        @if($previlegio->funcaos_id == 7 && isset($escola_selecionada))
+                        @if(session('previlegio')->funcaos_id == 7 && isset($escola_selecionada))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$escola_selecionada[0]->nome ?? 'Escola'}}</a>
                         </li>
@@ -106,10 +96,7 @@
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="" role="button" aria-expanded="false" style="color:white;">{{$turma_selecionada[0]->DESCR_TURMA ?? 'Turma'}}</a>
                             <ul class="dropdown-menu navbar-nav-scroll" style="max-height:250px;overflow-y:auto;">
                                 @foreach($turmas as $turma)
-                                @php
-                                $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-                                @endphp
-                                @if($previlegio->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
+                                @if(session('previlegio')->funcaos_id == 7 || Auth::user()->perfil == 'Administrador')
                                 @php
                                 $escola = $turma->find($turma->id)->relEscolas;
                                 $descricao_professor = $turma->DESCR_TURMA.' (Escola '.$escola->nome.')';

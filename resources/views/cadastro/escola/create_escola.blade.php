@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,22 +23,22 @@
             @if(isset($escola))
             <form id="form_edit_escola" name="form_edit_escola" action="{{ route('escola.update',$escola->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_escola" name="form_escola" action="{{ route('escola.store') }}" method="post" enctype="multipart/form-data">
+            @else
+            <form id="form_escola" name="form_escola" action="{{ route('escola.store') }}" method="post" enctype="multipart/form-data">
                     @endif
-                    @csrf
+            @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-10">
                             <div class="form-group">
                                 <label for="name">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome da Escola" value="{{ $escola->nome ?? ''}}" required>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome da Escola" value="{{ $escola->nome ?? old('nome')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-2">
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
                                 <select class="form-control" id="SAME" name="SAME" required>
-                                    <option value="{{ $escola->SAME ?? ''}}">{{ $escola->SAME ?? ''}}</option>
+                                    <option value="{{ $escola->SAME ?? old('SAME')}}">{{ $escola->SAME ?? old('SAME')}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
                                         <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
@@ -54,7 +54,7 @@
                                 <label for="id_sala">Município</label>
                                 <select class="form-control" id="municipios_id" name="municipios_id" required>
                                     @if(isset($escola))
-                                    <option value="{{ $escola->municipios_id ?? ''}}">{{ $escola->nome_municipio.' ('.$escola->SAME_municipio.')' ?? ''}}</option>
+                                    <option value="{{ $escola->municipios_id ?? old('municipios_id')}}">{{ $escola->nome_municipio.' ('.$escola->SAME_municipio.')' ?? old('municipios_id')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -65,7 +65,7 @@
                             <div class="form-group">
                                 <label for="perfil">Status</label>
                                 <select class="form-control" id="status" name="status" required>
-                                    <option value="{{ $escola->status ?? ''}}">{{ $escola->status ?? ''}}</option>
+                                    <option value="{{ $escola->status ?? old('status')}}">{{ $escola->status ?? old('status')}}</option>
                                     <option>Ativo</option>
                                     <option>Inativo</option>
                                 </select>

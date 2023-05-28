@@ -5,6 +5,7 @@ namespace App\Http\Controllers\cadastros\tipoquestao;
 use App\Http\Requests\TipoQuestaoRequest;
 use App\Models\TipoQuestao;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class TipoQuestaoController extends Controller
 {
@@ -58,22 +59,30 @@ class TipoQuestaoController extends Controller
      */
     public function store(TipoQuestaoRequest $request)
     {
-        $data = [
-            'titulo' => $request->titulo,
-            'descricao' => $request->descricao,
-        ];
+        try {
 
-        $tipoquestao = $this->objTipoQuestao->where([['titulo', '=', $request->titulo]])->get();
-        if ($tipoquestao && sizeof($tipoquestao) > 0) {
-            return redirect()->route('lista_tipoquestao')->with('status', 'O Tipo de Questão '.$request->titulo.' já encontra-se registrado!');
+            $data = [
+                'titulo' => trim($request->titulo),
+                'descricao' => trim($request->descricao),
+            ];
+
+            //Valida existência do Registro
+            if($this->objTipoQuestao->where([['titulo', '=', $request->titulo]])->get()->isNotEmpty()){
+                $mensagem = 'O Tipo de Questão '.$request->titulo.' já encontra-se registrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objTipoQuestao->create($data)){
+                    $mensagem = 'O Tipo de Questão '.$request->titulo.' foi incluído com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objTipoQuestao->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_tipoquestao');
-        }
+        return redirect()->route('lista_tipoquestao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
     /**
      * Display the specified resource.
@@ -108,18 +117,30 @@ class TipoQuestaoController extends Controller
      */
     public function update(TipoQuestaoRequest $request, $id)
     {
-        $data = [
-            'titulo' => $request->titulo,
-            'descricao' => $request->descricao,
-        ];
+        try {
 
-        $tipoquestao = $this->objTipoQuestao->where([['titulo', '=', $request->titulo],['id','<>',$id]])->get();
-        if ($tipoquestao && sizeof($tipoquestao) > 0) {
-            return redirect()->route('lista_tipoquestao')->with('status', 'O Tipo de Questão '.$request->titulo.' já encontra-se registrado!');
+            $data = [
+                'titulo' => trim($request->titulo),
+                'descricao' => trim($request->descricao),
+            ];
+
+            //Valida existência do Registro
+            if($this->objTipoQuestao->where([['titulo', '=', $request->titulo],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'O Tipo de Questão '.$request->titulo.' já encontra-se registrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objTipoQuestao->where(['id' => $id])->update($data)){
+                    $mensagem = 'O Tipo de Questão '.$request->titulo.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objTipoQuestao->where(['id' => $id])->update($data);
-        return redirect()->route('lista_tipoquestao');
+        return redirect()->route('lista_tipoquestao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

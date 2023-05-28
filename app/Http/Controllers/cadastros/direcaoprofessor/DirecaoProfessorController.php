@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class DirecaoProfessorController extends Controller
 {
@@ -98,30 +99,35 @@ class DirecaoProfessorController extends Controller
      */
     public function store(DirecaoProfessorRequest $request)
     { 
-        $id_escola = null;
-        if($request->filled('escolas_id')){
-            $id_escola = explode('_',$request->escolas_id)[0];
+        try {
+
+            $id_escola = null;
+            if($request->filled('escolas_id')){
+                $id_escola = explode('_',$request->escolas_id)[0];
+            }
+
+            $data = [
+                'id_previlegio' => intval($request->id_previlegio),
+                'id_escola' => $id_escola,
+                'id_turma' => $request->turmas_id,
+                'SAME' => trim($request->SAME)
+            ];
+
+            if($this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $id_escola],['id_turma','=', $request->turmas_id],['SAME','=',$request->SAME]])->get()->isNotEmpty()){
+                $mensagem = 'A turma selecionada já foi adicionada ao respectivo Usuário no SAME '.$request->SAME.'!'; 
+                $status = 'error';
+            } else {
+                if($this->objDirecaoProfessor->create($data)){
+                    $mensagem = 'O Registro da Direção Professor incluído com sucesso.'; 
+                    $status = 'success';
+                }
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
-
-        $data = [
-            'id_previlegio' => $request->id_previlegio,
-            'id_escola' => $id_escola,
-            'id_turma' => $request->turmas_id,
-            'SAME' => $request->SAME
-        ];
-
-        $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $id_escola],['id_turma','=', $request->turmas_id],['SAME','=',$request->SAME]])->get();
         
-        if ($direcao_professor && sizeof($direcao_professor) > 0) {
-            return redirect()->route('lista_direcao_professor')->with('status', 'A turma selecionada já foi adicionada ao respectivo Usuário no SAME '.$request->SAME.'!');
-        }
-
-        $cad = $this->objDirecaoProfessor->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_direcao_professor');
-        }
+        return redirect()->route('lista_direcao_professor')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -170,26 +176,35 @@ class DirecaoProfessorController extends Controller
      */
     public function update(DirecaoProfessorRequest $request, $id)
     {
-        $id_escola = null;
-        if($request->filled('escolas_id')){
-            $id_escola = explode('_',$request->escolas_id)[0];
+        try {
+
+            $id_escola = null;
+            if($request->filled('escolas_id')){
+                $id_escola = explode('_',$request->escolas_id)[0];
+            }
+
+            $data = [
+                'id_previlegio' => intval($request->id_previlegio),
+                'id_escola' => $id_escola,
+                'id_turma' => $request->turmas_id,
+                'SAME' => trim($request->SAME)
+            ];
+
+            if($this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $id_escola],['id_turma','=', $request->turmas_id],['SAME','=',$request->SAME],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'A turma selecionada já foi adicionada ao respectivo Usuário no SAME '.$request->SAME.'!'; 
+                $status = 'error';
+            } else {
+                if($this->objDirecaoProfessor->where(['id' => $id])->update($data)){
+                    $mensagem = 'O Registro de Direção Professor foi alterado com sucesso.'; 
+                    $status = 'success';
+                }
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
-
-        $data = [
-            'id_previlegio' => $request->id_previlegio,
-            'id_escola' => $id_escola,
-            'id_turma' => $request->turmas_id,
-            'SAME' => $request->SAME
-        ];
-
-        $direcao_professor = $this->objDirecaoProfessor->where([['id_previlegio', '=', $request->id_previlegio],['id_escola', '=', $id_escola],['id_turma','=', $request->turmas_id],['SAME','=',$request->SAME],['id','<>',$id]])->get();
         
-        if ($direcao_professor && sizeof($direcao_professor) > 0) {
-            return redirect()->route('lista_direcao_professor')->with('status', 'A turma selecionada já foi adicionada ao respectivo Usuário no SAME '.$request->SAME.'!');
-        }
-
-        $this->objDirecaoProfessor->where(['id' => $id])->update($data);
-        return redirect()->route('lista_direcao_professor');
+        return redirect()->route('lista_direcao_professor')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -198,10 +213,17 @@ class DirecaoProfessorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        $del = $this->objDirecaoProfessor->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objDirecaoProfessor->destroy($request->id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
     }
 
 }

@@ -6,6 +6,9 @@ use App\Http\Requests\DestaqueRequest;
 use App\Models\DestaqueModel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Throwable;
 
 class DestaqueController extends Controller
 {
@@ -59,19 +62,26 @@ class DestaqueController extends Controller
      */
     public function store(DestaqueRequest $request)
     {
-        $data = [
-            'titulo' => $request->titulo,
-            'conteudo' => $request->conteudo,
-            'descricao' => $request->descricao,
-            'fonte' => $request->fonte
-        ];
+        try {
 
-        $cad = $this->objDestaque->create($data);
+            $data = [
+                'titulo' => trim($request->titulo),
+                'conteudo' => trim($request->conteudo),
+                'descricao' => trim($request->descricao),
+                'fonte' => trim($request->fonte)
+            ];
 
-
-        if ($cad) {
-            return redirect()->route('lista_destaque');
+            //Realiza a inclusão do Registro
+            if($this->objDestaque->create($data)){
+                $mensagem = 'O Destaque '.$request->titulo.' foi cadastrado com Sucesso!';
+                $status = 'success';
+            }   
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
+
+        return redirect()->route('lista_destaque')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -108,15 +118,26 @@ class DestaqueController extends Controller
      */
     public function update(DestaqueRequest $request, $id)
     {
-        $data = [
-            'titulo' => $request->titulo,
-            'conteudo' => $request->conteudo,
-            'descricao' => $request->descricao,
-            'fonte' => $request->fonte
-        ];
+        try {
 
-        $this->objDestaque->where(['id' => $id])->update($data);
-        return redirect()->route('lista_destaque');
+            $data = [
+                'titulo' => trim($request->titulo),
+                'conteudo' => trim($request->conteudo),
+                'descricao' => trim($request->descricao),
+                'fonte' => trim($request->fonte)
+            ];
+
+            //Realiza a inclusão do Registro
+            if($this->objDestaque->where(['id' => $id])->update($data)){
+                $mensagem = 'O Destaque '.$request->titulo.' foi alterado com Sucesso!';
+                $status = 'success';
+            }   
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+
+        return redirect()->route('lista_destaque')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -125,8 +146,15 @@ class DestaqueController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try {
+            if($this->objDestaque->destroy($request->id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            report($e);
+        }
     }
 }

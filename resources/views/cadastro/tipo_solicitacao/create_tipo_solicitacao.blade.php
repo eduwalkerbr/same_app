@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($tipo_solicitacao))
             <form id="form_edit_tipo_solicitacao" name="form_edit_tipo_solicitacao" action="{{ route('tipo_solicitacao.update',$tipo_solicitacao->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_tipo_solicitacao" name="form_tipo_solicitacao" action="{{ route('tipo_solicitacao.store') }}" method="post" enctype="multipart/form-data">
+            @else
+            <form id="form_tipo_solicitacao" name="form_tipo_solicitacao" action="{{ route('tipo_solicitacao.store') }}" method="post" enctype="multipart/form-data">
                     @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="name">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Tipo de Solicitação" value="{{ $tipo_solicitacao->nome ?? ''}}" required>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Tipo de Solicitação" value="{{ $tipo_solicitacao->nome ?? old('nome')}}" required>
                             </div>
                         </div>
                     </div>

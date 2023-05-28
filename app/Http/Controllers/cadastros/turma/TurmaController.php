@@ -5,11 +5,11 @@ namespace App\Http\Controllers\cadastros\turma;
 use App\Http\Requests\TurmaRequest;
 use App\Models\AnoSame;
 use App\Models\Escola;
-use App\Models\Municipio;
 use App\Models\Turma;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class TurmaController extends Controller
 {
@@ -91,29 +91,36 @@ class TurmaController extends Controller
      */
     public function store(TurmaRequest $request)
     {
-        $params = explode('_',$request->municipios_id);
+        try {
 
-        $data = [
-            'TURMA' => $request->TURMA,
-            'DESCR_TURMA' => $request->DESCR_TURMA,
-            'status' => 'Ativo',
-            'escolas_municipios_id' => $params[0],
-            'escolas_id' => $request->escolas_id,
-            'SAME' => $request->SAME
-        ];
+            $params = explode('_',$request->municipios_id);
 
-        $turma = $this->objTurma->where([['SAME', '=', $request->SAME],['DESCR_TURMA', '=', $request->DESCR_TURMA],['escolas_municipios_id','=',$params[0]]])->get();
-        
-        if ($turma && sizeof($turma) > 0) {
-            return redirect()->route('lista_turma')->with('status', 'A Turma '.$request->DESCR_TURMA.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
+            $data = [
+                'TURMA' => trim($request->TURMA),
+                'DESCR_TURMA' => trim($request->DESCR_TURMA),
+                'status' => 'Ativo',
+                'escolas_municipios_id' => intval($params[0]),
+                'escolas_id' => intval($request->escolas_id),
+                'SAME' => trim($request->SAME)
+            ];
+
+            //Valida existência do Registro
+            if($this->objTurma->where([['SAME', '=', $request->SAME],['DESCR_TURMA', '=', $request->DESCR_TURMA],['escolas_municipios_id','=',$params[0]]])->get()->isNotEmpty()){
+                $mensagem = 'A Turma '.$request->DESCR_TURMA.' já encontra-se cadastrada no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objTurma->create($data)){
+                    $mensagem = 'A Turma '.$request->DESCR_TURMA.' foi incluída com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objTurma->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_turma');
-        }
+        return redirect()->route('lista_turma')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -156,25 +163,36 @@ class TurmaController extends Controller
      */
     public function update(TurmaRequest $request, $id)
     {
-        $params = explode('_',$request->municipios_id);
+        try {
 
-        $data = [
-            'TURMA' => $request->TURMA,
-            'DESCR_TURMA' => $request->DESCR_TURMA,
-            'status' => $request->status,
-            'escolas_municipios_id' => $params[0],
-            'escolas_id' => $request->escolas_id,
-            'SAME' => $request->SAME
-        ];
+            $params = explode('_',$request->municipios_id);
 
-        $turma = $this->objTurma->where([['SAME', '=', $request->SAME],['DESCR_TURMA', '=', $request->DESCR_TURMA],['escolas_id','=',$request->escolas_id],['id','<>',$id]])->get();
-        
-        if ($turma && sizeof($turma) > 0) {
-            return redirect()->route('lista_turma')->with('status', 'A Turma '.$request->DESCR_TURMA.' já encontra-se Cadastrada no SAME '.$request->SAME.'!');
+            $data = [
+                'TURMA' => trim($request->TURMA),
+                'DESCR_TURMA' => trim($request->DESCR_TURMA),
+                'status' => trim($request->status),
+                'escolas_municipios_id' => intval($params[0]),
+                'escolas_id' => intval($request->escolas_id),
+                'SAME' => trim($request->SAME)
+            ];
+
+            //Valida existência do Registro
+            if($this->objTurma->where([['SAME', '=', $request->SAME],['DESCR_TURMA', '=', $request->DESCR_TURMA],['escolas_id','=',$request->escolas_id],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'A Turma '.$request->DESCR_TURMA.' já encontra-se cadastrada no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objTurma->where(['id' => $id])->update($data)){
+                    $mensagem = 'A Turma '.$request->DESCR_TURMA.' foi alterada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objTurma->where(['id' => $id])->update($data);
-        return redirect()->route('lista_turma');
+        return redirect()->route('lista_turma')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -186,13 +204,21 @@ class TurmaController extends Controller
      */
     public function inativar($id)
     {
-        $turma = $this->objTurma->find($id);
-        $turma = [
-            'status' => 'Inativo',
-        ];
-
-        $this->objTurma->where(['id' => $id])->update($turma);
-        return redirect()->route('lista_turma');
+        try {
+            $turma = $this->objTurma->find($id);
+            $turma = [
+                'status' => 'Inativo',
+            ];
+            if($this->objTurma->where(['id' => $id])->update($turma)){
+                $mensagem = 'Inativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_turma')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -204,13 +230,21 @@ class TurmaController extends Controller
      */
     public function ativar($id)
     {
-        $turma = $this->objTurma->find($id);
-        $turma = [
-            'status' => 'Ativo',
-        ];
-
-        $this->objTurma->where(['id' => $id])->update($turma);
-        return redirect()->route('lista_turma');
+        try {
+            $turma = $this->objTurma->find($id);
+            $turma = [
+                'status' => 'Ativo',
+            ];
+            if($this->objTurma->where(['id' => $id])->update($turma)){
+                $mensagem = 'Ativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_turma')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -221,8 +255,17 @@ class TurmaController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objTurma->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objTurma->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_turma')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\user;
 
 use App\Http\Requests\UserRequest;
-use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -74,23 +74,30 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $data = [
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => trim($request->name),
+            'email' => trim($request->email),
             'perfil' => $request->perfil,
             'password' => bcrypt($request->password),
         ];
 
-        //Obtém o usuário pelo E-mail, interrompendo o processo caso já exista
-        $usuario = $this->objUser->where(['email' => $request->email])->get();
-        if ($usuario && sizeof($usuario) > 0) {
-            return redirect()->route('user.list')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
+        try {
+            //Valida existência do Registro
+            if($this->objUser->where(['email' => $request->email])->get()->isNotEmpty()){
+                $mensagem = 'O E-mail '.$request->email.' já encontra-se em uso para outro Usuário!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objUser->create($data)){
+                    $mensagem = 'Usuário cadastrado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objUser->create($data);
-
-        if ($cad) {
-            return redirect()->route('user.list');
-        }
+        return redirect()->route('user.list')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -126,20 +133,30 @@ class UserController extends Controller
     public function update(UserRequest $request, $id)
     {
         $data = [
-            'name' => $request->name,
-            'email' => $request->email,
+            'name' => trim($request->name),
+            'email' => trim($request->email),
             'perfil' => $request->perfil,
             'password' => bcrypt($request->password),
         ];
 
-        //Obtém o usuário pelo E-mail, sendo diferente do usuário que está sendo alterado, e interrompe o processo caso exista
-        $usuario = $this->objUser->where(['email' => $request->email])->where('id','<>',$id)->get();
-        if ($usuario && sizeof($usuario) > 0) {
-            return redirect()->route('user.list')->with('status', 'O E-mail '.$request->email.' já encontra-se em uso para o Usuário '.$usuario[0]->name.'!');
+        try {
+            //Valida existência do Registro
+            if($this->objUser->where(['email' => $request->email])->where('id','<>',$id)->get()->isNotEmpty()){
+                $mensagem = 'O E-mail '.$request->email.' já encontra-se em uso para outro Usuário!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objUser->where(['id' => $id])->update($data)){
+                    $mensagem = 'Usuário alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objUser->where(['id' => $id])->update($data);
-        return redirect()->route('user.list');
+        return redirect()->route('user.list')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -150,7 +167,16 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objUser->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objUser->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('user.list')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 }

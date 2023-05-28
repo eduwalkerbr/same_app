@@ -14,7 +14,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -24,15 +24,15 @@
             @if(isset($criterio_questao))
             <form id="form_edit_criterios_questao" name="form_edit_criterios_questao" action="{{ route('criterios_questao.update',$criterio_questao->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_criterios_questao" name="form_criterios_questao" action="{{ route('criterios_questao.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_criterios_questao" name="form_criterios_questao" action="{{ route('criterios_questao.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="nome">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Critério" value="{{ $criterio_questao->nome ?? ''}}">
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Critério" value="{{ $criterio_questao->nome ?? old('nome')}}">
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="descricao">Descrição</label>
-                                <textarea class="form-control" id="descricao" name="descricao" rows="2">{{ $criterio_questao->descricao ?? ''}}</textarea>
+                                <textarea class="form-control" id="descricao" name="descricao" rows="2">{{ $criterio_questao->descricao ?? old('descricao')}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                                     @php
                                     $disc_selecionado = $criterio_questao->find($criterio_questao->id)->relDisciplinas;
                                     @endphp
-                                    <option value="{{ $disc_selecionado->id ?? ''}}">{{ $disc_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $disc_selecionado->id ?? old('id_disciplina')}}">{{ $disc_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -71,7 +71,7 @@
                                     @php
                                     $tipo_selecionado = $criterio_questao->find($criterio_questao->id)->relTipoQuestaos;
                                     @endphp
-                                    <option value="{{ $tipo_selecionado->id ?? ''}}">{{ $tipo_selecionado->titulo ?? ''}}</option>
+                                    <option value="{{ $tipo_selecionado->id ?? old('id_tipo_questao')}}">{{ $tipo_selecionado->titulo ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -86,7 +86,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="obs">Observação</label>
-                                <textarea class="form-control" id="obs" name="obs" rows="3">{{ $criterio_questao->obs ?? ''}}</textarea>
+                                <textarea class="form-control" id="obs" name="obs" rows="3">{{ $criterio_questao->obs ?? old('obs')}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="ano">Ano</label>
-                                <input type="number" class="form-control" id="ano" name="ano" placeholder="Ano" value="{{ $criterio_questao->ano ?? ''}}">
+                                <input type="number" class="form-control" id="ano" name="ano" placeholder="Ano" value="{{ $criterio_questao->ano ?? old('ano')}}">
                             </div>
                         </div>
                     </div>

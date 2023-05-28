@@ -6,10 +6,7 @@
         <div class="col-md-9">
             <div class="card text-center">
                 <div class="card-body" style="background-color: #0046AD; color: white;box-shadow: 5px 5px 5px rgba(0,0, 139);">
-                    <h5 class="card-title">@if(isset($user)) Edição da @else Cadastro de @endif Usuário</h5>
-                    @if(isset($user))
-                    <p>OBS: A senha não será preenchida para evitar que seja usado algum recurso para obter a mesma.</p>
-                    @endif
+                    <h5 class="card-title">@if(isset($sugestao)) Visualização da @else Cadastro de @endif Sugestão</h5>
                 </div>
             </div>
         </div>
@@ -23,18 +20,18 @@
                 @endforeach
             </div>
             @endif
-            @if(isset($user))
-            <form id="form_edit_user" name="form_edit_user" action="{{ route('user.update',$user->id) }}" method="post" enctype="multipart/form-data">
+            @if(isset($sugestao))
+            <form id="form_edit_sugestao" name="form_edit_sugestao" action="{{ route('sugestao.update',$sugestao->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
             @else
-            <form id="form_user" name="form_user" action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+            <form id="form_sugestao" name="form_sugestao" action="{{ route('sugestao.store') }}" method="post" enctype="multipart/form-data">
             @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
-                                <label for="name">Nome</label>
-                                <input type="text" class="form-control" id="name" name="name" placeholder="Nome do Usuário" value="{{ $user->name ?? old('name')}}" required>
+                                <label for="nome">Nome</label>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome Autor Sugestão" value="{{ $sugestao->nome ?? old('nome')}}" required >
                             </div>
                         </div>
                     </div>
@@ -42,36 +39,29 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label for="email">E-Mail</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="E-mail do Usuário" value="{{ $user->email ?? old('email')}}" required>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="E-mail do Usuário" value="{{ $sugestao->email ?? old('email')}}" required>
                             </div>
                         </div>
                     </div>
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
-                        <div class="col-md-6">
+                        <div class=" col-md-12">
                             <div class="form-group">
-                                <label for="perfil">Perfil</label>
-                                <select class="form-control" id="perfil" name="perfil" required>
-                                    <option value="{{ $user->perfil ?? old('perfil')}}">{{ $user->perfil ?? old('perfil')}}</option>
-                                    <option>Administrador</option>
-                                    <option>Usuário</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="password">Senha</label>
-                                <input type="password" class="form-control" id="password" name="password" placeholder="Senha" value="" required>
+                                <label for="mensagem">Mensagem</label>
+                                <textarea class="form-control" id="mensagem" name="mensagem" rows="6">{{ $sugestao->mensagem ?? old('mensagem')}}</textarea>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <input type="hidden" name="id_user" id="id_user" value="{{ Auth::user()->id }}">
                     </div>
+                    <div class="form-group">
+                        <input type="hidden" name="id_user" id="id_user" value="{{ $sugestao->status ?? '1' }}">
+                    </div>
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <button type="submit" style="background-color: #f9821E;border-color:#f9821E;" class="btn btn-primary">@if(isset($user)) Editar @else Cadastrar @endif</button>
-                                <a href="{{ route('user.filtrar') }}"><button type="button" style="background-color: black;border-color:black;" class="btn btn-primary">Cancelar</button></a>
+                                <button type="submit" style="background-color: #f9821E;border-color:#f9821E;" class="btn btn-primary">@if(isset($sugestao)) Ok @else Cadastrar @endif</button>
+                                <a href="{{ route('lista_sugestoes') }}"><button type="button" style="background-color: black;border-color:black;" class="btn btn-primary">Cancelar</button></a>
                             </div>
                         </div>
                     </div>

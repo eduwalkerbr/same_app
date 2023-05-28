@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,9 +23,9 @@
             @if(isset($direcao_professor))
             <form id="form_edit_direcao_professor" name="form_edit_direcao_professor" action="{{ route('direcao_professor.update',$direcao_professor->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_direcao_professor" name="form_direcao_professor" action="{{ route('direcao_professor.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_direcao_professor" name="form_direcao_professor" action="{{ route('direcao_professor.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class="col-md-12">
@@ -37,7 +37,7 @@
                                     $prev_selecionado = $direcao_professor->find($direcao_professor->id)->relPrevilegios;
                                     $nome_prev_selecionado = $prev_selecionado->find($prev_selecionado->id)->relUsuarios;
                                     @endphp
-                                    <option value="{{ $prev_selecionado->id ?? ''}}">{{ $nome_prev_selecionado->name ?? ''}}</option>
+                                    <option value="{{ $prev_selecionado->id ?? old('id_previlegio')}}">{{ $nome_prev_selecionado->name ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -56,7 +56,7 @@
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
                                 <select class="form-control" id="SAME" name="SAME" required>
-                                    <option value="{{ $direcao_professor->SAME ?? ''}}">{{ $direcao_professor->SAME ?? ''}}</option>
+                                    <option value="{{ $direcao_professor->SAME ?? old('SAME')}}">{{ $direcao_professor->SAME ?? old('SAME')}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
                                     <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
@@ -70,7 +70,7 @@
                                 <label for="municipios_id">Município</label>
                                 <select class="form-control" id="municipios_id" name="municipios_id">
                                     @if(isset($direcao_professor) && isset($direcao_professor->id_municipio))
-                                    <option value="{{ $direcao_professor->id_municipio.'_'.$direcao_professor->SAME ?? ''}}">{{ $direcao_professor->nome_municipio.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
+                                    <option value="{{ $direcao_professor->id_municipio.'_'.$direcao_professor->SAME ?? old('municipios_id')}}">{{ $direcao_professor->nome_municipio.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -84,7 +84,7 @@
                                 <label for="escolas_id">Escola</label>
                                 <select class="form-control" id="escolas_id" name="escolas_id" required>
                                     @if(isset($direcao_professor) && isset($direcao_professor->id_escola))
-                                    <option value="{{ $direcao_professor->id_escola.'_'.$direcao_professor->SAME ?? ''}}">{{ $direcao_professor->nome_escola.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
+                                    <option value="{{ $direcao_professor->id_escola.'_'.$direcao_professor->SAME ?? old('escolas_id')}}">{{ $direcao_professor->nome_escola.' ('.$direcao_professor->SAME_escola.')' ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -96,7 +96,7 @@
                                 <label for="turmas_id">Turma</label>
                                 <select class="form-control" id="turmas_id" name="turmas_id">
                                     @if(isset($direcao_professor) && isset($direcao_professor->id_turma))
-                                    <option value="{{ $direcao_professor->id_turma ?? ''}}">{{ $direcao_professor->nome_turma.' ('.$direcao_professor->SAME_turma.')'  ?? ''}}</option>
+                                    <option value="{{ $direcao_professor->id_turma ?? old('turmas_id')}}">{{ $direcao_professor->nome_turma.' ('.$direcao_professor->SAME_turma.')'  ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif

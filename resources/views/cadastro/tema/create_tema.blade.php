@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($tema))
             <form id="form_edit_tema" name="form_edit_tema" action="{{ route('tema.update',$tema->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_tema" name="form_tema" action="{{ route('tema.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_tema" name="form_tema" action="{{ route('tema.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="name">Descrição</label>
-                                <input type="text" class="form-control" id="desc" name="desc" placeholder="Descrição do Tema" value="{{ $tema->desc ?? ''}}" required>
+                                <input type="text" class="form-control" id="desc" name="desc" placeholder="Descrição do Tema" value="{{ $tema->desc ?? old('desc')}}" required>
                             </div>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="name">Observação</label>
-                                <textarea class="form-control" id="obs" name="obs" rows="2">{{ $tema->obs ?? ''}}</textarea>
+                                <textarea class="form-control" id="obs" name="obs" rows="2">{{ $tema->obs ?? old('obs')}}</textarea>
                             </div>
                         </div>
                     </div>
@@ -52,7 +52,7 @@
                                     @php
                                     $dis_selecionado = $tema->find($tema->id)->relDisciplinas;
                                     @endphp
-                                    <option value="{{ $dis_selecionado->id ?? ''}}">{{ $dis_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $dis_selecionado->id ?? old('disciplinas_id')}}">{{ $dis_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif

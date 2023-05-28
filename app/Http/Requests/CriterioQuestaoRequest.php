@@ -26,8 +26,24 @@ class CriterioQuestaoRequest extends FormRequest
         return [
             'nome' => 'required',
             'descricao' => 'required',
-            'id_disciplina' => 'required',
-            'id_tipo_questao' => 'required',
+            'id_disciplina' => 'required|integer|min:0|exists:disciplinas,id',
+            'id_tipo_questao' => 'required|integer|min:0|exists:tipo_questaos,id',
+            'ano' => 'integer|min:0'
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'nome' => 'Nome',
+            'descricao' => 'Descrição',
+            'id_disciplina' => 'Disciplina',
+            'id_tipo_questao' => 'Tipo de Qqestão',
         ];
     }
 }

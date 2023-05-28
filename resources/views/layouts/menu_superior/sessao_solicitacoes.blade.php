@@ -1,7 +1,4 @@
-@php
-$previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
-@endphp
-@if (($previlegio->funcaos_id == 6 || Auth::user()->perfil == 'Administrador') && ( ((isset($solRegistro) && count($solRegistro) > 0)) || ((isset($solAltCadastral) && count($solAltCadastral) > 0)) || ((isset($solAddTurma) && count($solAddTurma) > 0))))
+@if ((session('previlegio')->funcaos_id == 6 || Auth::user()->perfil == 'Administrador') && ( ((isset($solRegistro) && count($solRegistro) > 0)) || ((isset($solAltCadastral) && count($solAltCadastral) > 0)) || ((isset($solAddTurma) && count($solAddTurma) > 0))))
 <ul class="navbar-nav mr-auto">
     <li class="nav-item dropdown">
         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;" onmouseover='this.style.backgroundColor="#0046AD";this.style.color="white"' onmouseout='this.style.backgroundColor=" white";this.style.color="black"'>
@@ -25,6 +22,5 @@ $previlegio = Auth::user()->find(Auth::user()->id)->relPrevilegio;
             @endif
         </div>
     </li>
-
 </ul>
 @endif

@@ -30,4 +30,19 @@ class DestaqueRequest extends FormRequest
             'fonte' => 'required'
         ];
     }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'titulo' => 'Título',
+            'conteudo' => 'Conteúdo',
+            'descricao' => 'Descrição',
+            'fonte' => 'Fonte',
+        ];
+    }
 }

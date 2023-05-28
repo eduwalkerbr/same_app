@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($aluno))
             <form id="form_edit_aluno" name="form_edit_aluno" action="{{ route('aluno.update',$aluno->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_aluno" name="form_aluno" action="{{ route('aluno.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_aluno" name="form_aluno" action="{{ route('aluno.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-8">
                             <div class="form-group">
                                 <label for="name">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Aluno" value="{{ $aluno->nome ?? ''}}" required>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Aluno" value="{{ $aluno->nome ?? old('nome')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-4">
@@ -54,7 +54,7 @@
                                 <label for="turmas_escolas_municipios_id">Município</label>
                                 <select class="form-control" id="turmas_escolas_municipios_id" name="turmas_escolas_municipios_id" required>
                                     @if(isset($aluno))
-                                    <option value="{{ $aluno->id_municipio.'_'.$aluno->SAME_municipio ?? ''}}">{{ $aluno->nome_municipio.' ('.$aluno->SAME_municipio.')' ?? ''}}</option>
+                                    <option value="{{ $aluno->id_municipio.'_'.$aluno->SAME_municipio ?? old('turmas_escolas_municipios_id')}}">{{ $aluno->nome_municipio.' ('.$aluno->SAME_municipio.')' ?? old('turmas_escolas_municipios_id')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -68,7 +68,7 @@
                                 <label for="turmas_escolas_id">Escola</label>
                                 <select class="form-control" id="turmas_escolas_id" name="turmas_escolas_id" required>
                                     @if(isset($aluno))
-                                    <option value="{{ $aluno->id_escola.'_'.$aluno->SAME_escola ?? ''}}">{{ $aluno->nome_escola.' ('.$aluno->SAME_escola.')' ?? ''}}</option>
+                                    <option value="{{ $aluno->id_escola.'_'.$aluno->SAME_escola ?? old('turmas_escolas_id')}}">{{ $aluno->nome_escola.' ('.$aluno->SAME_escola.')' ?? old('turmas_escolas_id')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -82,7 +82,7 @@
                                 <label for="turmas_id">Turma</label>
                                 <select class="form-control" id="turmas_id" name="turmas_id" required>
                                     @if(isset($aluno))
-                                    <option value="{{ $aluno->id_turma ?? ''}}">{{ $aluno->nome_turma.' ('.$aluno->SAME_turma.')' ?? ''}}</option>
+                                    <option value="{{ $aluno->id_turma ?? old('turmas_id')}}">{{ $aluno->nome_turma.' ('.$aluno->SAME_turma.')' ?? old('turmas_id')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif

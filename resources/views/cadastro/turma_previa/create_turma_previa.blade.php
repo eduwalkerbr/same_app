@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,15 +23,15 @@
             @if(isset($turmaprevia))
             <form id="form_edit_turma_previa" name="form_edit_turma_previa" action="{{ route('turma_previa.update',$turmaprevia->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_turma_previa" name="form_turma_previa" action="{{ route('turma_previa.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_turma_previa" name="form_turma_previa" action="{{ route('turma_previa.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-12">
                             <div class="form-group">
                                 <label for="email">E-mail</label>
-                                <input type="text" class="form-control" id="email" name="email" placeholder="E-mail" value="{{ $turmaprevia->email ?? ''}}">
+                                <input type="text" class="form-control" id="email" name="email" placeholder="E-mail" value="{{ $turmaprevia->email ?? old('email')}}">
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                                     @php
                                     $escola_selecionada = $turmaprevia->find($turmaprevia->id)->relEscolas;
                                     @endphp
-                                    <option value="{{ $escola_selecionada->id ?? ''}}">{{ $escola_selecionada->nome.' ('.$escola_selecionada->SAME.')' ?? ''}}</option>
+                                    <option value="{{ $escola_selecionada->id ?? old('id_escola')}}">{{ $escola_selecionada->nome.' ('.$escola_selecionada->SAME.')' ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -64,7 +64,7 @@
                                     @php
                                     $turma_selecionada = $turmaprevia->find($turmaprevia->id)->relTurmas;
                                     @endphp
-                                    <option value="{{ $turma_selecionada->id ?? ''}}">{{ $turma_selecionada->DESCR_TURMA.' ('.$turma_selecionada->SAME.')' ?? ''}}</option>
+                                    <option value="{{ $turma_selecionada->id ?? old('id_turma')}}">{{ $turma_selecionada->DESCR_TURMA.' ('.$turma_selecionada->SAME.')' ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif

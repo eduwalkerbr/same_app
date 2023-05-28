@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\cadastros\anosame;
 
 use App\Models\AnoSame;
-use Illuminate\Http\Request;
 use App\Http\Requests\AnoSAMERequest;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class AnoSAMEController extends Controller
 {
@@ -61,22 +61,30 @@ class AnoSAMEController extends Controller
      */
     public function store(AnoSAMERequest $request)
     {
-        $data = [
-            'descricao' => $request->descricao,
-            'status' => $request->status
-        ];
+        try {
 
-        $anosame = $this->objAnoSame->where(['descricao' => $request->descricao])->get();
-        if ($anosame && sizeof($anosame) > 0) {
-            return redirect()->route('lista_anosame')->with('status', 'O Ano '.$request->descricao.' já foi cadastrado!');
+            $data = [
+                'descricao' => trim($request->descricao),
+                'status' => trim($request->status)
+            ];
+
+            //Valida existência do Registro
+            if($this->objAnoSame->where(['descricao' => $request->descricao])->get()->isNotEmpty()){
+                $mensagem = 'O Ano SAME '.$request->descricao.' já foi cadastrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objAnoSame->create($data)){
+                    $mensagem = 'O Ano SAME '.$request->descricao.' foi cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objAnoSame->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_anosame');
-        }
+        return redirect()->route('lista_anosame')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -112,18 +120,30 @@ class AnoSAMEController extends Controller
      */
     public function update(AnoSAMERequest $request, $id)
     {
-        $data = [
-            'descricao' => $request->descricao,
-            'status' => $request->status
-        ];
+        try {
 
-        $anosame = $this->objAnoSame->where(['descricao' => $request->descricao])->where('id','<>',$id)->get();
-        if ($anosame && sizeof($anosame) > 0) {
-            return redirect()->route('lista_anosame')->with('status', 'O Ano '.$request->descricao.' já foi cadastrado!');
+            $data = [
+                'descricao' => trim($request->descricao),
+                'status' => trim($request->status)
+            ];
+
+            //Valida existência do Registro
+            if($this->objAnoSame->where(['descricao' => $request->descricao])->where('id','<>',$id)->get()->isNotEmpty()){
+                $mensagem = 'O Ano SAME '.$request->descricao.' já foi cadastrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objAnoSame->where(['id' => $id])->update($data)){
+                    $mensagem = 'O Ano SAME '.$request->descricao.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objAnoSame->where(['id' => $id])->update($data);
-        return redirect()->route('lista_anosame');
+        return redirect()->route('lista_anosame')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -135,13 +155,23 @@ class AnoSAMEController extends Controller
      */
     public function inativar($id)
     {
-        $anosame = $this->objAnoSame->find($id);
-        $anosame = [
-            'status' => 'Inativo',
-        ];
+        try {
 
-        $this->objAnoSame->where(['id' => $id])->update($anosame);
-        return redirect()->route('lista_anosame');
+            $anosame = $this->objAnoSame->find($id);
+            $anosame = [
+                'status' => 'Inativo',
+            ];
+
+            if($this->objAnoSame->where(['id' => $id])->update($anosame)){
+                $mensagem = 'Inativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+
+        return redirect()->route('lista_anosame')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -153,13 +183,23 @@ class AnoSAMEController extends Controller
      */
     public function ativar($id)
     {
-        $anosame = $this->objAnoSame->find($id);
-        $anosame = [
-            'status' => 'Ativo',
-        ];
+        try {
 
-        $this->objAnoSame->where(['id' => $id])->update($anosame);
-        return redirect()->route('lista_anosame');
+            $anosame = $this->objAnoSame->find($id);
+            $anosame = [
+                'status' => 'Ativo',
+            ];
+
+            if($this->objAnoSame->where(['id' => $id])->update($anosame)){
+                $mensagem = 'Ativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+
+        return redirect()->route('lista_anosame')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -170,7 +210,16 @@ class AnoSAMEController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objAnoSame->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objAnoSame->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_destaque')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 }

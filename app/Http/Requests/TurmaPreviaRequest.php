@@ -25,9 +25,24 @@ class TurmaPreviaRequest extends FormRequest
     {
         return [
             "email" => "required",
-            "id_escola" => "required",
-            "id_turma" => "required",
-            "ativo" => "required",
+            "id_escola" => "required|integer|min:0|exists:escolas,id",
+            "id_turma" => "required|integer|min:0|exists:turmas,id",
+            "ativo" => "required|integer|min:0",
+        ];
+    }
+
+    /**
+     * Get custom attributes for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function attributes(): array
+    {
+        return [
+            'email' => 'E-mail',
+            'id_escola' => 'Escola',
+            'id_turma' => 'Turma',
+            'ativo' => 'Ativação',
         ];
     }
 }

@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,9 +23,9 @@
             @if(isset($previlegio))
             <form id="form_edit_previlegio" name="form_edit_previlegio" action="{{ route('previlegio.update',$previlegio->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_previlegio" name="form_previlegio" action="{{ route('previlegio.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_previlegio" name="form_previlegio" action="{{ route('previlegio.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class="col-md-8">
@@ -36,7 +36,7 @@
                                     @php
                                     $us_selecionado = $previlegio->find($previlegio->id)->relUsuarios;
                                     @endphp
-                                    <option value="{{ $us_selecionado->id ?? ''}}">{{ $us_selecionado->name ?? ''}}</option>
+                                    <option value="{{ $us_selecionado->id ?? old('users_id')}}">{{ $us_selecionado->name ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -50,7 +50,7 @@
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
                                 <select class="form-control" id="SAME" name="SAME" required>
-                                    <option value="{{ $previlegio->SAME ?? ''}}">{{ $previlegio->SAME ?? ''}}</option>
+                                    <option value="{{ $previlegio->SAME ?? old('SAME')}}">{{ $previlegio->SAME ?? old('SAME')}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
                                         <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
@@ -66,7 +66,7 @@
                                 <label for="id_sala">Município</label>
                                 <select class="form-control" id="municipios_id" name="municipios_id" required>
                                     @if(isset($previlegio))
-                                    <option value="{{ $previlegio->id_municipio ?? ''}}">{{ $previlegio->nome_municipio.' ('.$previlegio->SAME_municipio.')' ?? ''}}</option>
+                                    <option value="{{ $previlegio->id_municipio ?? old('municipios_id')}}">{{ $previlegio->nome_municipio.' ('.$previlegio->SAME_municipio.')' ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -83,7 +83,7 @@
                                     @php
                                     $fun_selecionado = $previlegio->find($previlegio->id)->relFuncaos;
                                     @endphp
-                                    <option value="{{ $fun_selecionado->id ?? ''}}">{{ $fun_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $fun_selecionado->id ?? old('funcaos_id')}}">{{ $fun_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif

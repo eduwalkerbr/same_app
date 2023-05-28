@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,22 +23,22 @@
             @if(isset($questao))
             <form id="form_edit_questao" name="form_edit_questao" action="{{ route('questao.update',$questao->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_questao" name="form_questao" action="{{ route('questao.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_questao" name="form_questao" action="{{ route('questao.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-8">
                             <div class="form-group">
                                 <label for="desc">Descrição</label>
-                                <input type="text" class="form-control" id="desc" name="desc" placeholder="Descrição da Questão" value="{{ $questao->desc ?? ''}}">
+                                <input type="text" class="form-control" id="desc" name="desc" placeholder="Descrição da Questão" value="{{ $questao->desc ?? old('desc')}}">
                             </div>
                         </div>
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
                                 <select class="form-control" id="SAME" name="SAME" required>
-                                    <option value="{{ $questao->SAME ?? ''}}">{{ $questao->SAME ?? ''}}</option>
+                                    <option value="{{ $questao->SAME ?? old('SAME')}}">{{ $questao->SAME ?? old('SAME')}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
                                         <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
@@ -52,19 +52,19 @@
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="num_questao">Número</label>
-                                <input type="number" class="form-control" id="num_questao" name="num_questao" placeholder="Número da Questão" value="{{ $questao->num_questao ?? ''}}" required>
+                                <input type="number" class="form-control" id="num_questao" name="num_questao" placeholder="Número da Questão" value="{{ $questao->num_questao ?? old('num_questao')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="ano">Ano</label>
-                                <input type="number" class="form-control" id="ano" name="ano" placeholder="Ano" value="{{ $questao->ano ?? ''}}" required>
+                                <input type="number" class="form-control" id="ano" name="ano" placeholder="Ano" value="{{ $questao->ano ?? old('ano')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="correta">Correta</label>
-                                <input type="text" class="form-control" id="correta" name="correta" placeholder="Correta" value="{{ $questao->correta ?? ''}}" required>
+                                <input type="text" class="form-control" id="correta" name="correta" placeholder="Correta" value="{{ $questao->correta ?? old('correta')}}" required>
                             </div>
                         </div>
                     </div>
@@ -72,13 +72,13 @@
                         <div class=" col-md-9">
                             <div class="form-group">
                                 <label for="obs">Observação</label>
-                                <input type="text" class="form-control" id="obs" name="obs" placeholder="Observação da Questão" value="{{ $questao->obs ?? ''}}">
+                                <input type="text" class="form-control" id="obs" name="obs" placeholder="Observação da Questão" value="{{ $questao->obs ?? old('obs')}}">
                             </div>
                         </div>
                         <div class=" col-md-3">
                             <div class="form-group">
                                 <label for="modelo">Modelo</label>
-                                <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" value="{{ $questao->modelo ?? ''}}" required>
+                                <input type="text" class="form-control" id="modelo" name="modelo" placeholder="Modelo" value="{{ $questao->modelo ?? old('modelo')}}" required>
                             </div>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
                                     @php
                                     $disc_selecionado = $questao->find($questao->id)->relDisciplinas;
                                     @endphp
-                                    <option value="{{ $disc_selecionado->id ?? ''}}">{{ $disc_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $disc_selecionado->id ?? old('disciplinas_id')}}">{{ $disc_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -106,7 +106,7 @@
                                 <label for="tipo">Tipo de Questão</label>
                                 <select class="form-control" id="tipo" name="tipo" required>
                                     @if(isset($questao))
-                                    <option value="{{ $questao->tipo ?? ''}}">{{ $questao->tipo ?? ''}}</option>
+                                    <option value="{{ $questao->tipo ?? old('tipo')}}">{{ $questao->tipo ?? old('tipo')}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -126,7 +126,7 @@
                                     @php
                                     $tema_selecionado = $questao->find($questao->id)->relTemas;
                                     @endphp
-                                    <option value="{{ $tema_selecionado->id ?? ''}}">{{ $tema_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $tema_selecionado->id ?? old('temas_id')}}">{{ $tema_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -141,7 +141,7 @@
                                 <label for="prova_gabaritos_id">Provas</label>
                                 <select class="form-control" id="prova_gabaritos_id" name="prova_gabaritos_id" required>
                                     @if(isset($questao))
-                                    <option value="{{ $questao->id_prova_gabarito ?? ''}}">{{ $questao->nome_prova_gabarito ?? ''}}</option>
+                                    <option value="{{ $questao->id_prova_gabarito ?? old('prova_gabaritos_id')}}">{{ $questao->nome_prova_gabarito ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -161,7 +161,7 @@
                                     @php
                                     $hab_selecionado = $questao->find($questao->id)->relHabilidades;
                                     @endphp
-                                    <option value="{{ $hab_selecionado->id ?? ''}}">{{ $hab_selecionado->desc ?? ''}}</option>
+                                    <option value="{{ $hab_selecionado->id ?? old('habilidades_id')}}">{{ $hab_selecionado->desc ?? ''}}</option>
                                     @else
                                     <option value=""></option>
                                     @endif
@@ -178,7 +178,7 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     <label for="image">Imagem da Questão</label>
-                                    <input type="file" class="form-control-file" id="image" name="image" value="{{ $questao->imagem ?? ''}}">
+                                    <input type="file" class="form-control-file" id="image" name="image" value="{{ $questao->imagem ?? old('image')}}">
                                 </div>
                             </div>
                         </div>
@@ -195,7 +195,7 @@
                     <div class="form-group">
                         <div class="form-group">
                             <label for="image">Imagem da Questão</label>
-                            <input type="file" class="form-control-file" id="image" name="image" value="{{ $questao->imagem ?? ''}}">
+                            <input type="file" class="form-control-file" id="image" name="image" value="{{ $questao->imagem ?? old('image')}}">
                         </div>
                     </div>
                     @endif

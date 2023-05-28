@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Models\AnoSame;
+use Throwable;
 
 class AlunoController extends Controller
 {
@@ -94,29 +95,35 @@ class AlunoController extends Controller
      */
     public function store(AlunoRequest $request)
     {
-        
-        $id_escola = explode('_',$request->turmas_escolas_id)[0];
-        $id_municipio = explode('_',$request->turmas_escolas_municipios_id)[0];
-        $data = [
-            'nome' => $request->nome,
-            'turmas_id' => $request->turmas_id,
-            'turmas_escolas_id' => $id_escola,
-            'turmas_escolas_municipios_id' => $id_municipio,
-            'SAME' => $request->SAME
-        ];
+        try {
 
-        $aluno = $this->objAluno->where([['nome', '=', $request->nome],['SAME','=',$request->SAME]])->get();
-        
-        if ($aluno && sizeof($aluno) > 0) {
-            return redirect()->route('lista_aluno')->with('status', 'O Aluno '.$request->nome.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+            $id_escola = explode('_',$request->turmas_escolas_id)[0];
+            $id_municipio = explode('_',$request->turmas_escolas_municipios_id)[0];
+            $data = [
+                'nome' => trim($request->nome),
+                'turmas_id' => intval($request->turmas_id),
+                'turmas_escolas_id' => intval($id_escola),
+                'turmas_escolas_municipios_id' => intval($id_municipio),
+                'SAME' => trim($request->SAME)
+            ];
+
+            //Valida existência do Registro
+            if($this->objAluno->where([['nome', '=', $request->nome],['SAME','=',$request->SAME]])->get()->isNotEmpty()){
+                $mensagem = 'O Aluno '.$request->nome.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objAluno->create($data)){
+                    $mensagem = 'O Aluno '.$request->nome.' foi cadastrado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objAluno->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_aluno');
-        }
+        return redirect()->route('lista_aluno')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
 
@@ -164,25 +171,36 @@ class AlunoController extends Controller
      */
     public function update(AlunoRequest $request, $id)
     {
-        $id_escola = explode('_',$request->turmas_escolas_id)[0];
-        $id_municipio = explode('_',$request->turmas_escolas_municipios_id)[0];
+        try {
 
-        $data = [
-            'nome' => $request->nome,
-            'turmas_id' => $request->turmas_id,
-            'turmas_escolas_id' => $id_escola,
-            'turmas_escolas_municipios_id' => $id_municipio,
-            'SAME' => $request->SAME
-        ];
+            $id_escola = explode('_',$request->turmas_escolas_id)[0];
+            $id_municipio = explode('_',$request->turmas_escolas_municipios_id)[0];
 
-        $aluno = $this->objAluno->where([['nome', '=', $request->nome],['SAME','=',$request->SAME],['id','<>',$id]])->get();
-        
-        if ($aluno && sizeof($aluno) > 0) {
-            return redirect()->route('lista_aluno')->with('status', 'O Aluno '.$request->nome.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+            $data = [
+                'nome' => trim($request->nome),
+                'turmas_id' => intval($request->turmas_id),
+                'turmas_escolas_id' => intval($id_escola),
+                'turmas_escolas_municipios_id' => intval($id_municipio),
+                'SAME' => trim($request->SAME)
+            ];
+
+            //Valida existência do Registro
+            if($this->objAluno->where([['nome', '=', $request->nome],['SAME','=',$request->SAME],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'O Aluno '.$request->nome.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objAluno->where([['id','=',$id],['SAME','=',$request->SAME]])->update($data)){
+                    $mensagem = 'O Aluno '.$request->nome.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objAluno->where([['id','=',$id],['SAME','=',$request->SAME]])->update($data);
-        return redirect()->route('lista_aluno');
+        return redirect()->route('lista_aluno')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

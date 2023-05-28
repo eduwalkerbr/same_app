@@ -8,6 +8,7 @@ use App\Models\Turma;
 use App\Models\TurmaPrevia;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class TurmaPreviaController extends Controller
 {
@@ -69,26 +70,31 @@ class TurmaPreviaController extends Controller
      */
     public function store(TurmaPreviaRequest $request)
     {
-        $data = [
-            'email' => $request->email,
-            'id_escola' => $request->id_escola,
-            'id_turma' => $request->id_turma,
-            'ativo' => $request->ativo,
-        ];
+        try {
 
-        $turmaprevia = $this->objTurmaPrevia->where([['id_escola', '=', $request->id_escola],['id_turma', '=', $request->id_turma],
-            ['email','=', $request->email],['ativo','=', $request->ativo]])->get();
+            $data = [
+                'email' => trim($request->email),
+                'id_escola' => intval($request->id_escola),
+                'id_turma' => intval($request->id_turma),
+                'ativo' => intval($request->ativo),
+            ];
+
+            if($this->objTurmaPrevia->where([['id_escola', '=', $request->id_escola],['id_turma', '=', $request->id_turma],
+            ['email','=', $request->email],['ativo','=', $request->ativo]])->get()->isNotEmpty()){
+                $mensagem = 'A turma selecionada já foi adicionada ao respectivo Usuário!'; 
+                $status = 'error';
+            } else {
+                if($this->objTurmaPrevia->create($data)){
+                    $mensagem = 'Turma Prévia incluída com Sucesso!'; 
+                    $status = 'success';
+                }
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
         
-        if ($turmaprevia && sizeof($turmaprevia) > 0) {
-            return redirect()->route('lista_turma_previa')->with('status', 'A turma selecionada já foi adicionada ao respectivo Usuário!');
-        }
-
-        $cad = $this->objTurmaPrevia->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_turma_previa');
-        }
+        return redirect()->route('lista_turma_previa')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -126,22 +132,31 @@ class TurmaPreviaController extends Controller
      */
     public function update(TurmaPreviaRequest $request, $id)
     {
-        $data = [
-            'email' => $request->email,
-            'id_escola' => $request->id_escola,
-            'id_turma' => $request->id_turma,
-            'ativo' => $request->ativo,
-        ];
+        try {
 
-        $turmaprevia = $this->objTurmaPrevia->where([['id_escola', '=', $request->id_escola],['id_turma', '=', $request->id_turma],
-            ['email','=', $request->email],['ativo','=', $request->ativo],['id','<>',$id]])->get();
-        
-        if ($turmaprevia && sizeof($turmaprevia) > 0) {
-            return redirect()->route('lista_turma_previa')->with('status', 'A turma selecionada já foi adicionada ao respectivo Usuário!');
+            $data = [
+                'email' => trim($request->email),
+                'id_escola' => intval($request->id_escola),
+                'id_turma' => intval($request->id_turma),
+                'ativo' => intval($request->ativo),
+            ];
+
+            if($this->objTurmaPrevia->where([['id_escola', '=', $request->id_escola],['id_turma', '=', $request->id_turma],
+            ['email','=', $request->email],['ativo','=', $request->ativo],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'A turma selecionada já foi adicionada ao respectivo Usuário!'; 
+                $status = 'error';
+            } else {
+                if($this->objTurmaPrevia->where(['id' => $id])->update($data)){
+                    $mensagem = 'Turma Prévia alterada com Sucesso!'; 
+                    $status = 'success';
+                }
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
-
-        $this->objTurmaPrevia->where(['id' => $id])->update($data);
-        return redirect()->route('lista_turma_previa');
+        
+        return redirect()->route('lista_turma_previa')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -153,13 +168,23 @@ class TurmaPreviaController extends Controller
      */
     public function inativar($id)
     {
-        $turmaprevia = $this->objTurmaPrevia->find($id);
-        $turmaprevia = [
-            'ativo' => false,
-        ];
+        try {
 
-        $this->objTurmaPrevia->where(['id' => $id])->update($turmaprevia);
-        return redirect()->route('lista_turma_previa');
+            $turmaprevia = $this->objTurmaPrevia->find($id);
+            $turmaprevia = [
+                'ativo' => false,
+            ];
+
+            if($this->objTurmaPrevia->where(['id' => $id])->update($turmaprevia)){
+                $mensagem = 'Inativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_turma_previa')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -171,13 +196,23 @@ class TurmaPreviaController extends Controller
      */
     public function ativar($id)
     {
-        $turmaprevia = $this->objTurmaPrevia->find($id);
-        $turmaprevia = [
-            'ativo' => true,
-        ];
+        try {
 
-        $this->objTurmaPrevia->where(['id' => $id])->update($turmaprevia);
-        return redirect()->route('lista_turma_previa');
+            $turmaprevia = $this->objTurmaPrevia->find($id);
+            $turmaprevia = [
+                'ativo' => true,
+            ];
+
+            if($this->objTurmaPrevia->where(['id' => $id])->update($turmaprevia)){
+                $mensagem = 'Ativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_turma_previa')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -188,8 +223,17 @@ class TurmaPreviaController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objTurmaPrevia->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objTurmaPrevia->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_turma_previa')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

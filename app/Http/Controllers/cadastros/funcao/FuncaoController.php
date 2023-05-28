@@ -5,6 +5,7 @@ namespace App\Http\Controllers\cadastros\funcao;
 use App\Http\Requests\FuncaoRequest;
 use App\Models\Funcao;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class FuncaoController extends Controller
 {
@@ -59,22 +60,30 @@ class FuncaoController extends Controller
      */
     public function store(FuncaoRequest $request)
     {
-        $data = [
-            'desc' => $request->desc,
-            'previlegio' => $request->previlegio,
-        ];
+        try {
 
-        $funcao = $this->objFuncao->where(['desc' => $request->desc])->get();
-        if ($funcao && sizeof($funcao) > 0) {
-            return redirect()->route('lista_funcao')->with('status', 'A Função '.$request->desc.' já foi cadastrada!');
+            $data = [
+                'desc' => trim($request->desc),
+                'previlegio' => intval($request->previlegio),
+            ];
+
+            //Valida existência do Registro
+            if($this->objFuncao->where(['desc' => $request->desc])->get()->isNotEmpty()){
+                $mensagem = 'A Função '.$request->desc.' já foi cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objFuncao->create($data)){
+                    $mensagem = 'A Função '.$request->desc.' foi Cadastrada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objFuncao->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_funcao');
-        }
+        return redirect()->route('lista_funcao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -110,18 +119,30 @@ class FuncaoController extends Controller
      */
     public function update(FuncaoRequest $request, $id)
     {
-        $data = [
-            'desc' => $request->desc,
-            'previlegio' => $request->previlegio,
-        ];
+        try {
 
-        $funcao = $this->objFuncao->where(['desc' => $request->desc])->where('id','<>',$id)->get();
-        if ($funcao && sizeof($funcao) > 0) {
-            return redirect()->route('lista_funcao')->with('status', 'A Função '.$request->desc.' já foi cadastrada!');
+            $data = [
+                'desc' => trim($request->desc),
+                'previlegio' => intval($request->previlegio),
+            ];
+
+            //Valida existência do Registro
+            if($this->objFuncao->where(['desc' => $request->desc])->where('id','<>',$id)->get()->isNotEmpty()){
+                $mensagem = 'A Função '.$request->desc.' já foi cadastrada!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objFuncao->where(['id' => $id])->update($data)){
+                    $mensagem = 'A Função '.$request->desc.' foi alterada com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objFuncao->where(['id' => $id])->update($data);
-        return redirect()->route('lista_funcao');
+        return redirect()->route('lista_funcao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -132,7 +153,16 @@ class FuncaoController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objFuncao->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objFuncao->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_funcao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 }

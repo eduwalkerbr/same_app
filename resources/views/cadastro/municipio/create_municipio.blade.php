@@ -13,7 +13,7 @@
     </div>
     <div style="margin-top: 20px;" class="row justify-content-center">
         <div class="col-md-9">
-            @if(isset($errors) && count($errors)>0)
+            @if($errors->any())
             <div class="text-center mt-2 mb-2 p-2 alert-danger">
                 @foreach($errors->all() as $erro)
                 {{$erro}}<br>
@@ -23,22 +23,22 @@
             @if(isset($municipio))
             <form id="form_edit_municipio" name="form_edit_municipio" action="{{ route('municipio.update',$municipio->id) }}" method="post" enctype="multipart/form-data">
                 @method('PUT')
-                @else
-                <form id="form_municipio" name="form_municipio" action="{{ route('municipio.store') }}" method="post" enctype="multipart/form-data">
-                    @endif
+            @else
+            <form id="form_municipio" name="form_municipio" action="{{ route('municipio.store') }}" method="post" enctype="multipart/form-data">
+            @endif
                     @csrf
                     <div class="row justify-content-center" style="color:black;font-size:15px;">
                         <div class=" col-md-8">
                             <div class="form-group">
                                 <label for="name">Nome</label>
-                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Município" value="{{ $municipio->nome ?? ''}}" required>
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome do Município" value="{{ $municipio->nome ?? old('nome')}}" required>
                             </div>
                         </div>
                         <div class=" col-md-4">
                             <div class="form-group">
                                 <label for="SAME">Ano SAME</label>
                                 <select class="form-control" id="SAME" name="SAME" required>
-                                    <option value="{{ $municipio->SAME ?? ''}}">{{ $municipio->SAME ?? ''}}</option>
+                                    <option value="{{ $municipio->SAME ?? old('SAME')}}">{{ $municipio->SAME ?? old('SAME')}}</option>
                                     @if((isset($anosame) && $anosame[0]->status == 'Ativo') || empty($anosame))
                                     @foreach($anosativos as $anoativo)
                                         <option value="{{ $anoativo->descricao }}">{{ $anoativo->descricao ?? ''}}</option>
@@ -53,7 +53,7 @@
                             <div class="form-group">
                                 <label for="perfil">Estado</label>
                                 <select class="form-control" id="uf" name="uf" required>
-                                    <option value="{{ $municipio->uf ?? ''}}">{{ $municipio->uf ?? ''}}</option>
+                                    <option value="{{ $municipio->uf ?? old('uf')}}">{{ $municipio->uf ?? old('uf')}}</option>
                                     <option>RS</option>
                                     <option>SC</option>
                                     <option>PR</option>
@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <label for="perfil">Status</label>
                                 <select class="form-control" id="status" name="status" required>
-                                    <option value="{{ $municipio->status ?? ''}}">{{ $municipio->status ?? ''}}</option>
+                                    <option value="{{ $municipio->status ?? old('status')}}">{{ $municipio->status ?? old('status')}}</option>
                                     <option>Ativo</option>
                                     <option>Inativo</option>
                                 </select>

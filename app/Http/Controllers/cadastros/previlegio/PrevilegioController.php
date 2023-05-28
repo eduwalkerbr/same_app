@@ -5,14 +5,13 @@ namespace App\Http\Controllers\cadastros\previlegio;
 use App\Http\Requests\PrevilegioRequest;
 use App\Models\Previlegio;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\AnoSame;
 use App\Models\Funcao;
 use App\Models\Municipio;
-use App\Models\Escola;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class PrevilegioController extends Controller
 {
@@ -96,44 +95,52 @@ class PrevilegioController extends Controller
      */
     public function store(Request $request)
     {
-        //Verifica existência de Previlégio pelo usuário
-        $previlegios = $this->objPrevilegio->where(['users_id' => $request->users_id])->get();
-        if ($previlegios && sizeof($previlegios) > 0) {
-            //Exibe página de listagem de previlégios com mensagem ao usuário
-            return redirect()->route('lista_previlegio')->with('status', 'Já existem previlégios atribuídos para este Usuário!');
+        try {
+
+            //Verifica existência de Previlégio pelo usuário
+            if($this->objPrevilegio->where(['users_id' => $request->users_id])->get()->isNotEmpty()){
+                //Exibe página de listagem de previlégios com mensagem ao usuário
+                $mensagem = 'Já existem previlégios atribuídos para este Usuário!';
+                $status = 'error';
+                return redirect()->route('lista_previlegio')->with(['mensagem' => $mensagem,'status' => $status]);
+            }
+
+            $id_municipio = explode('_',$request->municipios_id)[0];
+
+            $data = [
+                'users_id' => intval($request->users_id),
+                'autorizou_users_id' => intval($request->autorizou_users_id),
+                'status' => 1,
+                'funcaos_id' => intval($request->funcaos_id),
+                'municipios_id' => intval($id_municipio),
+                'SAME' => trim($request->SAME)
+            ];
+            //Verifica existência previlégio pelo usuário, função e município
+            if($this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $id_municipio]])->get()->isNotEmpty()){
+                //Carrega os dados do Usuário
+                $usuario = $this->objUser->find($request->users_id);
+                //Carrega os dados da Função
+                $funcao = $this->objFuncao->find($request->funcaos_id);
+                //Carrega os dados do Município pelo id e Ano SAME
+                $municipios = $this->objMunicipio->where([['id','=',$id_municipio],['SAME','=',$request->SAME]])->get();
+                $municipio = $municipios[0];
+                $mensagem = 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objPrevilegio->create($data)){
+                    //Carrega os dados do Usuário
+                    $usuario = $this->objUser->find($request->users_id);
+                    $mensagem = 'O Previlégio do usuário '.$usuario->name.' foi incluído com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $id_municipio = explode('_',$request->municipios_id)[0];
-
-        $data = [
-            'users_id' => $request->users_id,
-            'autorizou_users_id' => $request->autorizou_users_id,
-            'status' => 1,
-            'funcaos_id' => $request->funcaos_id,
-            'municipios_id' => $id_municipio,
-            'SAME' => $request->SAME
-        ];
-
-        //Verifica existência previlégio pelo usuário, função e município
-        $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $id_municipio]])->get();
-        //Caso exista previlégio cadastrado
-        if ($previlegio && sizeof($previlegio) > 0) {
-            //Carrega os dados do Usuário
-            $usuario = $this->objUser->find($request->users_id);
-            //Carrega os dados da Função
-            $funcao = $this->objFuncao->find($request->funcaos_id);
-            //Carrega os dados do Município pelo id e Ano SAME
-            $municipios = $this->objMunicipio->where([['id','=',$id_municipio],['SAME','=',$request->SAME]])->get();
-            $municipio = $municipios[0];
-            //Exibe listagem de previlégio com mensagem ao usuário
-            return redirect()->route('lista_previlegio')->with('status', 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!');
-        }
-
-        $cad = $this->objPrevilegio->create($data);
-
-        if ($cad) {
-            return redirect()->route('lista_previlegio');
-        }
+        return redirect()->route('lista_previlegio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -178,35 +185,45 @@ class PrevilegioController extends Controller
      */
     public function update(PrevilegioRequest $request, $id)
     {
-        $id_municipio = explode('_',$request->municipios_id)[0];
+        try {
+
+            $id_municipio = explode('_',$request->municipios_id)[0];
         
-        $data = [
-            'users_id' => $request->users_id,
-            'autorizou_users_id' => $request->autorizou_users_id,
-            'status' => 1,
-            'funcaos_id' => $request->funcaos_id,
-            'municipios_id' => $id_municipio,
-            'SAME' => $request->SAME
-        ];
+            $data = [
+                'users_id' => intval($request->users_id),
+                'autorizou_users_id' => intval($request->autorizou_users_id),
+                'status' => 1,
+                'funcaos_id' => intval($request->funcaos_id),
+                'municipios_id' => intval($id_municipio),
+                'SAME' => trim($request->SAME)
+            ];
 
-        //Verifica existência previlégio pelo usuário, função e município
-        $previlegio = $this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $id_municipio],['id','<>',$id]])->get();
-        //Caso exista um previlégio cadastrado
-        if ($previlegio && sizeof($previlegio) > 0) {
-            //Carrega os dados do Usuário
-            $usuario = $this->objUser->find($request->users_id);
-            //Carrega os dados da Função
-            $funcao = $this->objFuncao->find($request->funcaos_id);
-            //Carrega os dados do Município pelo id e Ano SAME
-            $municipios = $this->objMunicipio->where([['id','=',$id_municipio],['SAME','=',$request->SAME]])->get();
-            $municipio = $municipios[0];
-
-            //Exibe página de listagem de previlégios com mensagem ao usuário
-            return redirect()->route('lista_previlegio')->with('status', 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!');
+            //Verifica existência previlégio pelo usuário, função e município
+            if($this->objPrevilegio->where([['users_id', '=', $request->users_id],['funcaos_id', '=', $request->funcaos_id],['municipios_id', '=', $id_municipio],['id','<>',$id]])->get()->isNotEmpty()){
+                //Carrega os dados do Usuário
+                $usuario = $this->objUser->find($request->users_id);
+                //Carrega os dados da Função
+                $funcao = $this->objFuncao->find($request->funcaos_id);
+                //Carrega os dados do Município pelo id e Ano SAME
+                $municipios = $this->objMunicipio->where([['id','=',$id_municipio],['SAME','=',$request->SAME]])->get();
+                $municipio = $municipios[0];
+                $mensagem = 'O usuário '.$usuario->name.' já possuí a Função de '.$funcao->desc.' no Município de '.$municipio->nome.'!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objPrevilegio->where(['id' => $id])->update($data)){
+                    //Carrega os dados do Usuário
+                    $usuario = $this->objUser->find($request->users_id);
+                    $mensagem = 'O Previlégio do usuário '.$usuario->name.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objPrevilegio->where(['id' => $id])->update($data);
-        return redirect()->route('lista_previlegio');
+        return redirect()->route('lista_previlegio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -218,13 +235,23 @@ class PrevilegioController extends Controller
      */
     public function inativar($id)
     {
-        $previlegio = $this->objPrevilegio->find($id);
-        $previlegio = [
-            'status' => 0,
-        ];
+        try {
 
-        $this->objPrevilegio->where(['id' => $id])->update($previlegio);
-        return redirect()->route('lista_previlegio');
+            $previlegio = $this->objPrevilegio->find($id);
+            $previlegio = [
+                'status' => 0,
+            ];
+
+            if($this->objPrevilegio->where(['id' => $id])->update($previlegio)){
+                $mensagem = 'Inativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_previlegio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -236,13 +263,23 @@ class PrevilegioController extends Controller
      */
     public function ativar($id)
     {
-        $previlegio = $this->objPrevilegio->find($id);
-        $previlegio = [
-            'status' => 1,
-        ];
+        try {
 
-        $this->objPrevilegio->where(['id' => $id])->update($previlegio);
-        return redirect()->route('lista_previlegio');
+            $previlegio = $this->objPrevilegio->find($id);
+            $previlegio = [
+                'status' => 1,
+            ];
+
+            if($this->objPrevilegio->where(['id' => $id])->update($previlegio)){
+                $mensagem = 'Ativação realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_previlegio')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

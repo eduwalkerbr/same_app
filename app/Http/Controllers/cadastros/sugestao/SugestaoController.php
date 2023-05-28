@@ -5,6 +5,7 @@ namespace App\Http\Controllers\cadastros\sugestao;
 use App\Http\Requests\SugestaoRequest;
 use App\Models\Sugestao;
 use App\Http\Controllers\Controller;
+use Throwable;
 
 class SugestaoController extends Controller
 {
@@ -35,7 +36,7 @@ class SugestaoController extends Controller
      */
     public function exibirLista()
     {
-        $sugestoes = $this->objSugestao->orderBy('updated_at', 'desc')->paginate(8);
+        $sugestoes = $this->objSugestao->orderByDesc('status', 'desc')->orderBy('created_at', 'desc')->paginate(8);
         return view('cadastro/sugestao/list_sugestao', compact('sugestoes'));
     }
 
@@ -55,7 +56,7 @@ class SugestaoController extends Controller
      */
     public function create()
     {
-        // return view('cadastro/topico_aberto/create_topico_aberto');
+         return view('cadastro/sugestao/create_sugestao');
     }
 
     /**
@@ -66,18 +67,27 @@ class SugestaoController extends Controller
      */
     public function store(SugestaoRequest $request)
     {
-        $data = [
-            'nome' => $request->nome,
-            'email' => $request->email,
-            'mensagem' => $request->mensagem
-        ];
+        try {
 
-        $cad = $this->objSugestao->create($data);
+            $data = [
+                'nome' => trim($request->nome),
+                'email' => trim($request->email),
+                'mensagem' => trim($request->mensagem),
+                'status' => 1
+            ];
 
-
-        if ($cad) {
-            return redirect()->route('home.index');
+            //Realiza a alteração do Registro
+            if($this->objSugestao->create($data)){
+                $mensagem = 'Inclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }   
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: ' + $e; 
+            $status = 'error';
         }
+
+        return redirect()->route('lista_sugestoes')->with(['mensagem' => $mensagem,'status' => $status]);
+
     }
 
     /**
@@ -88,8 +98,8 @@ class SugestaoController extends Controller
      */
     public function edit($id)
     {
-        /*$topico_aberto = $this->objTopicoAberto->find($id);
-        return view('cadastro/topico_aberto/create_topico_aberto',compact('topico_aberto'));*/
+        $sugestao = $this->objSugestao->find($id);
+        return view('cadastro/sugestao/create_sugestao',compact('sugestao'));
     }
 
     /**
@@ -102,12 +112,23 @@ class SugestaoController extends Controller
      */
     public function update(SugestaoRequest $request, $id)
     {
-        $data = [
-            'nome' => $request->nome,
-            'email' => $request->email,
-            'mensagem' => $request->mensagem
-        ];
-        return redirect()->route('home.index');
+        try {
+
+            $data = [
+                'status' => 0
+            ];
+
+            //Realiza a alteração do Registro
+            if($this->objSugestao->where(['id' => $id])->update($data)){
+                $mensagem = ''; 
+                $status = 'success';
+            }   
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: ' + $e; 
+            $status = 'error';
+        }
+
+        return redirect()->route('lista_sugestoes')->with(['mensagem' => $mensagem,'status' => $status]);;
     }
 
     /**
@@ -118,7 +139,15 @@ class SugestaoController extends Controller
      */
     public function destroy($id)
     {
-        $del = $this->objSugestao->destroy($id);
-        return ($del) ? "sim" : "não";
+        try {
+            if($this->objSugestao->destroy($id)){
+                $mensagem = 'Exclusão realizada com Sucesso.'; 
+                $status = 'success';
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
     }
 }

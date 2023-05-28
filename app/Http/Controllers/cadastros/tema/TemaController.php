@@ -7,6 +7,7 @@ use App\Models\Disciplina;
 use App\Models\Tema;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class TemaController extends Controller
 {
@@ -77,24 +78,31 @@ class TemaController extends Controller
      */
     public function store(TemaRequest $request)
     {
-        $data = [
-            'desc' => $request->desc,
-            'obs' => $request->obs,
-            'disciplinas_id' => $request->disciplinas_id
-        ];
+        try {
 
-        $tema = $this->objTema->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id]])->get();
-        
-        if ($tema && sizeof($tema) > 0) {
-            return redirect()->route('lista_tema')->with('status', 'O Tema '.$request->desc.' já encontra-se Cadastrado!');
+            $data = [
+                'desc' => trim($request->desc),
+                'obs' => trim($request->obs),
+                'disciplinas_id' => intval($request->disciplinas_id)
+            ];
+
+            //Valida existência do Registro
+            if($this->objTema->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id]])->get()->isNotEmpty()){
+                $mensagem = 'O Tema '.$request->desc.' já encontra-se Cadastrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a inclusão do Registro
+                if($this->objTema->create($data)){
+                    $mensagem = 'O Tema '.$request->desc.' foi cadastrado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objTema->create($data);
-
-
-        if ($cad) {
-            return redirect()->route('lista_tema');
-        }
+        return redirect()->route('lista_tema')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -132,20 +140,31 @@ class TemaController extends Controller
      */
     public function update(TemaRequest $request, $id)
     {
-        $data = [
-            'desc' => $request->desc,
-            'disciplinas_id' => $request->disciplinas_id,
-            'obs' => $request->obs,
-        ];
+        try {
 
-        $tema = $this->objTema->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id],['id','<>',$id]])->get();
-        
-        if ($tema && sizeof($tema) > 0) {
-            return redirect()->route('lista_tema')->with('status', 'O Tema '.$request->desc.' já encontra-se Cadastrado!');
+            $data = [
+                'desc' => trim($request->desc),
+                'disciplinas_id' => intval($request->disciplinas_id),
+                'obs' => trim($request->obs),
+            ];
+
+            //Valida existência do Registro
+            if($this->objTema->where([['desc', '=', $request->desc],['disciplinas_id', '=', $request->disciplinas_id],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'O Tema '.$request->desc.' já encontra-se Cadastrado!';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objTema->where(['id' => $id])->update($data)){
+                    $mensagem = 'O Tema '.$request->desc.' foi atualizado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objTema->where(['id' => $id])->update($data);
-        return redirect()->route('lista_tema');
+        return redirect()->route('lista_tema')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

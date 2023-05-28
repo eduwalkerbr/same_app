@@ -8,6 +8,7 @@ use App\Models\Disciplina;
 use App\Models\TipoQuestao;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class CriterioQuestaoController extends Controller
 {
@@ -84,29 +85,35 @@ class CriterioQuestaoController extends Controller
      */
     public function store(CriterioQuestaoRequest $request)
     {
-        $data = [
-            'nome' => $request->nome,
-            'descricao' => $request->descricao,
-            'id_disciplina' => $request->id_disciplina,
-            'id_tipo_questao' => $request->id_tipo_questao,
-            'ano' => $request->ano,
-            'obs' => $request->obs
-        ];
+        try {
 
-        $criterioquestao = $this->objCriterioQuestao->where([['nome', '=', $request->nome],['id_disciplina', '=', $request->id_disciplina],
-            ['id_tipo_questao','=', $request->id_tipo_questao],['ano','=', $request->ano]])->get();
-        
+            $data = [
+                'nome' => trim($request->nome),
+                'descricao' => trim($request->descricao),
+                'id_disciplina' => intval($request->id_disciplina),
+                'id_tipo_questao' => intval($request->id_tipo_questao),
+                'ano' => intval($request->ano),
+                'obs' => trim($request->obs)
+            ];
 
-        if ($criterioquestao && sizeof($criterioquestao) > 0) {
-            
-            return redirect()->route('lista_criterios_questao')->with('status', 'O Critério de Questão '.$request->nome.' já encontra-se registrado para a Disciplina e Tipo de Questão no Ano '.$request->ano.' !');
+            //Valida existência do Registro
+            if($this->objCriterioQuestao->where([['nome', '=', $request->nome],['id_disciplina', '=', $request->id_disciplina],
+            ['id_tipo_questao','=', $request->id_tipo_questao],['ano','=', $request->ano]])->get()->isNotEmpty()){
+                $mensagem = 'O Critério de Questão '.$request->nome.' já encontra-se registrado para a Disciplina e Tipo de Questão no Ano '.$request->ano.' !';
+                $status = 'error';
+            } else {
+                 //Realiza a inserção do Registro
+                if($this->objCriterioQuestao->create($data)){
+                    $mensagem = 'O Critério de Questão '.$request->nome.' do Ano '.$request->ano.' foi incluído com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objCriterioQuestao->create($data);
-
-        if ($cad) {
-            return redirect()->route('lista_criterios_questao');
-        }
+        return redirect()->route('lista_criterios_questao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -145,26 +152,35 @@ class CriterioQuestaoController extends Controller
      */
     public function update(CriterioQuestaoRequest $request, $id)
     {
-        $data = [
-            'nome' => $request->nome,
-            'descricao' => $request->descricao,
-            'id_disciplina' => $request->id_disciplina,
-            'id_tipo_questao' => $request->id_tipo_questao,
-            'ano' => $request->ano,
-            'obs' => $request->obs
-        ];
+        try {
 
-        $criterioquestao = $this->objCriterioQuestao->where([['nome', '=', $request->nome],['id_disciplina', '=', $request->id_disciplina],
-            ['id_tipo_questao','=', $request->id_tipo_questao],['ano','=', $request->ano],['id','<>',$id]])->get();
-        
+            $data = [
+                'nome' => trim($request->nome),
+                'descricao' => trim($request->descricao),
+                'id_disciplina' => intval($request->id_disciplina),
+                'id_tipo_questao' => intval($request->id_tipo_questao),
+                'ano' => intval($request->ano),
+                'obs' => trim($request->obs)
+            ];
 
-        if ($criterioquestao && sizeof($criterioquestao) > 0) {
-            
-            return redirect()->route('lista_criterios_questao')->with('status', 'O Critério de Questão '.$request->nome.' já encontra-se registrado para a Disciplina e Tipo de Questão no Ano '.$request->ano.' !');
+            //Valida existência do Registro
+            if($this->objCriterioQuestao->where([['nome', '=', $request->nome],['id_disciplina', '=', $request->id_disciplina],
+            ['id_tipo_questao','=', $request->id_tipo_questao],['ano','=', $request->ano],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'O Critério de Questão '.$request->nome.' já encontra-se registrado para a Disciplina e Tipo de Questão no Ano '.$request->ano.' !';
+                $status = 'error';
+            } else {
+                 //Realiza a alteração do Registro
+                if($this->objCriterioQuestao->where(['id' => $id])->update($data)){
+                    $mensagem = 'O Critério de Questão '.$request->nome.' do Ano '.$request->ano.' foi alterado com Sucesso!';
+                    $status = 'success';
+                }   
+            }
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objCriterioQuestao->where(['id' => $id])->update($data);
-        return redirect()->route('lista_criterios_questao');
+        return redirect()->route('lista_criterios_questao')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**

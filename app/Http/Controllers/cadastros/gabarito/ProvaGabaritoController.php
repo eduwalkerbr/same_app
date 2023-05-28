@@ -6,9 +6,9 @@ use App\Http\Requests\ProvaGabaritoRequest;
 use App\Models\AnoSame;
 use App\Models\Disciplina;
 use App\Models\Prova_gabarito;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
+use Throwable;
 
 class ProvaGabaritoController extends Controller
 {
@@ -81,28 +81,37 @@ class ProvaGabaritoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProvaGabaritoRequest $request)
     {
-        $data = [
-            'DESCR_PROVA' => $request->DESCR_PROVA,
-            'gabarito' => $request->gabarito,
-            'ano' => $request->ano,
-            'qtd' => $request->qtd,
-            'disciplinas_id' => $request->disciplinas_id,
-            'status' => $request->status,
-            'SAME' => $request->SAME
-        ];
+        try {
 
-        $prova_gabarito = $this->objProvaGabarito->where([['DESCR_PROVA', '=', $request->DESCR_PROVA],['ano', '=', $request->ano],['disciplinas_id','=',$request->disciplinas_id],['SAME','=',$request->SAME]])->get();
-        if ($prova_gabarito && sizeof($prova_gabarito) > 0) {
-            return redirect()->route('lista_prova_gabarito')->with('status', 'O Gabarito da Prova '.$request->DESCR_PROVA.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+            $data = [
+                'DESCR_PROVA' => trim($request->DESCR_PROVA),
+                'gabarito' => trim($request->gabarito),
+                'ano' => intval($request->ano),
+                'qtd' => intval($request->qtd),
+                'disciplinas_id' => intval($request->disciplinas_id),
+                'status' => intval($request->status),
+                'SAME' => trim($request->SAME)
+            ];
+
+            //Valida existência do Registro
+            if($this->objProvaGabarito->where([['DESCR_PROVA', '=', $request->DESCR_PROVA],['ano', '=', $request->ano],['disciplinas_id','=',$request->disciplinas_id],['SAME','=',$request->SAME]])->get()->isNotEmpty()){
+                $mensagem = 'O Gabarito da Prova '.$request->DESCR_PROVA.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                //Realiza a inclusão do Registro
+               if($this->objProvaGabarito->create($data)){
+                   $mensagem = 'A Prova Gabarito '.$request->DESCR_PROVA.' foi incluída com Sucesso!';
+                   $status = 'success';
+               }   
+           }   
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $cad = $this->objProvaGabarito->create($data);
-
-        if ($cad) {
-            return redirect()->route('lista_prova_gabarito');
-        }
+        return redirect()->route('lista_prova_gabarito')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -142,23 +151,35 @@ class ProvaGabaritoController extends Controller
      */
     public function update(ProvaGabaritoRequest $request, $id)
     {
-        $data = [
-            'DESCR_PROVA' => $request->DESCR_PROVA,
-            'gabarito' => $request->gabarito,
-            'ano' => $request->ano,
-            'qtd' => $request->qtd,
-            'disciplinas_id' => $request->disciplinas_id,
-            'status' => $request->status,
-            'SAME' => $request->SAME
-        ];
+        try {
 
-        $prova_gabarito = $this->objProvaGabarito->where([['DESCR_PROVA', '=', $request->DESCR_PROVA],['ano', '=', $request->ano],['disciplinas_id','=',$request->disciplinas_id],['SAME','=',$request->SAME],['id','<>',$id]])->get();
-        if ($prova_gabarito && sizeof($prova_gabarito) > 0) {
-            return redirect()->route('lista_prova_gabarito')->with('status', 'O Gabarito da Prova '.$request->DESCR_PROVA.' já encontra-se Cadastrado no SAME '.$request->SAME.'!');
+            $data = [
+                'DESCR_PROVA' => trim($request->DESCR_PROVA),
+                'gabarito' => trim($request->gabarito),
+                'ano' => intval($request->ano),
+                'qtd' => intval($request->qtd),
+                'disciplinas_id' => intval($request->disciplinas_id),
+                'status' => intval($request->status),
+                'SAME' => trim($request->SAME)
+            ];
+
+            //Valida existência do Registro
+            if($this->objProvaGabarito->where([['DESCR_PROVA', '=', $request->DESCR_PROVA],['ano', '=', $request->ano],['disciplinas_id','=',$request->disciplinas_id],['SAME','=',$request->SAME],['id','<>',$id]])->get()->isNotEmpty()){
+                $mensagem = 'O Gabarito da Prova '.$request->DESCR_PROVA.' já encontra-se Cadastrado no SAME '.$request->SAME.'!';
+                $status = 'error';
+            } else {
+                //Realiza a alteração do Registro
+               if($this->objProvaGabarito->where(['id' => $id])->update($data)){
+                   $mensagem = 'A Prova Gabarito '.$request->DESCR_PROVA.' foi alterada com Sucesso!';
+                   $status = 'success';
+               }   
+           }   
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
         }
 
-        $this->objProvaGabarito->where(['id' => $id])->update($data);
-        return redirect()->route('lista_prova_gabarito');
+        return redirect()->route('lista_prova_gabarito')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -170,13 +191,23 @@ class ProvaGabaritoController extends Controller
      */
     public function inativar($id)
     {
-        $prova_gabarito = $this->objProvaGabarito->find($id);
-        $prova_gabarito = [
-            'status' => 0,
-        ];
+        try {
+            $prova_gabarito = $this->objProvaGabarito->find($id);
+            $prova_gabarito = [
+                'status' => 0,
+            ];
 
-        $this->objProvaGabarito->where(['id' => $id])->update($prova_gabarito);
-        return redirect()->route('lista_prova_gabarito');
+            if($this->objProvaGabarito->where(['id' => $id])->update($prova_gabarito)){
+                $mensagem = 'Inativação realizada com sucesso.'; 
+                $status = 'success';
+            }
+
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_prova_gabarito')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
@@ -188,13 +219,23 @@ class ProvaGabaritoController extends Controller
      */
     public function ativar($id)
     {
-        $prova_gabarito = $this->objProvaGabarito->find($id);
-        $prova_gabarito = [
-            'status' => 1,
-        ];
+        try {
+            $prova_gabarito = $this->objProvaGabarito->find($id);
+            $prova_gabarito = [
+                'status' => 1,
+            ];
 
-        $this->objProvaGabarito->where(['id' => $id])->update($prova_gabarito);
-        return redirect()->route('lista_prova_gabarito');
+            if($this->objProvaGabarito->where(['id' => $id])->update($prova_gabarito)){
+                $mensagem = 'Ativação realizada com sucesso.'; 
+                $status = 'success';
+            }
+
+        } catch (Throwable $e) {
+            $mensagem = 'Erro: '.$e; 
+            $status = 'error';
+        }
+        
+        return redirect()->route('lista_prova_gabarito')->with(['mensagem' => $mensagem,'status' => $status]);
     }
 
     /**
